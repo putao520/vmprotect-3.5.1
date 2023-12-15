@@ -1,6 +1,10 @@
 #ifndef PROPERTY_EDITOR_H
 #define PROPERTY_EDITOR_H
 
+#include "../core/processors.h"
+#include "../core/files.h"
+#include "widgets.h"
+
 class Property : public QObject
 {
     Q_OBJECT

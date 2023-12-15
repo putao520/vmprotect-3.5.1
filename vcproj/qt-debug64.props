@@ -15,7 +15,7 @@
       <AdditionalIncludeDirectories>$(QTDIR)\msvc2015_64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%QTDIR%\msvc2015_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(QTDIR)%\msvc2015_64\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>qtmaind.lib;Qt5Guid.lib;Qt5Cored.lib;Qt5Concurrentd.lib;Qt5Widgetsd.lib;Qt5WinExtrasd.lib;Qt5Helpd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>

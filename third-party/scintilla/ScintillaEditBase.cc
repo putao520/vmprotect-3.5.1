@@ -11,6 +11,8 @@
 #define INDIC_INPUTMETHOD 24
 
 #include "../../VMProtect/moc/moc_ScintillaEditBase.cc"
+#include "PlatQt.h"
+
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;

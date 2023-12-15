@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=:PlatformToolSet=v141_xp:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native64Bit:WindowsTargetPlatformVersion=7.0
+Debug|x64|C:\Users\yuyao\OneDrive\cProject\vmprotect-3.5.1\third-party\libffi\win32\vc14_x64\|

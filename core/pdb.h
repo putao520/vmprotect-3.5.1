@@ -76,9 +76,9 @@
 
 #pragma pack(push, 1)
 
-/* ======================================== *
- *             Type information
- * ======================================== */
+ /* ======================================== *
+  *             Type information
+  * ======================================== */
 
 struct p_string
 {
@@ -455,7 +455,7 @@ union codeview_fieldtype
 #endif
     } enumerate_v1;
 
-   struct
+    struct
     {
         short int               id;
         short int               attribute;
@@ -733,82 +733,82 @@ union codeview_fieldtype
  * added this basic type... as if bit 3 had been integrated into the size field
  */
 
-/* the type number of a built-in type is a 16-bit value specified in the following format:
-    bit #   |   11     |   10-8   |   7-4    |    3     |    2-0   |
-    field   | reserved |   mode   |   type   | reserved |   size   |
+ /* the type number of a built-in type is a 16-bit value specified in the following format:
+     bit #   |   11     |   10-8   |   7-4    |    3     |    2-0   |
+     field   | reserved |   mode   |   type   | reserved |   size   |
 
-    where
-        <type> is one of the following types:
-                0x00 Special
-                0x01 Signed integral value
-                0x02 Unsigned integral value
-                0x03 Boolean
-                0x04 Real
-                0x05 Complex
-                0x06 Special2
-                0x07 Real int value
-                0x08 Reserved
-                0x09 Reserved
-                0x0a Reserved
-                0x0b Reserved
-                0x0c Reserved
-                0x0d Reserved
-                0x0e Reserved
-                0x0f Reserved for debugger expression evaluator
+     where
+         <type> is one of the following types:
+                 0x00 Special
+                 0x01 Signed integral value
+                 0x02 Unsigned integral value
+                 0x03 Boolean
+                 0x04 Real
+                 0x05 Complex
+                 0x06 Special2
+                 0x07 Real int value
+                 0x08 Reserved
+                 0x09 Reserved
+                 0x0a Reserved
+                 0x0b Reserved
+                 0x0c Reserved
+                 0x0d Reserved
+                 0x0e Reserved
+                 0x0f Reserved for debugger expression evaluator
 
-        <size> is an enumerated value for each of the types.
-                Type = special
-                    0x00 No type
-                    0x01 Absolute symbol
-                    0x02 Segment
-                    0x03 Void
-                    0x04 Basic 8-byte currency value
-                    0x05 Near Basic string
-                    0x06 Far Basic string
-                    0x07 Untranslated type from previous Microsoft symbol formats
-                Type = signed/unsigned integral and Boolean values
-                    0x00 1 byte
-                    0x01 2 byte
-                    0x02 4 byte
-                    0x03 8 byte
-                    0x04 Reserved
-                    0x05 Reserved
-                    0x06 Reserved
-                    0x07 Reserved
-                Type = real and complex
-                    0x00 32 bit
-                    0x01 64 bit
-                    0x02 80 bit
-                    0x03 128 bit
-                    0x04 48 bit
-                    0x05 Reserved
-                    0x06 Reserved
-                    0x07 Reserved
-                Type = special2
-                    0x00 Bit
-                    0x01 Pascal CHAR
-                Type = Real int
-                    0x00 Char
-                    0x01 Wide character
-                    0x02 2-byte signed integer
-                    0x03 2-byte unsigned integer
-                    0x04 4-byte signed integer
-                    0x05 4-byte unsigned integer
-                    0x06 8-byte signed integer
-                    0x07 8-byte unsigned integer
+         <size> is an enumerated value for each of the types.
+                 Type = special
+                     0x00 No type
+                     0x01 Absolute symbol
+                     0x02 Segment
+                     0x03 Void
+                     0x04 Basic 8-byte currency value
+                     0x05 Near Basic string
+                     0x06 Far Basic string
+                     0x07 Untranslated type from previous Microsoft symbol formats
+                 Type = signed/unsigned integral and Boolean values
+                     0x00 1 byte
+                     0x01 2 byte
+                     0x02 4 byte
+                     0x03 8 byte
+                     0x04 Reserved
+                     0x05 Reserved
+                     0x06 Reserved
+                     0x07 Reserved
+                 Type = real and complex
+                     0x00 32 bit
+                     0x01 64 bit
+                     0x02 80 bit
+                     0x03 128 bit
+                     0x04 48 bit
+                     0x05 Reserved
+                     0x06 Reserved
+                     0x07 Reserved
+                 Type = special2
+                     0x00 Bit
+                     0x01 Pascal CHAR
+                 Type = Real int
+                     0x00 Char
+                     0x01 Wide character
+                     0x02 2-byte signed integer
+                     0x03 2-byte unsigned integer
+                     0x04 4-byte signed integer
+                     0x05 4-byte unsigned integer
+                     0x06 8-byte signed integer
+                     0x07 8-byte unsigned integer
 
-            <mode> is the pointer mode:
-                0x00 Direct; not a pointer
-                0x01 Near pointer
-                0x02 Far pointer
-                0x03 Huge pointer
-                0x04 32-bit near pointer
-                0x05 32-bit far pointer
-                0x06 64-bit near pointer
-                0x07 Reserved
-*/
+             <mode> is the pointer mode:
+                 0x00 Direct; not a pointer
+                 0x01 Near pointer
+                 0x02 Far pointer
+                 0x03 Huge pointer
+                 0x04 32-bit near pointer
+                 0x05 32-bit far pointer
+                 0x06 64-bit near pointer
+                 0x07 Reserved
+ */
 
-/* basic types */
+ /* basic types */
 #define T_NOTYPE            0x0000  /* Notype */
 #define T_ABS               0x0001  /* Abs */
 #define T_SEGMENT           0x0002  /* segment type */
@@ -1219,21 +1219,21 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;
-	short int	        id;
-	unsigned int	        offset;
-	unsigned short	        segment;
-	unsigned short	        symtype;
+        short int	        len;
+        short int	        id;
+        unsigned int	        offset;
+        unsigned short	        segment;
+        unsigned short	        symtype;
         struct p_string         p_name;
     } data_v1;
 
     struct
     {
-	short int	        len;
-	short int	        id;
-	unsigned int	        symtype;
-	unsigned int	        offset;
-	unsigned short	        segment;
+        short int	        len;
+        short int	        id;
+        unsigned int	        symtype;
+        unsigned int	        offset;
+        unsigned short	        segment;
         struct p_string         p_name;
     } data_v2;
 
@@ -1249,15 +1249,15 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;
-	short int	        id;
-	unsigned int	        pparent;
-	unsigned int	        pend;
-	unsigned int	        next;
-	unsigned int	        offset;
-	unsigned short	        segment;
-	unsigned short	        thunk_len;
-	unsigned char	        thtype;
+        short int	        len;
+        short int	        id;
+        unsigned int	        pparent;
+        unsigned int	        pend;
+        unsigned int	        next;
+        unsigned int	        offset;
+        unsigned short	        segment;
+        unsigned short	        thunk_len;
+        unsigned char	        thtype;
         struct p_string         p_name;
     } thunk_v1;
 
@@ -1277,35 +1277,35 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;
-	short int	        id;
-	unsigned int	        pparent;
-	unsigned int	        pend;
-	unsigned int	        next;
-	unsigned int	        proc_len;
-	unsigned int	        debug_start;
-	unsigned int	        debug_end;
-	unsigned int	        offset;
-	unsigned short	        segment;
-	unsigned short	        proctype;
-	unsigned char	        flags;
+        short int	        len;
+        short int	        id;
+        unsigned int	        pparent;
+        unsigned int	        pend;
+        unsigned int	        next;
+        unsigned int	        proc_len;
+        unsigned int	        debug_start;
+        unsigned int	        debug_end;
+        unsigned int	        offset;
+        unsigned short	        segment;
+        unsigned short	        proctype;
+        unsigned char	        flags;
         struct p_string         p_name;
     } proc_v1;
 
     struct
     {
-	short int	        len;
-	short int	        id;
-	unsigned int	        pparent;
-	unsigned int	        pend;
-	unsigned int	        next;
-	unsigned int	        proc_len;
-	unsigned int	        debug_start;
-	unsigned int	        debug_end;
-	unsigned int	        proctype;
-	unsigned int	        offset;
-	unsigned short	        segment;
-	unsigned char	        flags;
+        short int	        len;
+        short int	        id;
+        unsigned int	        pparent;
+        unsigned int	        pend;
+        unsigned int	        next;
+        unsigned int	        proc_len;
+        unsigned int	        debug_start;
+        unsigned int	        debug_end;
+        unsigned int	        proctype;
+        unsigned int	        offset;
+        unsigned short	        segment;
+        unsigned char	        flags;
         struct p_string         p_name;
     } proc_v2;
 
@@ -1348,19 +1348,19 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;	        /* Total length of this entry */
-	short int	        id;		/* Always S_BPREL_V1 */
-	unsigned int	        offset;	        /* Stack offset relative to BP */
-	unsigned short	        symtype;
+        short int	        len;	        /* Total length of this entry */
+        short int	        id;		/* Always S_BPREL_V1 */
+        unsigned int	        offset;	        /* Stack offset relative to BP */
+        unsigned short	        symtype;
         struct p_string         p_name;
     } stack_v1;
 
     struct
     {
-	short int	        len;	        /* Total length of this entry */
-	short int	        id;		/* Always S_BPREL_V2 */
-	unsigned int	        offset;	        /* Stack offset relative to EBP */
-	unsigned int	        symtype;
+        short int	        len;	        /* Total length of this entry */
+        short int	        id;		/* Always S_BPREL_V2 */
+        unsigned int	        offset;	        /* Stack offset relative to EBP */
+        unsigned int	        symtype;
         struct p_string         p_name;
     } stack_v2;
 
@@ -1385,8 +1385,8 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;	        /* Total length of this entry */
-	short int	        id;		/* Always S_REGISTER */
+        short int	        len;	        /* Total length of this entry */
+        short int	        id;		/* Always S_REGISTER */
         unsigned short          type;
         unsigned short          reg;
         struct p_string         p_name;
@@ -1395,8 +1395,8 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;	        /* Total length of this entry */
-	short int	        id;		/* Always S_REGISTER_V2 */
+        short int	        len;	        /* Total length of this entry */
+        short int	        id;		/* Always S_REGISTER_V2 */
         unsigned int            type;           /* check whether type & reg are correct */
         unsigned short          reg;
         struct p_string         p_name;
@@ -1405,8 +1405,8 @@ union codeview_symbol
 
     struct
     {
-	short int	        len;	        /* Total length of this entry */
-	short int	        id;		/* Always S_REGISTER_V3 */
+        short int	        len;	        /* Total length of this entry */
+        short int	        id;		/* Always S_REGISTER_V3 */
         unsigned int            type;           /* check whether type & reg are correct */
         unsigned short          reg;
         char                    name[1];
@@ -1769,7 +1769,7 @@ struct codeview_linetab_block
     unsigned short              seg;
     unsigned short              num_lines;
     unsigned int                offsets[1];     /* in fact num_lines */
-/*  unsigned short              linenos[]; */
+    /*  unsigned short              linenos[]; */
 };
 
 struct startend
@@ -1853,7 +1853,7 @@ struct PDB_JG_HEADER
 
 struct PDB_DS_HEADER
 {
-	char                   signature[32];
+    char                   signature[32];
     uint32_t               block_size;
     uint32_t               unknown1;
     uint32_t               num_pages;
@@ -1880,7 +1880,7 @@ struct PDB_JG_ROOT
     uint32_t               TimeDateStamp;
     uint32_t               Age;
     uint32_t               cbNames;
-	char                   names[1];
+    char                   names[1];
 };
 
 struct PDB_DS_ROOT
@@ -1890,7 +1890,7 @@ struct PDB_DS_ROOT
     uint32_t               Age;
     GUID                   guid;
     uint32_t               cbNames;
-	char                   names[1];
+    char                   names[1];
 };
 
 typedef struct _PDB_TYPES_OLD
@@ -1901,7 +1901,7 @@ typedef struct _PDB_TYPES_OLD
     uint32_t        type_size;
     uint16_t        file;
     uint16_t        pad;
-} PDB_TYPES_OLD, *PPDB_TYPES_OLD;
+} PDB_TYPES_OLD, * PPDB_TYPES_OLD;
 
 typedef struct _PDB_TYPES
 {
@@ -1920,7 +1920,7 @@ typedef struct _PDB_TYPES
     uint32_t       search_len;
     uint32_t       unknown_offset;
     uint32_t       unknown_len;
-} PDB_TYPES, *PPDB_TYPES;
+} PDB_TYPES, * PPDB_TYPES;
 
 typedef struct _PDB_SYMBOL_RANGE
 {
@@ -1931,7 +1931,7 @@ typedef struct _PDB_SYMBOL_RANGE
     uint32_t       characteristics;
     uint16_t       index;
     uint16_t       pad2;
-} PDB_SYMBOL_RANGE, *PPDB_SYMBOL_RANGE;
+} PDB_SYMBOL_RANGE, * PPDB_SYMBOL_RANGE;
 
 typedef struct _PDB_SYMBOL_RANGE_EX
 {
@@ -1944,7 +1944,7 @@ typedef struct _PDB_SYMBOL_RANGE_EX
     uint16_t       pad2;
     uint32_t       timestamp;
     uint32_t       unknown;
-} PDB_SYMBOL_RANGE_EX, *PPDB_SYMBOL_RANGE_EX;
+} PDB_SYMBOL_RANGE_EX, * PPDB_SYMBOL_RANGE_EX;
 
 typedef struct _PDB_SYMBOL_FILE
 {
@@ -1957,8 +1957,8 @@ typedef struct _PDB_SYMBOL_FILE
     uint32_t       unknown2;
     uint32_t       nSrcFiles;
     uint32_t       attribute;
-	char           filename[1];
-} PDB_SYMBOL_FILE, *PPDB_SYMBOL_FILE;
+    char           filename[1];
+} PDB_SYMBOL_FILE, * PPDB_SYMBOL_FILE;
 
 typedef struct _PDB_SYMBOL_FILE_EX
 {
@@ -1972,15 +1972,15 @@ typedef struct _PDB_SYMBOL_FILE_EX
     uint32_t       nSrcFiles;
     uint32_t       attribute;
     uint32_t       reserved[2];
-	char           filename[1];
-} PDB_SYMBOL_FILE_EX, *PPDB_SYMBOL_FILE_EX;
+    char           filename[1];
+} PDB_SYMBOL_FILE_EX, * PPDB_SYMBOL_FILE_EX;
 
 typedef struct _PDB_SYMBOL_SOURCE
 {
     uint16_t        nModules;
     uint16_t        nSrcFiles;
     uint16_t        table[1];
-} PDB_SYMBOL_SOURCE, *PPDB_SYMBOL_SOURCE;
+} PDB_SYMBOL_SOURCE, * PPDB_SYMBOL_SOURCE;
 
 typedef struct _PDB_SYMBOL_IMPORT
 {
@@ -1988,8 +1988,8 @@ typedef struct _PDB_SYMBOL_IMPORT
     uint32_t       unknown2;
     uint32_t       TimeDateStamp;
     uint32_t       Age;
-	char           filename[1];
-} PDB_SYMBOL_IMPORT, *PPDB_SYMBOL_IMPORT;
+    char           filename[1];
+} PDB_SYMBOL_IMPORT, * PPDB_SYMBOL_IMPORT;
 
 typedef struct _PDB_SYMBOLS_OLD
 {
@@ -2001,7 +2001,7 @@ typedef struct _PDB_SYMBOLS_OLD
     uint32_t       offset_size;
     uint32_t       hash_size;
     uint32_t       srcmodule_size;
-} PDB_SYMBOLS_OLD, *PPDB_SYMBOLS_OLD;
+} PDB_SYMBOLS_OLD, * PPDB_SYMBOLS_OLD;
 
 typedef struct _PDB_SYMBOLS
 {
@@ -2023,7 +2023,7 @@ typedef struct _PDB_SYMBOLS
     uint16_t       resvd3;
     uint16_t       machine;
     uint32_t       resvd4;
-} PDB_SYMBOLS, *PPDB_SYMBOLS;
+} PDB_SYMBOLS, * PPDB_SYMBOLS;
 
 typedef struct
 {
@@ -2080,12 +2080,12 @@ typedef struct
 
 struct msc_debug_info
 {
-    struct module*              module;
+    struct module* module;
     int			        nsect;
     const IMAGE_SECTION_HEADER* sectp;
     int			        nomap;
-    const OMAP_DATA*            omapp;
-    const BYTE*                 root;
+    const OMAP_DATA* omapp;
+    const BYTE* root;
 };
 
 /* coff.c */
@@ -2114,7 +2114,7 @@ extern BOOL coff_process_info(const struct msc_debug_info* msc_dbg);
 #define sstFileIndex   0x133
 #define sstStaticSym   0x134
 
-/* overall structure information */
+ /* overall structure information */
 typedef struct OMFSignature
 {
     char        Signature[4];
@@ -2126,7 +2126,7 @@ typedef struct OMFSignatureRSDS
     char        Signature[4];
     GUID        guid;
     uint32_t    age;
-	char        name[1];
+    char        name[1];
 } OMFSignatureRSDS;
 
 typedef struct _CODEVIEW_PDB_DATA
@@ -2135,8 +2135,8 @@ typedef struct _CODEVIEW_PDB_DATA
     long        filepos;
     uint32_t    timestamp;
     uint32_t    age;
-	char        name[1];
-} CODEVIEW_PDB_DATA, *PCODEVIEW_PDB_DATA;
+    char        name[1];
+} CODEVIEW_PDB_DATA, * PCODEVIEW_PDB_DATA;
 
 typedef struct OMFDirHeader
 {
@@ -2171,20 +2171,20 @@ typedef struct OMFModule
     uint16_t       iLib;
     uint16_t       cSeg;
     char           Style[2];
-/*
-    OMFSegDesc  SegInfo[cSeg];
-    p_string    Name;
-*/
+    /*
+        OMFSegDesc  SegInfo[cSeg];
+        p_string    Name;
+    */
 } OMFModule;
 
 typedef struct OMFGlobalTypes
 {
     uint32_t       flags;
     uint32_t       cTypes;
-/*
-    uint32_t       offset[cTypes];
-                types_record[];
-*/
+    /*
+        uint32_t       offset[cTypes];
+                    types_record[];
+    */
 } OMFGlobalTypes;
 
 /* sstGlobalPub section */
@@ -2217,7 +2217,7 @@ typedef struct OMFSegMap
 {
     unsigned short  cSeg;
     unsigned short  cSegLog;
-/*    OMFSegMapDesc   rgDesc[0];*/
+    /*    OMFSegMapDesc   rgDesc[0];*/
 } OMFSegMap;
 
 
@@ -2247,7 +2247,7 @@ typedef struct OMFSourceModule
     unsigned long   baseSrcFile[1];
 } OMFSourceModule;
 
-//ïîðòèðîâàíî èç WINEDUMP ñ ñîõðàíåíèåì áîëüøèíñòâà èìåí
+//§á§à§â§ä§Ú§â§à§Ó§Ñ§ß§à §Ú§Ù WINEDUMP §ã §ã§à§ç§â§Ñ§ß§Ö§ß§Ú§Ö§Þ §Ò§à§Ý§î§ê§Ú§ß§ã§ä§Ó§Ñ §Ú§Þ§Ö§ß
 static const char       pdb2[] = "Microsoft C/C++ program database 2.00";
 static const char       pdb7[] = "Microsoft C/C++ MSF 7.00";
 
@@ -2259,149 +2259,149 @@ static const char       pdb7[] = "Microsoft C/C++ MSF 7.00";
 class PdbFileStream : public FileStream
 {
 public:
-	PdbFileStream() : FileStream() { }
-	template<class T>
-	bool RawRead(int64_t pos, std::vector<T> *dest)
-	{
-		if (Seek(pos, soBeginning) == (uint64_t)-1)
-			return false;
-		size_t size = dest->size() * sizeof(T);
-		return (Read(dest->data(), size) == size);
-	}
-	template<class T>
-	bool RawRead(int64_t pos, T *dest)
-	{
-		if (Seek(pos, soBeginning) == (uint64_t)-1)
-			return false;
-		size_t size = sizeof(*dest);
-		return (Read(dest, size) == size);
-	}
+    PdbFileStream() : FileStream() { }
+    template<class T>
+    bool RawRead(int64_t pos, std::vector<T>* dest)
+    {
+        if (Seek(pos, soBeginning) == (uint64_t)-1)
+            return false;
+        size_t size = dest->size() * sizeof(T);
+        return (Read(dest->data(), size) == size);
+    }
+    template<class T>
+    bool RawRead(int64_t pos, T* dest)
+    {
+        if (Seek(pos, soBeginning) == (uint64_t)-1)
+            return false;
+        size_t size = sizeof(*dest);
+        return (Read(dest, size) == size);
+    }
 };
 
 class pdb_reader
 {
 protected:
-	PdbFileStream &fs_;
-	std::vector<uint8_t> vtoc_, vroot_;
+    PdbFileStream& fs_;
+    std::vector<uint8_t> vtoc_, vroot_;
 public:
-	pdb_reader(PdbFileStream &fs) : fs_(fs) {}
-	virtual ~pdb_reader() {}
-	virtual bool init() = 0;
-	virtual bool read_file(size_t idx, std::vector<uint8_t> &dest) = 0;
-	template<class T> bool read(size_t block_size, const T* block_list, size_t size, std::vector<uint8_t> &dest);
+    pdb_reader(PdbFileStream& fs) : fs_(fs) {}
+    virtual ~pdb_reader() {}
+    virtual bool init() = 0;
+    virtual bool read_file(size_t idx, std::vector<uint8_t>& dest) = 0;
+    template<class T> bool read(size_t block_size, const T* block_list, size_t size, std::vector<uint8_t>& dest);
 };
 
 class pdb_jg_reader : public pdb_reader
 {
 public:
-	pdb_jg_reader(PdbFileStream &fs) : pdb_reader(fs), toc(NULL), root(NULL) {}
-	bool init();
-	bool read_file(size_t idx, std::vector<uint8_t> &dest);
+    pdb_jg_reader(PdbFileStream& fs) : pdb_reader(fs), toc(NULL), root(NULL) {}
+    bool init();
+    bool read_file(size_t idx, std::vector<uint8_t>& dest);
 
-	PDB_JG_HEADER header;
-	const struct PDB_JG_TOC*    toc;
-	const struct PDB_JG_ROOT*   root;
+    PDB_JG_HEADER header;
+    const struct PDB_JG_TOC* toc;
+    const struct PDB_JG_ROOT* root;
 };
 
 class pdb_ds_reader : public pdb_reader
 {
 public:
-	pdb_ds_reader(PdbFileStream &fs) : pdb_reader(fs), toc(NULL), root(NULL) {}
-	bool init();
-	bool read_file(size_t idx, std::vector<uint8_t> &dest);
+    pdb_ds_reader(PdbFileStream& fs) : pdb_reader(fs), toc(NULL), root(NULL) {}
+    bool init();
+    bool read_file(size_t idx, std::vector<uint8_t>& dest);
 
-	PDB_DS_HEADER header;
-	const struct PDB_DS_TOC*    toc;
-	const struct PDB_DS_ROOT*   root;
+    PDB_DS_HEADER header;
+    const struct PDB_DS_TOC* toc;
+    const struct PDB_DS_ROOT* root;
 };
 
 template<class T>
-bool pdb_reader::read(size_t block_size, const T* block_list, size_t size, std::vector<uint8_t> &dest)
+bool pdb_reader::read(size_t block_size, const T* block_list, size_t size, std::vector<uint8_t>& dest)
 {
-	if (!size) 
-		return false;
+    if (!size)
+        return false;
 
-	dest.resize(size);
-	uint8_t *buffer = dest.data();
+    dest.resize(size);
+    uint8_t* buffer = dest.data();
 
-	size_t block_count = (size + block_size - 1) / block_size;
-	for (size_t i = 0; i < block_count; i++)
-	{
-		fs_.Seek(block_list[i] * block_size, soBeginning);
-		size_t pos = i * block_size;
-		fs_.Read(buffer + pos, std::min(size - pos, block_size));
-	}
-	return true;
+    size_t block_count = (size + block_size - 1) / block_size;
+    for (size_t i = 0; i < block_count; i++)
+    {
+        fs_.Seek(block_list[i] * block_size, soBeginning);
+        size_t pos = i * block_size;
+        fs_.Read(buffer + pos, std::min(size - pos, block_size));
+    }
+    return true;
 }
 
-bool pdb_jg_reader::read_file(size_t file_nr, std::vector<uint8_t> &dest)
+bool pdb_jg_reader::read_file(size_t file_nr, std::vector<uint8_t>& dest)
 {
-	if (!toc || file_nr >= toc->num_files) 
-		return false;
+    if (!toc || file_nr >= toc->num_files)
+        return false;
 
-	if (toc->file[file_nr].size == 0 || toc->file[file_nr].size == 0xFFFFFFFF)
-		return false;
+    if (toc->file[file_nr].size == 0 || toc->file[file_nr].size == 0xFFFFFFFF)
+        return false;
 
-	const uint16_t *block_list = reinterpret_cast<const WORD*>(&toc->file[toc->num_files]);
-	for (size_t i = 0; i < file_nr; i++)
-		block_list += (toc->file[i].size + header.block_size - 1) / header.block_size;
+    const uint16_t* block_list = reinterpret_cast<const WORD*>(&toc->file[toc->num_files]);
+    for (size_t i = 0; i < file_nr; i++)
+        block_list += (toc->file[i].size + header.block_size - 1) / header.block_size;
 
-	return read(header.block_size, block_list, toc->file[file_nr].size, dest);
+    return read(header.block_size, block_list, toc->file[file_nr].size, dest);
 }
 
 bool pdb_jg_reader::init()
 {
-	if(!fs_.RawRead(0, &header))
-		return false;
+    if (!fs_.RawRead(0, &header))
+        return false;
 
-	std::vector<WORD> toc_blocks((header.toc.size + header.block_size - 1) / header.block_size);
-	if (!fs_.RawRead(offsetof(PDB_JG_HEADER, toc_block), &toc_blocks))
-		return false;
+    std::vector<WORD> toc_blocks((header.toc.size + header.block_size - 1) / header.block_size);
+    if (!fs_.RawRead(offsetof(PDB_JG_HEADER, toc_block), &toc_blocks))
+        return false;
 
-	if (read(header.block_size, toc_blocks.data(), header.toc.size, vtoc_))
-	{
-		toc = reinterpret_cast<PDB_JG_TOC*>(vtoc_.data());
-		if (read_file(PDB_STREAM_PDB, vroot_))
-		{
-			root = reinterpret_cast<PDB_JG_ROOT*>(vroot_.data());
-			return true;
-		}
-	}
-	return false;
+    if (read(header.block_size, toc_blocks.data(), header.toc.size, vtoc_))
+    {
+        toc = reinterpret_cast<PDB_JG_TOC*>(vtoc_.data());
+        if (read_file(PDB_STREAM_PDB, vroot_))
+        {
+            root = reinterpret_cast<PDB_JG_ROOT*>(vroot_.data());
+            return true;
+        }
+    }
+    return false;
 }
 
- bool pdb_ds_reader::read_file(size_t file_number, std::vector<uint8_t> &dest)
+bool pdb_ds_reader::read_file(size_t file_number, std::vector<uint8_t>& dest)
 {
-	if (!toc || file_number >= toc->num_files)
-		 return false;
+    if (!toc || file_number >= toc->num_files)
+        return false;
 
-	if (toc->file_size[file_number] == 0 || toc->file_size[file_number] == 0xFFFFFFFF)
-		return false;
+    if (toc->file_size[file_number] == 0 || toc->file_size[file_number] == 0xFFFFFFFF)
+        return false;
 
-	const uint32_t *block_list = toc->file_size + toc->num_files;
-	for (size_t i = 0; i < file_number; i++)
-		block_list += (toc->file_size[i] + header.block_size - 1) / header.block_size;
+    const uint32_t* block_list = toc->file_size + toc->num_files;
+    for (size_t i = 0; i < file_number; i++)
+        block_list += (toc->file_size[i] + header.block_size - 1) / header.block_size;
 
-	return read(header.block_size, block_list, toc->file_size[file_number], dest);
+    return read(header.block_size, block_list, toc->file_size[file_number], dest);
 }
 
 bool pdb_ds_reader::init()
 {
-	if (!fs_.RawRead(0, &header)) 
-		return false;
+    if (!fs_.RawRead(0, &header))
+        return false;
 
-	std::vector<DWORD> toc_blocks((header.toc_size + header.block_size - 1) / header.block_size);
-	if (!fs_.RawRead(header.toc_page * header.block_size, &toc_blocks))
-		return false;
+    std::vector<DWORD> toc_blocks((header.toc_size + header.block_size - 1) / header.block_size);
+    if (!fs_.RawRead(header.toc_page * header.block_size, &toc_blocks))
+        return false;
 
-	if (read(header.block_size, toc_blocks.data(), header.toc_size, vtoc_))
-	{
-		toc = reinterpret_cast<PDB_DS_TOC*>(&vtoc_[0]);
-		if (read_file(PDB_STREAM_PDB, vroot_))
-		{
-			root = reinterpret_cast<PDB_DS_ROOT*>(vroot_.data());
-			return true;
-		}
-	}
-	return false;
+    if (read(header.block_size, toc_blocks.data(), header.toc_size, vtoc_))
+    {
+        toc = reinterpret_cast<PDB_DS_TOC*>(&vtoc_[0]);
+        if (read_file(PDB_STREAM_PDB, vroot_))
+        {
+            root = reinterpret_cast<PDB_DS_ROOT*>(vroot_.data());
+            return true;
+        }
+    }
+    return false;
 }

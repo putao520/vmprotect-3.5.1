@@ -17,11 +17,11 @@ class PatchedProxyStyle : public QProxyStyle
 public:
 	PatchedProxyStyle() : QProxyStyle("windows") {}
 
-	int styleHint(StyleHint hint, const QStyleOption *opt, const QWidget *widget,
-		QStyleHintReturn *returnData) const
+	int styleHint(StyleHint hint, const QStyleOption* opt, const QWidget* widget,
+		QStyleHintReturn* returnData) const
 	{
 		int ret = 0;
-		switch (hint) 
+		switch (hint)
 		{
 		case QStyle::SH_MainWindow_SpaceBelowMenuBar:
 			ret = 0;
@@ -33,14 +33,14 @@ public:
 		return ret;
 	}
 
-	void drawPrimitive(PrimitiveElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
+	void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
 	{
-		if(element == QStyle::PE_FrameFocusRect) 
+		if (element == QStyle::PE_FrameFocusRect)
 		{
-			if (dynamic_cast<const QTabBar *>(widget))
+			if (dynamic_cast<const QTabBar*>(widget))
 			{
 				// compensate 'const int OFFSET = 1 + pixelMetric(PM_DefaultFrameWidth)' at qcommonstyle.cpp:1891
-				const_cast<QStyleOption *>(option)->rect.adjust(-8, -3, 8, 3);
+				const_cast<QStyleOption*>(option)->rect.adjust(-8, -3, 8, 3);
 			}
 		}
 		QProxyStyle::drawPrimitive(element, option, painter, widget);
@@ -51,8 +51,8 @@ public:
  Application
  */
 
-Application::Application(int &argc, char **argv) 
-	: QApplication(argc, argv) 
+Application::Application(int& argc, char** argv)
+	: QApplication(argc, argv)
 {
 	installStylesheet();
 
@@ -65,7 +65,7 @@ Application::Application(int &argc, char **argv)
 	if (isHelpMode()) {
 		QIcon icon(":/images/help_icon.png");
 #ifdef __APPLE__
-		void qt_mac_set_app_icon(const QIcon &);
+		void qt_mac_set_app_icon(const QIcon&);
 		qt_mac_set_app_icon(icon);
 #endif
 		setWindowIcon(icon);
@@ -78,7 +78,7 @@ Application::Application(int &argc, char **argv)
 	}
 #endif
 #else
-	HICON icon = static_cast<HICON>(LoadImageA(GetModuleHandle(NULL), 
+	HICON icon = static_cast<HICON>(LoadImageA(GetModuleHandle(NULL),
 		MAKEINTRESOURCEA(isHelpMode() ? 3 : 1),
 		IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADTRANSPARENT));
 	setWindowIcon(QtWin::fromHICON(icon));
@@ -90,13 +90,13 @@ double Application::stylesheetScaleFactor_ = 96.0 / 72.0, Application::devicePix
 void Application::initScalingConstants()
 {
 	double dpi = 96.0;
-	QScreen *srn = QApplication::primaryScreen();
+	QScreen* srn = QApplication::primaryScreen();
 	if (srn)
 		dpi = (double)srn->logicalDotsPerInch();
 
-	devicePixelRatio_ = 
+	devicePixelRatio_ =
 #ifdef __APPLE__
-		1.4 *  // ïðîâåðÿë íà âèðòóàëêå (RENDER_DPI äëÿ ìàêà, ãîâîðÿò, ïðèìåðíî âî ñòîëüêî ðàç ìåíüøå), íî ïîäîçðåâàþ, ÷òî íà ìàêáóêå ñ ðåòèíîé ïîëó÷èì ñþðïðèç
+		1.4 *  // §á§â§à§Ó§Ö§â§ñ§Ý §ß§Ñ §Ó§Ú§â§ä§å§Ñ§Ý§Ü§Ö (RENDER_DPI §Õ§Ý§ñ §Þ§Ñ§Ü§Ñ, §Ô§à§Ó§à§â§ñ§ä, §á§â§Ú§Þ§Ö§â§ß§à §Ó§à §ã§ä§à§Ý§î§Ü§à §â§Ñ§Ù §Þ§Ö§ß§î§ê§Ö), §ß§à §á§à§Õ§à§Ù§â§Ö§Ó§Ñ§ð, §é§ä§à §ß§Ñ §Þ§Ñ§Ü§Ò§å§Ü§Ö §ã §â§Ö§ä§Ú§ß§à§Û §á§à§Ý§å§é§Ú§Þ §ã§ð§â§á§â§Ú§Ù
 #endif
 		devicePixelRatio();
 
@@ -115,13 +115,13 @@ Application::~Application()
 		t.remove();
 }
 
-bool Application::event(QEvent *event)
+bool Application::event(QEvent* event)
 {
 	switch (event->type()) {
 	case QEvent::FileOpen:
-		if (isHelpMode() == false) 
+		if (isHelpMode() == false)
 		{
-			emit fileOpenEvent(static_cast<QFileOpenEvent *>(event)->file());
+			emit fileOpenEvent(static_cast<QFileOpenEvent*>(event)->file());
 			return true;
 		}
 	default:
@@ -151,7 +151,7 @@ void Application::installStylesheet()
 	}
 }
 
-QByteArray Application::transformStylesheet(const QByteArray &qssData)
+QByteArray Application::transformStylesheet(const QByteArray& qssData)
 {
 	enum {
 		OUTSIDE, INSIDE
@@ -159,10 +159,10 @@ QByteArray Application::transformStylesheet(const QByteArray &qssData)
 	QByteArray ret;
 	ret.reserve(qssData.length() * 2);
 	QString current;
-	for(int idx = 0; idx < qssData.length(); ++idx)
+	for (int idx = 0; idx < qssData.length(); ++idx)
 	{
 		char ch = qssData[idx];
-		switch(state)
+		switch (state)
 		{
 		case OUTSIDE:
 			if (ch == '<')
@@ -179,7 +179,8 @@ QByteArray Application::transformStylesheet(const QByteArray &qssData)
 				ret.append(buf);
 				current.clear();
 				state = OUTSIDE;
-			} else
+			}
+			else
 			{
 				current.append(ch);
 			}
@@ -189,14 +190,14 @@ QByteArray Application::transformStylesheet(const QByteArray &qssData)
 	return ret;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
 	QString file_name;
 
 #ifdef VMP_GNU
 	file_name = QString::fromUtf8(argv[0]);
 #else
-	wchar_t **argv_w = CommandLineToArgvW(GetCommandLineW(), &argc);
+	wchar_t** argv_w = CommandLineToArgvW(GetCommandLineW(), &argc);
 	if (argc)
 		file_name = QString::fromWCharArray(argv_w[0]);
 	LocalFree(argv_w);
@@ -214,14 +215,15 @@ int main(int argc, char *argv[])
 
 	Application app(argc, argv);
 	std::auto_ptr<QMainWindow> win;
-	if(app.isHelpMode())
+	if (app.isHelpMode())
 	{
 		win.reset(new HelpBrowser(app.helpFileName()));
 		win->show();
-	} else
+	}
+	else
 	{
 		win.reset(new MainWindow);
-		win->connect(&app, SIGNAL(fileOpenEvent(const QString &)), win.get(), SLOT(loadFile(const QString &)));
+		win->connect(&app, SIGNAL(fileOpenEvent(const QString&)), win.get(), SLOT(loadFile(const QString&)));
 		win->showMaximized();
 	}
 	return app.exec();

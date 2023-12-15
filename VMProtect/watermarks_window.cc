@@ -18,9 +18,9 @@
 #include "help_browser.h"
 #include "application.h"
 
-WatermarksModel *WatermarksWindow::watermarks_model = NULL;
+WatermarksModel* WatermarksWindow::watermarks_model = NULL;
 
-WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
+WatermarksWindow::WatermarksWindow(bool selectMode, QWidget* parent)
 	: QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint), processEditLocked(false)
 #ifndef VMP_GNU
 	, debugPrivilegeEnabled(false)
@@ -70,7 +70,7 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 
 	watermarkFilter = new SearchLineEdit(this);
 	watermarkFilter->setPlaceholderText(QString::fromUtf8(language[lsSearch].c_str()));
-    connect(watermarkFilter, SIGNAL(textChanged(const QString &)), this, SLOT(watermarkSearchChanged()));
+	connect(watermarkFilter, SIGNAL(textChanged(const QString&)), this, SLOT(watermarkSearchChanged()));
 	connect(watermarkFilter, SIGNAL(returnPressed()), this, SLOT(watermarkSearchChanged()));
 
 	watermarkTree = new TreeView(this);
@@ -83,9 +83,9 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	watermarkTree->setModel(watermarks_model);
 	watermarkTree->addAction(addAct);
 	watermarkTree->addAction(delAct);
-    connect(watermarkTree->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(watermarkIndexChanged()));
+	connect(watermarkTree->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(watermarkIndexChanged()));
 	connect(watermarkTree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(itemDoubleClicked(QModelIndex)));
-	connect(watermarkTree, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenuRequested(const QPoint &)));
+	connect(watermarkTree, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(contextMenuRequested(const QPoint&)));
 	pagePanel->addWidget(watermarkTree);
 
 	searchTree = new TreeView(this);
@@ -99,42 +99,42 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	connect(searchTree, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(itemDoubleClicked(QModelIndex)));
 	pagePanel->addWidget(searchTree);
 
-	QTreeView *scanTree = new TreeView(this);
+	QTreeView* scanTree = new TreeView(this);
 	scanTree->setObjectName("grid");
 	scanTree->setRootIsDecorated(false);
 	scanTree->setIconSize(QSize(18, 18));
 	scanTree->setModel(scanModel);
 	scanTree->header()->resizeSection(0, 300 * Application::stylesheetScaleFactor());
 
-	QToolButton *helpButton = new QToolButton(this);
+	QToolButton* helpButton = new QToolButton(this);
 	helpButton->setShortcut(HelpContentsKeySequence());
 	helpButton->setIconSize(QSize(20, 20));
 	helpButton->setIcon(QIcon(":/images/help_gray.png"));
 	helpButton->setToolTip(QString::fromUtf8(language[lsHelp].c_str()));
 	connect(helpButton, SIGNAL(clicked(bool)), this, SLOT(helpClicked()));
 
-    okButton = new PushButton(QString::fromUtf8(language[lsOK].c_str()), this);
+	okButton = new PushButton(QString::fromUtf8(language[lsOK].c_str()), this);
 	okButton->setVisible(selectMode);
 	connect(okButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
 
-	QPushButton *cancelButton = new PushButton(QString::fromUtf8(language[selectMode ? lsCancel : lsClose].c_str()), this);
+	QPushButton* cancelButton = new PushButton(QString::fromUtf8(language[selectMode ? lsCancel : lsClose].c_str()), this);
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
+	QHBoxLayout* buttonLayout = new QHBoxLayout();
 	buttonLayout->setContentsMargins(0, 0, 0, 0);
 	buttonLayout->setSpacing(10);
 	buttonLayout->addWidget(helpButton);
 	buttonLayout->addStretch();
 #ifdef __APPLE__
-    buttonLayout->addWidget(cancelButton);
-    buttonLayout->addWidget(okButton);
+	buttonLayout->addWidget(cancelButton);
+	buttonLayout->addWidget(okButton);
 #else
-    buttonLayout->addWidget(okButton);
-    buttonLayout->addWidget(cancelButton);
+	buttonLayout->addWidget(okButton);
+	buttonLayout->addWidget(cancelButton);
 #endif
 
-	QFrame *panel = new QFrame(this);
-	QGridLayout *gridLayout = new QGridLayout();
+	QFrame* panel = new QFrame(this);
+	QGridLayout* gridLayout = new QGridLayout();
 	gridLayout->setContentsMargins(0, 10, 0, 0);
 	gridLayout->setVerticalSpacing(10);
 	gridLayout->addWidget(addButton, 0, 0);
@@ -144,7 +144,7 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	panel->setLayout(gridLayout);
 	tabBar->addTab(panel, QIcon(":/images/tool.png"), QString::fromUtf8(language[lsSetup].c_str()));
 
-	QFrame *filePanel = new QFrame(this);
+	QFrame* filePanel = new QFrame(this);
 	filePanel->setObjectName("gridEditor");
 	filePanel->setFrameShape(QFrame::StyledPanel);
 
@@ -152,7 +152,7 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	fileButton->setObjectName("editor");
 	connect(fileButton, SIGNAL(clicked()), this, SLOT(fileButtonClicked()));
 
-	QFrame *fileSpacer = new QFrame(this);
+	QFrame* fileSpacer = new QFrame(this);
 	fileSpacer->setObjectName("editor");
 	fileSpacer->setFixedWidth(17);
 
@@ -171,13 +171,13 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 #else
 		"%1 (*.*)"
 #endif
-		).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
+	).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
 
 	processButton = new QRadioButton(QString::fromUtf8(language[lsSearchInModule].c_str()), this);
 	processButton->setObjectName("editor");
 	connect(processButton, SIGNAL(clicked()), this, SLOT(processButtonClicked()));
 
-	QFrame *processSpacer = new QFrame(this);
+	QFrame* processSpacer = new QFrame(this);
 	processSpacer->setObjectName("editor");
 	processSpacer->setFixedWidth(17);
 
@@ -191,7 +191,7 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	connect(processEdit, SIGNAL(dropDown()), this, SLOT(processEditDropDown()));
 	connect(processEdit, SIGNAL(currentIndexChanged(int)), this, SLOT(processEditChanged()));
 
-	QFrame *moduleSpacer = new QFrame(this);
+	QFrame* moduleSpacer = new QFrame(this);
 	moduleSpacer->setObjectName("editor");
 	moduleSpacer->setFixedWidth(17);
 
@@ -222,11 +222,11 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	gridLayout->setColumnStretch(2, 1);
 	filePanel->setLayout(gridLayout);
 
-	QPushButton *scanButton = new PushButton(QString::fromUtf8(language[lsStart].c_str()), this);
+	QPushButton* scanButton = new PushButton(QString::fromUtf8(language[lsStart].c_str()), this);
 	connect(scanButton, SIGNAL(clicked()), this, SLOT(scanButtonClicked()));
 
 	panel = new QFrame(this);
-	QBoxLayout *layout = new QVBoxLayout();
+	QBoxLayout* layout = new QVBoxLayout();
 	layout->setContentsMargins(0, 10, 0, 0);
 	layout->setSpacing(10);
 	layout->addWidget(filePanel);
@@ -242,8 +242,8 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 	layout->addLayout(buttonLayout);
 	setLayout(layout);
 
-	connect(watermarks_model, SIGNAL(nodeUpdated(ProjectNode *)), this, SLOT(watermarkNodeUpdated(ProjectNode *)));
-	connect(watermarks_model, SIGNAL(nodeRemoved(ProjectNode *)), this, SLOT(watermarkNodeRemoved(ProjectNode *)));
+	connect(watermarks_model, SIGNAL(nodeUpdated(ProjectNode*)), this, SLOT(watermarkNodeUpdated(ProjectNode*)));
+	connect(watermarks_model, SIGNAL(nodeRemoved(ProjectNode*)), this, SLOT(watermarkNodeRemoved(ProjectNode*)));
 
 	fileButton->setChecked(true);
 	fileButtonClicked();
@@ -253,22 +253,22 @@ WatermarksWindow::WatermarksWindow(bool selectMode, QWidget *parent)
 
 WatermarksWindow::~WatermarksWindow()
 {
-	disconnect(watermarks_model, SIGNAL(nodeUpdated(ProjectNode *)), this, SLOT(watermarkNodeUpdated(ProjectNode *)));
-	disconnect(watermarks_model, SIGNAL(nodeRemoved(ProjectNode *)), this, SLOT(watermarkNodeRemoved(ProjectNode *)));
+	disconnect(watermarks_model, SIGNAL(nodeUpdated(ProjectNode*)), this, SLOT(watermarkNodeUpdated(ProjectNode*)));
+	disconnect(watermarks_model, SIGNAL(nodeRemoved(ProjectNode*)), this, SLOT(watermarkNodeRemoved(ProjectNode*)));
 
 	delete searchModel;
 	delete scanModel;
 }
 
-void WatermarksWindow::watermarkNodeUpdated(ProjectNode *node)
+void WatermarksWindow::watermarkNodeUpdated(ProjectNode* node)
 {
 	searchModel->updateNode(node);
 }
 
-void WatermarksWindow::watermarkNodeRemoved(ProjectNode *node)
+void WatermarksWindow::watermarkNodeRemoved(ProjectNode* node)
 {
 	searchModel->removeNode(node);
-	scanModel->removeWatermark(static_cast<Watermark *>(node->data()));
+	scanModel->removeWatermark(static_cast<Watermark*>(node->data()));
 }
 
 void WatermarksWindow::okButtonClicked()
@@ -277,31 +277,33 @@ void WatermarksWindow::okButtonClicked()
 		accept();
 }
 
-ProjectNode *WatermarksWindow::currentNode() const
+ProjectNode* WatermarksWindow::currentNode() const
 {
-	ProjectNode *res = NULL;
+	ProjectNode* res = NULL;
 	if (pagePanel->currentWidget() == watermarkTree) {
 		res = watermarks_model->indexToNode(watermarkTree->currentIndex());
-	} else if (pagePanel->currentWidget() == searchTree) {
+	}
+	else if (pagePanel->currentWidget() == searchTree) {
 		res = searchModel->indexToNode(searchTree->currentIndex());
 	}
 	return res;
 }
 
-Watermark *WatermarksWindow::selectedWatermark() const
+Watermark* WatermarksWindow::selectedWatermark() const
 {
-	ProjectNode *node = currentNode();
-	return (node && node->type() == NODE_WATERMARK) ? reinterpret_cast<Watermark *>(node->data()) : NULL;
+	ProjectNode* node = currentNode();
+	return (node && node->type() == NODE_WATERMARK) ? reinterpret_cast<Watermark*>(node->data()) : NULL;
 }
 
 void WatermarksWindow::watermarkSearchChanged()
 {
-	Watermark *watermark = selectedWatermark();
+	Watermark* watermark = selectedWatermark();
 	if (!watermarkFilter->text().isEmpty()) {
 		searchModel->search(watermarks_model->root(), watermarkFilter->text());
 		pagePanel->setCurrentWidget(searchTree);
 		searchTree->setCurrentIndex(searchModel->nodeToIndex(watermarks_model->objectToNode(watermark)));
-	} else {
+	}
+	else {
 		pagePanel->setCurrentWidget(watermarkTree);
 		watermarkTree->setCurrentIndex(watermarks_model->objectToIndex(watermark));
 	}
@@ -309,7 +311,7 @@ void WatermarksWindow::watermarkSearchChanged()
 	watermarkIndexChanged();
 }
 
-QTreeView *WatermarksWindow::currentTreeView() const
+QTreeView* WatermarksWindow::currentTreeView() const
 {
 	if (pagePanel->currentWidget() == watermarkTree)
 		return watermarkTree;
@@ -319,7 +321,7 @@ QTreeView *WatermarksWindow::currentTreeView() const
 
 void WatermarksWindow::watermarkIndexChanged()
 {
-	Watermark *watermark = selectedWatermark();
+	Watermark* watermark = selectedWatermark();
 
 	okButton->setEnabled(watermark != NULL);
 	delAct->setEnabled(watermark != NULL);
@@ -328,7 +330,7 @@ void WatermarksWindow::watermarkIndexChanged()
 	blockAct->setChecked(watermark != NULL && !watermark->enabled());
 }
 
-void WatermarksWindow::itemDoubleClicked(const QModelIndex & /*index*/)
+void WatermarksWindow::itemDoubleClicked(const QModelIndex& /*index*/)
 {
 	if (!okButton->isVisible())
 		return;
@@ -338,11 +340,11 @@ void WatermarksWindow::itemDoubleClicked(const QModelIndex & /*index*/)
 
 QString WatermarksWindow::watermarkName() const
 {
-	Watermark *watermark = selectedWatermark();
+	Watermark* watermark = selectedWatermark();
 	return watermark ? QString::fromUtf8(watermark->name().c_str()) : QString();
 }
 
-void WatermarksWindow::setWatermarkName(const QString &name)
+void WatermarksWindow::setWatermarkName(const QString& name)
 {
 	QModelIndex index = watermarks_model->indexByName(name);
 	watermarkTree->setCurrentIndex(index);
@@ -350,14 +352,16 @@ void WatermarksWindow::setWatermarkName(const QString &name)
 		watermarkTree->scrollTo(index, QAbstractItemView::PositionAtTop);
 }
 
-std::map<Watermark*, size_t> WatermarksWindow::internalScanWatermarks(IFile *file)
+std::map<Watermark*, size_t> WatermarksWindow::internalScanWatermarks(IFile* file)
 {
 	std::map<Watermark*, size_t> res;
 	try {
 		res = file->SearchWatermarks(*watermarks_model->core()->watermark_manager());
-	} catch(canceled_error &error) {
+	}
+	catch (canceled_error& error) {
 		file->Notify(mtWarning, NULL, error.what());
-	} catch(std::runtime_error &error) {
+	}
+	catch (std::runtime_error& error) {
 		file->Notify(mtError, NULL, error.what());
 	}
 	return res;
@@ -371,7 +375,8 @@ void WatermarksWindow::scanButtonClicked()
 			fileNameEdit->setFocus();
 			return;
 		}
-	} else {
+	}
+	else {
 		if (processEdit->currentIndex() == -1) {
 			MessageDialog::critical(this, QString::fromUtf8(language[lsProcessNotSpecified].c_str()), QMessageBox::Ok);
 			processEdit->setFocus();
@@ -390,7 +395,7 @@ void WatermarksWindow::scanButtonClicked()
 
 	if (fileButton->isChecked()) {
 		std::string fileName = fileNameEdit->text().toUtf8().data();
-		std::auto_ptr<IFile> files[] = { 
+		std::auto_ptr<IFile> files[] = {
 			std::auto_ptr<IFile>(new PEFile(qobject_cast<ILog*>(&log)))
 			, std::auto_ptr<IFile>(new MacFile(qobject_cast<ILog*>(&log)))
 			, std::auto_ptr<IFile>(new ELFFile(qobject_cast<ILog*>(&log)))
@@ -407,7 +412,8 @@ void WatermarksWindow::scanButtonClicked()
 			if (status == osOpenError) {
 				MessageDialog::critical(this, QString::fromUtf8(string_format(language[lsOpenFileError].c_str(), fileName.c_str()).c_str()), QMessageBox::Ok);
 				break;
-			} else if (status != osUnknownFormat) {
+			}
+			else if (status != osUnknownFormat) {
 				LangString message_id;
 				switch (status) {
 				case osUnsupportedCPU:
@@ -424,7 +430,8 @@ void WatermarksWindow::scanButtonClicked()
 					break;
 			}
 		}
-	} else {
+	}
+	else {
 		QVariant process = processEdit->itemData(processEdit->currentIndex());
 		QVariant module = moduleEdit->itemData(moduleEdit->currentIndex());
 		std::string moduleName = moduleEdit->currentText().toUtf8().data();
@@ -440,8 +447,8 @@ void WatermarksWindow::scanButtonClicked()
 
 		connect(&watcher, SIGNAL(finished()), &progress, SLOT(reject()));
 		connect(&progress, SIGNAL(cancel()), &log, SLOT(cancel()));
-		connect(&log, SIGNAL(notify(MessageType, IObject *, const QString &)), &progress, SLOT(notify(MessageType, IObject *, const QString &)));
-		connect(&log, SIGNAL(startProgress(const QString &, unsigned long long)), &progress, SLOT(startProgress(const QString &, unsigned long long)));
+		connect(&log, SIGNAL(notify(MessageType, IObject*, const QString&)), &progress, SLOT(notify(MessageType, IObject*, const QString&)));
+		connect(&log, SIGNAL(startProgress(const QString&, unsigned long long)), &progress, SLOT(startProgress(const QString&, unsigned long long)));
 		connect(&log, SIGNAL(stepProgress(unsigned long long)), &progress, SLOT(stepProgress(unsigned long long)));
 
 		watcher.setFuture(QtConcurrent::run(this, &WatermarksWindow::internalScanWatermarks, file.get()));
@@ -457,21 +464,22 @@ void WatermarksWindow::addClicked()
 
 	if (dialog.exec() == QDialog::Accepted) {
 		watermarkFilter->clear();
-		Watermark *watermark = dialog.watermark();
+		Watermark* watermark = dialog.watermark();
 		watermarkTree->setCurrentIndex(watermarks_model->objectToIndex(watermark));
 	}
 }
 
 void WatermarksWindow::delClicked()
 {
-	Watermark *watermark = selectedWatermark();
+	Watermark* watermark = selectedWatermark();
 	if (!watermark)
 		return;
 
 	int res;
 	if (watermark->use_count()) {
 		res = MessageDialog::warning(this, QString("%1.\n%2?").arg(QString::fromUtf8(string_format(language[lsWatermarkIsUsed].c_str(), watermark->name().c_str()).c_str())).arg(QString(QString::fromUtf8(language[lsDeleteWatermark].c_str()))), QMessageBox::Yes | QMessageBox::No);
-	} else {
+	}
+	else {
 		res = MessageDialog::question(this, QString(QString::fromUtf8(language[lsDeleteWatermark].c_str()) + "?"), QMessageBox::Yes | QMessageBox::No);
 	}
 	if (res == QMessageBox::Yes)
@@ -480,13 +488,13 @@ void WatermarksWindow::delClicked()
 
 void WatermarksWindow::renameClicked()
 {
-	QTreeView *tree_view = currentTreeView();
+	QTreeView* tree_view = currentTreeView();
 	tree_view->edit(tree_view->currentIndex());
 }
 
 void WatermarksWindow::blockClicked()
 {
-	Watermark *watermark = selectedWatermark();
+	Watermark* watermark = selectedWatermark();
 	if (!watermark)
 		return;
 
@@ -547,7 +555,7 @@ void WatermarksWindow::processEditDropDown()
 	std::vector<PROCESS_ITEM> processes = os::EnumProcesses();
 	for (size_t i = 0; i < processes.size(); i++) {
 		processEdit->addItem(
-			QString("[%1] ").arg(processes[i].id) + QString::fromUtf8(processes[i].name.c_str()), 
+			QString("[%1] ").arg(processes[i].id) + QString::fromUtf8(processes[i].name.c_str()),
 			QVariant(static_cast<qulonglong>(processes[i].id)));
 	}
 
@@ -571,21 +579,21 @@ void WatermarksWindow::processEditChanged()
 	QVariant data = processEdit->itemData(i);
 	std::vector<MODULE_ITEM> modules = os::EnumModules(data.toInt());
 	for (size_t i = 0; i < modules.size(); i++) {
-		
+
 		moduleEdit->addItem(
 			QString::fromUtf8(modules[i].name.c_str())
-#ifdef __unix__ // может быть много строк для одного файла по разным адресам (addr === HANDLE)
-				+ QString(" @%1").arg((uint64_t)modules[i].handle, sizeof(void *) * 2, 16, QLatin1Char('0')).toUpper()
+#ifdef __unix__ // §Ю§а§Ш§Ц§д §Т§н§д§о §Ю§Я§а§Ф§а §г§д§в§а§Ь §Х§Э§с §а§Х§Я§а§Ф§а §ж§С§Ы§Э§С §б§а §в§С§Щ§Я§н§Ю §С§Х§в§Ц§г§С§Ю (addr === HANDLE)
+			+ QString(" @%1").arg((uint64_t)modules[i].handle, sizeof(void*) * 2, 16, QLatin1Char('0')).toUpper()
 #endif
-				,
+			,
 			QVariant(reinterpret_cast<qulonglong>(modules[i].handle)));
 	}
-	
+
 	if (moduleEdit->count())
 		moduleEdit->setCurrentIndex(0);
 }
 
-void WatermarksWindow::contextMenuRequested(const QPoint &p)
+void WatermarksWindow::contextMenuRequested(const QPoint& p)
 {
 	contextMenu->exec(watermarkTree->viewport()->mapToGlobal(p));
 }

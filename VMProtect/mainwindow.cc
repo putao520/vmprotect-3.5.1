@@ -64,7 +64,7 @@ MainWindow::MainWindow()
 
 	// create internal objects
 	log_ = new GUILog(this);
-	connect(log_, SIGNAL(notify(MessageType, IObject *, const QString &)), this, SLOT(notify(MessageType, IObject *, const QString &)));
+	connect(log_, SIGNAL(notify(MessageType, IObject*, const QString&)), this, SLOT(notify(MessageType, IObject*, const QString&)));
 
 	core_ = new Core(qobject_cast<ILog*>(log_));
 
@@ -78,8 +78,8 @@ MainWindow::MainWindow()
 
 	project_model_ = new ProjectModel(this);
 	connect(project_model_, SIGNAL(modified()), this, SLOT(projectModified()));
-	connect(project_model_, SIGNAL(nodeRemoved(ProjectNode *)), this, SLOT(projectNodeRemoved(ProjectNode *)));
-	connect(project_model_, SIGNAL(objectRemoved(void *)), this, SLOT(projectObjectRemoved(void *)));
+	connect(project_model_, SIGNAL(nodeRemoved(ProjectNode*)), this, SLOT(projectNodeRemoved(ProjectNode*)));
+	connect(project_model_, SIGNAL(objectRemoved(void*)), this, SLOT(projectObjectRemoved(void*)));
 
 	search_model_ = new SearchModel(this);
 	directory_model_ = new DirectoryModel(this);
@@ -325,8 +325,8 @@ MainWindow::MainWindow()
 	search_act_->setEnabled(false);
 	connect(search_act_, SIGNAL(triggered()), this, SLOT(search()));
 
-    QList<QAction *> action_list = this->findChildren<QAction *>();
-	for (QList<QAction *>::ConstIterator it = action_list.constBegin(); it != action_list.constEnd(); it++) {
+	QList<QAction*> action_list = this->findChildren<QAction*>();
+	for (QList<QAction*>::ConstIterator it = action_list.constBegin(); it != action_list.constEnd(); it++) {
 		(*it)->setIconVisibleInMenu(false);
 	}
 
@@ -423,13 +423,13 @@ MainWindow::MainWindow()
 	project_filter_ = new SearchLineEdit(this);
 	project_filter_->setFrame(false);
 	project_filter_->setFixedWidth(200);
-    connect(project_filter_, SIGNAL(textChanged(const QString &)), this, SLOT(projectFilterChanged()));
+	connect(project_filter_, SIGNAL(textChanged(const QString&)), this, SLOT(projectFilterChanged()));
 	connect(project_filter_, SIGNAL(returnPressed()), this, SLOT(projectFilterChanged()));
 
-	QWidget *widget = new QWidget(this);
-	QLabel *label = new QLabel(QString::fromUtf8(language[lsParameters].c_str()) + ":", this);
+	QWidget* widget = new QWidget(this);
+	QLabel* label = new QLabel(QString::fromUtf8(language[lsParameters].c_str()) + ":", this);
 	parameters_edit_ = new LineEdit(this);
-	QBoxLayout *layout = new QHBoxLayout();
+	QBoxLayout* layout = new QHBoxLayout();
 	layout->setContentsMargins(16, 0, 0, 0);
 	layout->addWidget(label);
 	layout->addWidget(parameters_edit_);
@@ -444,7 +444,7 @@ MainWindow::MainWindow()
 
 	setContextMenuPolicy(Qt::NoContextMenu);
 
-	QToolBar *tool_bar = addToolBar("");
+	QToolBar* tool_bar = addToolBar("");
 	tool_bar->setMovable(false);
 	tool_bar->setIconSize(QSize(20, 20));
 	tool_bar->addSeparator();
@@ -460,7 +460,7 @@ MainWindow::MainWindow()
 	tool_bar->addWidget(spacer_);
 	tool_bar->addAction(compile_act_);
 	tool_bar->addAction(execute_act_);
-	QToolButton *button = reinterpret_cast<QToolButton *>(tool_bar->widgetForAction(execute_act_));
+	QToolButton* button = reinterpret_cast<QToolButton*>(tool_bar->widgetForAction(execute_act_));
 	button->setMenu(execute_menu_);
 	button->setPopupMode(QToolButton::MenuButtonPopup);
 	project_separator_ = tool_bar->addSeparator();
@@ -502,12 +502,12 @@ MainWindow::MainWindow()
 	templates_act_->setVisible(false);
 
 	tool_bar->addAction(templates_act_);
-	QToolButton *template_button = reinterpret_cast<QToolButton*>(tool_bar->widgetForAction(templates_act_));
+	QToolButton* template_button = reinterpret_cast<QToolButton*>(tool_bar->widgetForAction(templates_act_));
 	template_button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	template_button->setPopupMode(QToolButton::InstantPopup);
 	template_button->setMenu(templates_menu_);
 
-	QWidget *spacer = new QWidget(this);
+	QWidget* spacer = new QWidget(this);
 	spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	tool_bar->addWidget(spacer);
 	project_filter_act_ = tool_bar->addWidget(project_filter_);
@@ -523,10 +523,10 @@ MainWindow::MainWindow()
 	project_tree_->setIconSize(QSize(18, 18));
 	project_tree_->setModel(project_model_);
 	project_tree_->setContextMenuPolicy(Qt::CustomContextMenu);
-	project_tree_->setDragDropMode(QAbstractItemView::DragDrop); 
+	project_tree_->setDragDropMode(QAbstractItemView::DragDrop);
 	project_tree_->setItemDelegate(new ProjectTreeDelegate(this));
 	connect(project_tree_->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(projectItemChanged()));
-	connect(project_tree_, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(projectContextMenu(const QPoint &)));
+	connect(project_tree_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(projectContextMenu(const QPoint&)));
 
 #ifndef LITE
 	functions_tree_ = new TreeView(this);
@@ -537,7 +537,7 @@ MainWindow::MainWindow()
 	functions_tree_->setModel(functions_model_);
 	functions_tree_->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(functions_tree_->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(projectItemChanged()));
-	connect(functions_tree_, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(projectContextMenu(const QPoint &)));
+	connect(functions_tree_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(projectContextMenu(const QPoint&)));
 
 	info_tree_ = new TreeView(this);
 	info_tree_->setObjectName("project");
@@ -552,7 +552,7 @@ MainWindow::MainWindow()
 	project_tab_->tabBar()->hide();
 	project_tab_->resize(240 * Application::stylesheetScaleFactor(), 10);
 
-	QFrame *tab_bar = new QFrame(this);
+	QFrame* tab_bar = new QFrame(this);
 	tab_bar->setObjectName("desktop");
 
 	icon_project_ = new QRadioButton(this);
@@ -610,7 +610,7 @@ MainWindow::MainWindow()
 	connect(directory_tree_, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(treeItemDoubleClicked(QModelIndex)));
 	connect(directory_tree_->header(), SIGNAL(sectionClicked(int)), this, SLOT(treeSectionClicked(int)));
 	directory_tree_->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(directory_tree_, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(projectContextMenu(const QPoint &)));
+	connect(directory_tree_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(projectContextMenu(const QPoint&)));
 
 #ifndef LITE
 	dump_view_ = new TableView(this);
@@ -648,7 +648,7 @@ MainWindow::MainWindow()
 
 	script_editor_ = new ScriptEdit(this);
 	script_editor_->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(script_editor_, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(scriptContextMenu(const QPoint &)));
+	connect(script_editor_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(scriptContextMenu(const QPoint&)));
 
 	project_file_name_ = new QLabel(this);
 
@@ -680,7 +680,7 @@ MainWindow::MainWindow()
 	function_property_editor_->setContextMenuPolicy(Qt::CustomContextMenu);
 	function_property_editor_->setSelectionMode(QTreeView::ExtendedSelection);
 	function_property_editor_->header()->setSectionsMovable(false);
-	connect(function_property_editor_, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(functionContextMenu(const QPoint &)));
+	connect(function_property_editor_, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(functionContextMenu(const QPoint&)));
 	connect(function_property_editor_, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(functionItemDoubleClicked(QModelIndex)));
 
 #ifndef LITE
@@ -762,14 +762,14 @@ MainWindow::MainWindow()
 	licensing_parameters_help_->setWordWrap(true);
 	licensing_parameters_help_->setText(QString::fromUtf8(language[lsKeyPairHelp].c_str()));
 
-	QFrame *key_frame = new QFrame(this);
+	QFrame* key_frame = new QFrame(this);
 	key_frame->setObjectName("gridEditor");
 	key_frame->setFrameShape(QFrame::NoFrame);
 
 	key_algo_label_ = new QLabel(QString::fromUtf8(language[lsKeyPairAlgorithm].c_str()), this);
 	key_algo_label_->setObjectName("editor");
 
-	QComboBox *comboKeyAlgo = new QComboBox(this);
+	QComboBox* comboKeyAlgo = new QComboBox(this);
 	comboKeyAlgo->setFrame(false);
 	comboKeyAlgo->setFont(font);
 	comboKeyAlgo->addItem("RSA");
@@ -791,21 +791,21 @@ MainWindow::MainWindow()
 	use_other_project_button_ = new PushButton(QString::fromUtf8(language[lsUseOtherProject].c_str()), this);
 	connect(use_other_project_button_, SIGNAL(clicked()), this, SLOT(useOtherProject()));
 
-    QGridLayout *keyLayout = new QGridLayout();
+	QGridLayout* keyLayout = new QGridLayout();
 	keyLayout->setContentsMargins(0, 1, 0, 1);
 	keyLayout->setHorizontalSpacing(0);
 	keyLayout->setVerticalSpacing(1);
-    keyLayout->addWidget(key_algo_label_, 0, 0);
+	keyLayout->addWidget(key_algo_label_, 0, 0);
 	keyLayout->addWidget(comboKeyAlgo, 0, 1);
-    keyLayout->addWidget(key_len_label_, 1, 0);
+	keyLayout->addWidget(key_len_label_, 1, 0);
 	keyLayout->addWidget(key_len_, 1, 1);
 	key_frame->setLayout(keyLayout);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout();
+	QHBoxLayout* buttonLayout = new QHBoxLayout();
 	buttonLayout->setContentsMargins(0, 0, 0, 0);
 	buttonLayout->setSpacing(10);
-    buttonLayout->addWidget(create_key_button_);
-    buttonLayout->addWidget(use_other_project_button_);
+	buttonLayout->addWidget(create_key_button_);
+	buttonLayout->addWidget(use_other_project_button_);
 	buttonLayout->setAlignment(Qt::AlignCenter);
 
 	layout = new QVBoxLayout();
@@ -819,7 +819,7 @@ MainWindow::MainWindow()
 	licensing_parameters_page_->setLayout(layout);
 #endif
 
-	QSplitter *splitter;
+	QSplitter* splitter;
 #ifndef LITE
 	splitter = new QSplitter(this);
 	splitter->setOrientation(Qt::Vertical);
@@ -835,7 +835,7 @@ MainWindow::MainWindow()
 
 	splitter->addWidget(disasm_view_);
 	splitter->addWidget(dump_view_);
-    splitter->setStretchFactor(0, 1);
+	splitter->setStretchFactor(0, 1);
 	splitter->setStretchFactor(1, 0);
 #endif
 
@@ -870,7 +870,7 @@ MainWindow::MainWindow()
 		SLOT(contextFind(QString, bool, bool)));
 	connect(context_find_, SIGNAL(escapePressed()), this, SLOT(contextFindClosed()));
 
-	QWidget *project_find = new QWidget(this);
+	QWidget* project_find = new QWidget(this);
 	layout = new QVBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
@@ -887,7 +887,7 @@ MainWindow::MainWindow()
 	splitter = new QSplitter(this);
 	splitter->setOrientation(Qt::Vertical);
 
-	QFrame *project_right = new QFrame(this);
+	QFrame* project_right = new QFrame(this);
 	layout = new QVBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
@@ -898,12 +898,12 @@ MainWindow::MainWindow()
 
 	splitter->addWidget(project_find);
 	splitter->addWidget(log_tree_);
-    splitter->setStretchFactor(0, 1);
+	splitter->setStretchFactor(0, 1);
 	splitter->setStretchFactor(1, 0);
 
 	splitter = new QSplitter(this);
 
-	QGridLayout *gridLayout = new QGridLayout();
+	QGridLayout* gridLayout = new QGridLayout();
 	gridLayout->setContentsMargins(0, 0, 0, 0);
 	gridLayout->setSpacing(0);
 	gridLayout->addWidget(tab_bar, 0, 0);
@@ -915,8 +915,8 @@ MainWindow::MainWindow()
 
 	splitter->addWidget(project_tab_);
 	splitter->addWidget(project_right);
-    splitter->setStretchFactor(0, 0);
-    splitter->setStretchFactor(1, 1);
+	splitter->setStretchFactor(0, 0);
+	splitter->setStretchFactor(1, 1);
 
 	boot_frame_ = new QFrame(this);
 	boot_frame_->setObjectName("desktop");
@@ -931,19 +931,19 @@ MainWindow::MainWindow()
 	layout->setAlignment(boot_panel_, Qt::AlignCenter);
 	boot_frame_->setLayout(layout);
 
-	QFrame *top = new QFrame(this);
+	QFrame* top = new QFrame(this);
 	top->setObjectName("bootTop");
 
-	QLabel *logo = new QLabel(this);
+	QLabel* logo = new QLabel(this);
 	logo->setPixmap(QPixmap(":/images/logo.png"));
 
 	welcome_label_ = new QLabel(QString::fromUtf8(language[lsWelcome].c_str()), this);
 	welcome_label_->setObjectName("version");
 
-	QLabel *version = new QLabel(QString::fromLatin1(Core::edition()) + " v " + QString::fromLatin1(Core::version()), this);
+	QLabel* version = new QLabel(QString::fromLatin1(Core::edition()) + " v " + QString::fromLatin1(Core::version()), this);
 	version->setObjectName("version");
 
-	QGridLayout *grid_layout = new QGridLayout();
+	QGridLayout* grid_layout = new QGridLayout();
 	grid_layout->setContentsMargins(30, 30, 30, 20);
 	grid_layout->setSpacing(0);
 	grid_layout->setColumnStretch(1, 1);
@@ -952,7 +952,7 @@ MainWindow::MainWindow()
 	grid_layout->addWidget(version, 1, 1, Qt::AlignCenter);
 	top->setLayout(grid_layout);
 
-	QFrame *line1 = new QFrame(this);
+	QFrame* line1 = new QFrame(this);
 	line1->setObjectName("bootHSeparator");
 	line1->setFixedHeight(1);
 
@@ -962,7 +962,7 @@ MainWindow::MainWindow()
 	quick_start_label_ = new QLabel(QString::fromUtf8(language[lsQuickStart].c_str()), this);
 	quick_start_label_->setObjectName("boot");
 
-	QFrame *left = new QFrame(this);
+	QFrame* left = new QFrame(this);
 	left->setFixedWidth(boot_panel_->minimumSize().width() / 2);
 	recent_files_layout_ = new QVBoxLayout();
 	recent_files_layout_->setContentsMargins(10, 10, 10, 10);
@@ -1012,7 +1012,7 @@ MainWindow::MainWindow()
 	help_button_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 	connect(help_button_, SIGNAL(clicked(bool)), this, SLOT(help()));
 
-	QFrame *right = new QFrame(this);
+	QFrame* right = new QFrame(this);
 	layout = new QVBoxLayout();
 	layout->setContentsMargins(10, 10, 10, 10);
 	layout->setSpacing(0);
@@ -1024,11 +1024,11 @@ MainWindow::MainWindow()
 	layout->addStretch(1);
 	right->setLayout(layout);
 
-	QFrame *line3 = new QFrame(this);
+	QFrame* line3 = new QFrame(this);
 	line3->setObjectName("bootVSeparator");
 	line3->setFixedWidth(1);
 
-	QFrame *center = new QFrame(this);
+	QFrame* center = new QFrame(this);
 	layout = new QHBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
@@ -1052,7 +1052,7 @@ MainWindow::MainWindow()
 	setCentralWidget(desktop_page_);
 
 	connect(QAbstractEventDispatcher::instance(), SIGNAL(awake()), SLOT(updateEditActions()));
-	connect(&fs_watcher_, SIGNAL(fileChanged(const QString &)), this, SLOT(fileChanged(const QString &)));
+	connect(&fs_watcher_, SIGNAL(fileChanged(const QString&)), this, SLOT(fileChanged(const QString&)));
 
 	setAcceptDrops(true);
 
@@ -1084,14 +1084,14 @@ void MainWindow::addRecentFile(int index, const QString file_name)
 {
 	history_separator_->setVisible(true);
 
-	QAction *action = new QAction(file_name, this);
+	QAction* action = new QAction(file_name, this);
 	connect(action, SIGNAL(triggered()), this, SLOT(loadFileFromHistory()));
 	int file_pos = file_menu_->actions().indexOf(history_separator_) + 1;
 	file_menu_->insertAction(file_menu_->actions().at(file_pos + index), action);
 
 	QFileInfo fileInfo(file_name);
 
-	QToolButton *button = new QToolButton(this);
+	QToolButton* button = new QToolButton(this);
 	button->setObjectName("boot");
 	button->setIconSize(QSize(16, 16));
 	button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -1100,7 +1100,7 @@ void MainWindow::addRecentFile(int index, const QString file_name)
 	button->setText(fileInfo.fileName());
 	button->setToolTip(file_name);
 	button->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(button, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(recentFileContextMenu(const QPoint &)));
+	connect(button, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(recentFileContextMenu(const QPoint&)));
 
 	QFileIconProvider ip;
 	QIcon icon = ip.icon(fileInfo);
@@ -1112,10 +1112,10 @@ void MainWindow::addRecentFile(int index, const QString file_name)
 	recent_files_layout_->insertWidget(2 + index, button);
 }
 
-void MainWindow::recentFileContextMenu(const QPoint &p)
+void MainWindow::recentFileContextMenu(const QPoint& p)
 {
 	recent_file_ = -1;
-	QToolButton *widget = qobject_cast<QToolButton*>(sender());
+	QToolButton* widget = qobject_cast<QToolButton*>(sender());
 	if (widget) {
 		for (int i = 2; i < recent_files_layout_->count(); ++i) {
 			if (recent_files_layout_->itemAt(i)->widget() == widget) {
@@ -1137,7 +1137,7 @@ void MainWindow::openRecentFile()
 	if (recent_file_ < 0)
 		return;
 
-	QToolButton *button = qobject_cast<QToolButton *>(recent_files_layout_->itemAt(2 + recent_file_)->widget());
+	QToolButton* button = qobject_cast<QToolButton*>(recent_files_layout_->itemAt(2 + recent_file_)->widget());
 	if (button)
 		loadFile(button->toolTip());
 }
@@ -1148,11 +1148,11 @@ void MainWindow::removeRecentFile()
 		return;
 
 	int file_pos = file_menu_->actions().indexOf(history_separator_) + 1;
-	QAction *action = file_menu_->actions().at(file_pos + recent_file_);
+	QAction* action = file_menu_->actions().at(file_pos + recent_file_);
 	file_menu_->removeAction(action);
 	delete action;
 
-	QWidget *widget = recent_files_layout_->itemAt(2 + recent_file_)->widget();
+	QWidget* widget = recent_files_layout_->itemAt(2 + recent_file_)->widget();
 	recent_files_layout_->removeWidget(widget);
 	delete widget;
 
@@ -1167,7 +1167,7 @@ void MainWindow::saveRecentFiles()
 	int file_pos = file_menu_->actions().indexOf(history_separator_) + 1;
 	QList<QAction*> actions = file_menu_->actions();
 	for (int i = file_pos; i < actions.size() - 2; i++) {
-		QAction *action = actions[i];
+		QAction* action = actions[i];
 		project_list.push_back(action->text().toUtf8().constData());
 	}
 	settings_file().set_project_list(project_list);
@@ -1288,13 +1288,13 @@ void MainWindow::localize()
 #endif
 }
 
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+void MainWindow::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasUrls())
-        event->acceptProposedAction();
+	if (event->mimeData()->hasUrls())
+		event->acceptProposedAction();
 }
 
-void MainWindow::dropEvent(QDropEvent *event)
+void MainWindow::dropEvent(QDropEvent* event)
 {
 	if (!event->mimeData()->hasUrls())
 		return;
@@ -1302,20 +1302,22 @@ void MainWindow::dropEvent(QDropEvent *event)
 	loadFile(QDir::toNativeSeparators(event->mimeData()->urls().at(0).toLocalFile()));
 }
 
-bool MainWindow::internalLoadFile(const QString &filename)
+bool MainWindow::internalLoadFile(const QString& filename)
 {
 	bool res = false;
 	try {
 		res = core_->Open(filename.toUtf8().constData());
-	} catch(canceled_error &error) {
+	}
+	catch (canceled_error& error) {
 		core_->Notify(mtWarning, NULL, error.what());
-	} catch(std::runtime_error &error) {
+	}
+	catch (std::runtime_error& error) {
 		core_->Notify(mtError, NULL, error.what());
 	}
 	return res;
 }
 
-void MainWindow::loadFile(const QString &filename)
+void MainWindow::loadFile(const QString& filename)
 {
 	if (!closeFile())
 		return;
@@ -1328,7 +1330,7 @@ void MainWindow::loadFile(const QString &filename)
 
 		connect(&watcher, SIGNAL(finished()), &progress, SLOT(reject()));
 		connect(&progress, SIGNAL(cancel()), log_, SLOT(cancel()));
-		connect(log_, SIGNAL(startProgress(const QString &, unsigned long long)), &progress, SLOT(startProgress(const QString &, unsigned long long)));
+		connect(log_, SIGNAL(startProgress(const QString&, unsigned long long)), &progress, SLOT(startProgress(const QString&, unsigned long long)));
 		connect(log_, SIGNAL(stepProgress(unsigned long long)), &progress, SLOT(stepProgress(unsigned long long)));
 
 		watcher.setFuture(QtConcurrent::run(this, &MainWindow::internalLoadFile, filename));
@@ -1355,17 +1357,17 @@ void MainWindow::loadFile(const QString &filename)
 	QImage image = pixmap.toImage();
 	for (int i = 0; i < pixmap.width(); ++i) {
 		for (int j = 0; j < pixmap.height(); ++j) {
-            QRgb col = image.pixel(i, j);
-            int gray = qGray(col);
-            image.setPixel(i, j, qRgba(gray, gray, gray, qAlpha(col)));
-        }
-    }
+			QRgb col = image.pixel(i, j);
+			int gray = qGray(col);
+			image.setPixel(i, j, qRgba(gray, gray, gray, qAlpha(col)));
+		}
+	}
 	QIcon newIcon;
 	newIcon.addPixmap(pixmap, QIcon::Active, QIcon::Off);
 	newIcon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::Off);
 	spacer_->setIcon(newIcon);
 
-	IFile *file = core_->input_file();
+	IFile* file = core_->input_file();
 	if (file)
 		file->map_function_list()->ReadFromFile(*file);
 
@@ -1373,12 +1375,12 @@ void MainWindow::loadFile(const QString &filename)
 	QList<QAction*> actions = file_menu_->actions();
 	int file_pos = actions.indexOf(history_separator_) + 1;
 	for (int i = file_pos; i < actions.size() - 2; i++) {
-		QAction *action = actions[i];
+		QAction* action = actions[i];
 		if (action->text() == filename) {
 			file_menu_->removeAction(action);
 			file_menu_->insertAction(file_menu_->actions().at(file_pos), action);
 
-			QWidget *button = recent_files_layout_->itemAt(2 + i - file_pos)->widget();
+			QWidget* button = recent_files_layout_->itemAt(2 + i - file_pos)->widget();
 			recent_files_layout_->removeWidget(button);
 			recent_files_layout_->insertWidget(2, button);
 			is_found = true;
@@ -1389,13 +1391,13 @@ void MainWindow::loadFile(const QString &filename)
 		addRecentFile(0, filename);
 
 		if (actions.size() - file_pos - 2 == 10) {
-			QAction *action = actions[9 + file_pos];
+			QAction* action = actions[9 + file_pos];
 			file_menu_->removeAction(action);
 			delete action;
 		}
 
 		if (recent_files_layout_->count() == 14) {
-			QWidget *widget = recent_files_layout_->itemAt(12)->widget();
+			QWidget* widget = recent_files_layout_->itemAt(12)->widget();
 			recent_files_layout_->removeWidget(widget);
 			delete widget;
 		}
@@ -1404,7 +1406,7 @@ void MainWindow::loadFile(const QString &filename)
 	saveRecentFiles();
 
 	project_model_->setCore(core_);
-	ProjectNode *options = project_model_->indexToNode(project_model_->optionsIndex());
+	ProjectNode* options = project_model_->indexToNode(project_model_->optionsIndex());
 	if (options)
 		options->setPropertyManager(core_property_manager_);
 	project_tree_->setCurrentIndex(project_model_->index(0, 0));
@@ -1418,7 +1420,7 @@ void MainWindow::loadFile(const QString &filename)
 #endif
 
 	script_editor_->setText(QString(core_->script()->text().c_str()));
-	connect(script_editor_, SIGNAL(notify(SCNotification *)), this, SLOT(scriptNotify(SCNotification *)));
+	connect(script_editor_, SIGNAL(notify(SCNotification*)), this, SLOT(scriptNotify(SCNotification*)));
 	core_property_manager_->setCore(core_);
 
 	desktop_page_->setCurrentWidget(project_frame_);
@@ -1452,20 +1454,20 @@ void MainWindow::loadFile(const QString &filename)
 	updateLicensingActions();
 #endif
 	projectTabMoved();
-	
+
 	updateCaption();
 }
 
 void MainWindow::loadFileFromHistory()
 {
-	QAction *action = qobject_cast<QAction *>(sender());
+	QAction* action = qobject_cast<QAction*>(sender());
 	if (action)
 		loadFile(action->text());
 }
 
 void MainWindow::loadFileFromBoot()
 {
-	QToolButton *button = qobject_cast<QToolButton *>(sender());
+	QToolButton* button = qobject_cast<QToolButton*>(sender());
 	if (button)
 		loadFile(button->toolTip());
 }
@@ -1496,7 +1498,7 @@ bool MainWindow::closeFile()
 	project_model_->setCore(NULL);
 	directory_model_->setDirectory(NULL);
 	search_model_->clear();
-	disconnect(script_editor_, SIGNAL(notify(SCNotification *)), this, SLOT(scriptNotify(SCNotification *)));
+	disconnect(script_editor_, SIGNAL(notify(SCNotification*)), this, SLOT(scriptNotify(SCNotification*)));
 	script_editor_->setText("");
 	core_property_manager_->setCore(NULL);
 	function_property_manager_->setValue(NULL);
@@ -1587,12 +1589,12 @@ void MainWindow::open()
 	QString fileName = FileDialog::getOpenFileName(this, QString::fromUtf8(language[lsOpen].c_str()), FileDialog::defaultPath(),
 		QString("%1 ("
 #ifdef VMP_GNU
-				"*.app *.dylib *.exe *.dll *.bpl *.ocx *.sys *.scr *.so);;%2 (*.vmp);;%3 (*)"
+			"*.app *.dylib *.exe *.dll *.bpl *.ocx *.sys *.scr *.so);;%2 (*.vmp);;%3 (*)"
 #else
-				"*.exe *.dll *.bpl *.ocx *.sys *.scr *.dylib *.so);;%2 (*.vmp);;%3 (*.*)"
+			"*.exe *.dll *.bpl *.ocx *.sys *.scr *.dylib *.so);;%2 (*.vmp);;%3 (*.*)"
 #endif
-				).arg(QString::fromUtf8(language[lsExecutableFiles].c_str())).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
-	
+		).arg(QString::fromUtf8(language[lsExecutableFiles].c_str())).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
+
 	if (fileName.isEmpty())
 		return;
 
@@ -1605,7 +1607,8 @@ bool MainWindow::save()
 	if (ret) {
 		save_act_->setEnabled(false);
 		updateCaption();
-	} else {
+	}
+	else {
 		MessageDialog::critical(this, QString::fromUtf8(string_format(language[lsSaveFileError].c_str(), core_->project_file_name().c_str()).c_str()), QMessageBox::Ok);
 	}
 
@@ -1617,9 +1620,9 @@ void MainWindow::saveAs()
 	QString fileName = FileDialog::getSaveFileName(this, QString::fromUtf8(language[lsSave].c_str()), QString::fromUtf8(core_->project_file_name().c_str()),
 		QString(
 #ifdef VMP_GNU
-		"%1 (*.vmp);;%2 (*)"
+			"%1 (*.vmp);;%2 (*)"
 #else
-		"%1 (*.vmp);;%2 (*.*)"
+			"%1 (*.vmp);;%2 (*.*)"
 #endif
 		).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
 
@@ -1629,7 +1632,8 @@ void MainWindow::saveAs()
 	if (core_->SaveAs(fileName.toUtf8().constData())) {
 		save_act_->setEnabled(false);
 		updateCaption();
-	} else {
+	}
+	else {
 		MessageDialog::critical(this, QString::fromUtf8(string_format(language[lsSaveFileError].c_str(), fileName.toUtf8().constData()).c_str()), QMessageBox::Ok);
 	}
 }
@@ -1640,9 +1644,9 @@ void MainWindow::saveLicenses()
 	QString fileName = FileDialog::getSaveFileName(this, QString::fromUtf8(language[lsSave].c_str()), QString::fromUtf8(core_->project_file_name().c_str()),
 		QString(
 #ifdef VMP_GNU
-		"%1 (*.vmp);;%2 (*)"
+			"%1 (*.vmp);;%2 (*)"
 #else
-		"%1 (*.vmp);;%2 (*.*)"
+			"%1 (*.vmp);;%2 (*.*)"
 #endif
 		).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
 
@@ -1664,7 +1668,7 @@ void MainWindow::homePage()
 void MainWindow::help()
 {
 	QString keywordId;
-	ProjectNode *current = currentProjectNode();
+	ProjectNode* current = currentProjectNode();
 	if (current) {
 		switch (current->type()) {
 		case NODE_ROOT:
@@ -1716,7 +1720,7 @@ void MainWindow::examples()
 #else
 	wchar_t buf[MAX_PATH];
 	QString path;
-	// ïðèîðèòåòíàÿ ïàïêà, ñþäà äèñòðèáóòèâ ïèøåò
+	// §á§â§Ú§à§â§Ú§ä§Ö§ä§ß§Ñ§ñ §á§Ñ§á§Ü§Ñ, §ã§ð§Õ§Ñ §Õ§Ú§ã§ä§â§Ú§Ò§å§ä§Ú§Ó §á§Ú§ê§Ö§ä
 	if (SHGetSpecialFolderPathW(0, buf, CSIDL_COMMON_DOCUMENTS, FALSE))
 	{
 		path = QDir::fromNativeSeparators(QString::fromWCharArray(buf)) + "/VMProtect";
@@ -1725,20 +1729,20 @@ void MainWindow::examples()
 	}
 	if (path.isEmpty())
 	{
-		// åñëè íåñêîëüêî þçåðîâ ðàáîòàþò îäíîâðåìåííî, íàäî êàæäîìó ñêîïèðîâàòü ïàïêó èç CSIDL_COMMON_DOCUMENTS ê ñåáå â äîêóìåíòû,
-		// à èñõîäíóþ ãðîõíóòü - â èòîãå êàæäûé ðàáîòàåò ñî ñâîèì êàòàëîãîì
+		// §Ö§ã§Ý§Ú §ß§Ö§ã§Ü§à§Ý§î§Ü§à §ð§Ù§Ö§â§à§Ó §â§Ñ§Ò§à§ä§Ñ§ð§ä §à§Õ§ß§à§Ó§â§Ö§Þ§Ö§ß§ß§à, §ß§Ñ§Õ§à §Ü§Ñ§Ø§Õ§à§Þ§å §ã§Ü§à§á§Ú§â§à§Ó§Ñ§ä§î §á§Ñ§á§Ü§å §Ú§Ù CSIDL_COMMON_DOCUMENTS §Ü §ã§Ö§Ò§Ö §Ó §Õ§à§Ü§å§Þ§Ö§ß§ä§í,
+		// §Ñ §Ú§ã§ç§à§Õ§ß§å§ð §Ô§â§à§ç§ß§å§ä§î - §Ó §Ú§ä§à§Ô§Ö §Ü§Ñ§Ø§Õ§í§Û §â§Ñ§Ò§à§ä§Ñ§Ö§ä §ã§à §ã§Ó§à§Ú§Þ §Ü§Ñ§ä§Ñ§Ý§à§Ô§à§Þ
 		path = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).first() + "/VMProtect";
 	}
 #endif
 
 	QString fileName = FileDialog::getOpenFileName(this, QString::fromUtf8(language[lsOpen].c_str()), path, QString("%1 ("
 #ifdef VMP_GNU
-				"*.app *.dylib *.exe *.dll *.bpl *.ocx *.sys *.scr *.so);;%2 (*.vmp);;%3 (*)"
+		"*.app *.dylib *.exe *.dll *.bpl *.ocx *.sys *.scr *.so);;%2 (*.vmp);;%3 (*)"
 #else
-				"*.exe *.dll *.bpl *.ocx *.sys *.scr *.dylib *.so);;%2 (*.vmp);;%3 (*.*)"
+		"*.exe *.dll *.bpl *.ocx *.sys *.scr *.dylib *.so);;%2 (*.vmp);;%3 (*.*)"
 #endif
-				).arg(QString::fromUtf8(language[lsExecutableFiles].c_str())).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
-	
+	).arg(QString::fromUtf8(language[lsExecutableFiles].c_str())).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
+
 	if (fileName.isEmpty())
 		return;
 
@@ -1791,11 +1795,11 @@ void MainWindow::settings()
 	}
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
-    if (closeFile())
+	if (closeFile())
 		event->accept();
-    else
+	else
 		event->ignore();
 }
 
@@ -1805,13 +1809,13 @@ void MainWindow::projectModified()
 	updateCaption();
 }
 
-void MainWindow::projectNodeRemoved(ProjectNode *node)
+void MainWindow::projectNodeRemoved(ProjectNode* node)
 {
 	directory_model_->removeNode(node);
 	search_model_->removeNode(node);
 }
 
-void MainWindow::projectObjectRemoved(void *object)
+void MainWindow::projectObjectRemoved(void* object)
 {
 	if (function_property_manager_->value() && function_property_manager_->value() == object)
 		function_property_manager_->setValue(NULL);
@@ -1826,13 +1830,14 @@ void MainWindow::updateCaption()
 		QFileInfo fileInfo(fileName);
 		caption = QString("%1%2 %3 %4").arg(fileInfo.fileName()).arg(save_act_->isEnabled() ? "*" : "").arg(QString::fromUtf8("\xE2\x80\x94")).arg(caption_);
 		project_file_name_->setText(fileName);
-	} else {
+	}
+	else {
 		project_file_name_->setText("");
 	}
 	setWindowTitle(caption);
 }
 
-QTreeView *MainWindow::currentTreeView() const
+QTreeView* MainWindow::currentTreeView() const
 {
 #ifdef LITE
 	return project_tree_;
@@ -1846,10 +1851,10 @@ QTreeView *MainWindow::currentTreeView() const
 #endif
 }
 
-ProjectNode *MainWindow::currentProjectNode(bool focusedTree) const
+ProjectNode* MainWindow::currentProjectNode(bool focusedTree) const
 {
-	QTreeView *tree_view = (focusedTree && focusWidget() == directory_tree_ && directory_tree_->selectionModel()->selectedIndexes().count()) ? directory_tree_ : currentTreeView();
-	IProjectNodesModel *model = dynamic_cast<IProjectNodesModel *>(tree_view->model());
+	QTreeView* tree_view = (focusedTree && focusWidget() == directory_tree_ && directory_tree_->selectionModel()->selectedIndexes().count()) ? directory_tree_ : currentTreeView();
+	IProjectNodesModel* model = dynamic_cast<IProjectNodesModel*>(tree_view->model());
 	return model ? model->indexToNode(tree_view->currentIndex()) : NULL;
 }
 
@@ -1868,21 +1873,21 @@ void MainWindow::projectFilterChanged()
 		return;
 	}
 
-	QAbstractItemModel *model = currentTreeView()->model();
+	QAbstractItemModel* model = currentTreeView()->model();
 	assert(model);
 	if (model == NULL) return;
 
-	search_model_->search(reinterpret_cast<BaseModel *>(model)->root(), project_filter_->text()
+	search_model_->search(reinterpret_cast<BaseModel*>(model)->root(), project_filter_->text()
 #ifdef LITE
 		, (show_act_->isVisible() && show_act_->isChecked())
 #endif
-		);
+	);
 	project_page_->setCurrentWidget(search_tree_);
 }
 
 void MainWindow::showCurrentObject()
 {
-    ProjectNode *current = currentProjectNode();
+	ProjectNode* current = currentProjectNode();
 	if (!current)
 		return;
 
@@ -1902,7 +1907,7 @@ void MainWindow::showCurrentObject()
 
 #ifdef LITE
 	if (show_act_->isVisible() && show_act_->isChecked()) {
-		ProjectNode *root = reinterpret_cast<BaseModel *>(currentTreeView()->model())->root();
+		ProjectNode* root = reinterpret_cast<BaseModel*>(currentTreeView()->model())->root();
 		search_model_->search(root, project_filter_->text(), true);
 		project_page_->setCurrentWidget(search_tree_);
 		context_find_->hide();
@@ -1913,13 +1918,13 @@ void MainWindow::showCurrentObject()
 	switch (current->type()) {
 #ifdef ULTIMATE
 	case NODE_LICENSES:
-		{
-			LicensingManager *licensingManager = static_cast<LicensingManager *>(current->data());
-			if (licensingManager->empty()) {
-				project_page_->setCurrentWidget(licensing_parameters_page_);
-				break;
-			}
+	{
+		LicensingManager* licensingManager = static_cast<LicensingManager*>(current->data());
+		if (licensingManager->empty()) {
+			project_page_->setCurrentWidget(licensing_parameters_page_);
+			break;
 		}
+	}
 #endif
 	case NODE_ARCHITECTURE:
 	case NODE_LOAD_COMMANDS:
@@ -1939,7 +1944,7 @@ void MainWindow::showCurrentObject()
 	case NODE_ASSEMBLIES:
 		directory_model_->setDirectory(current);
 		for (int i = 0; i < directory_tree_->header()->count(); i++) {
-			directory_tree_->header()->resizeSection(i,  Application::stylesheetScaleFactor() *((i == 0) ? 240 : 100));
+			directory_tree_->header()->resizeSection(i, Application::stylesheetScaleFactor() * ((i == 0) ? 240 : 100));
 		}
 
 		directory_tree_->header()->setSectionsClickable(current->type() == NODE_FUNCTIONS || current->type() == NODE_FOLDER || current->type() == NODE_FILES || current->type() == NODE_FILE_FOLDER || current->type() == NODE_LICENSES || current->type() == NODE_ASSEMBLIES);
@@ -1963,143 +1968,143 @@ void MainWindow::showCurrentObject()
 #endif
 
 	case NODE_MAP_FUNCTION:
-		{
-			MapFunctionBundle *map = static_cast<MapFunctionBundle *>(current->data());
-			FunctionBundle *func = core_->input_file()->function_list()->GetFunctionByName(map->name());
-			FunctionBundle *old_temp_function = NULL;
-			if (!func) {
-				old_temp_function = temp_function_;
-				temp_function_ = NULL;
-				func = new FunctionBundle(core_->input_file()->function_list(), map->full_name(), false);
-				for (size_t i = 0; i < map->count(); i++) {
-					MapFunctionArch *map_arch = map->item(i);
-					FunctionArch *func_arch = func->Add(map_arch->arch(), map_arch->arch()->function_list()->CreateFunction());
-					func_arch->func()->set_need_compile(false);
-					func_arch->func()->set_compilation_type(ctVirtualization);
-					func_arch->func()->ReadFromFile(*map_arch->arch(), map_arch->func()->address());
-				}
-				temp_function_ = func;
+	{
+		MapFunctionBundle* map = static_cast<MapFunctionBundle*>(current->data());
+		FunctionBundle* func = core_->input_file()->function_list()->GetFunctionByName(map->name());
+		FunctionBundle* old_temp_function = NULL;
+		if (!func) {
+			old_temp_function = temp_function_;
+			temp_function_ = NULL;
+			func = new FunctionBundle(core_->input_file()->function_list(), map->full_name(), false);
+			for (size_t i = 0; i < map->count(); i++) {
+				MapFunctionArch* map_arch = map->item(i);
+				FunctionArch* func_arch = func->Add(map_arch->arch(), map_arch->arch()->function_list()->CreateFunction());
+				func_arch->func()->set_need_compile(false);
+				func_arch->func()->set_compilation_type(ctVirtualization);
+				func_arch->func()->ReadFromFile(*map_arch->arch(), map_arch->func()->address());
 			}
-			function_property_manager_->setValue(func);
-
-			if (old_temp_function) {
-				for (size_t i = 0; i < old_temp_function->count(); i++) {
-					delete old_temp_function->item(i)->func();
-				}
-				delete old_temp_function;
-			}
+			temp_function_ = func;
 		}
-		project_page_->setCurrentWidget(function_property_editor_);
-		break;
+		function_property_manager_->setValue(func);
+
+		if (old_temp_function) {
+			for (size_t i = 0; i < old_temp_function->count(); i++) {
+				delete old_temp_function->item(i)->func();
+			}
+			delete old_temp_function;
+		}
+	}
+	project_page_->setCurrentWidget(function_property_editor_);
+	break;
 
 	case NODE_FUNCTION:
-		{
-			FunctionBundle *object = static_cast<FunctionBundle *>(current->data());
-			function_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(function_property_editor_);
-		break;
+	{
+		FunctionBundle* object = static_cast<FunctionBundle*>(current->data());
+		function_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(function_property_editor_);
+	break;
 
 #ifndef LITE
 	case NODE_SEGMENT:
-		{
-			ISection *object = static_cast<ISection *>(current->data());
-			segment_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(segment_property_editor_);
-		break;
+	{
+		ISection* object = static_cast<ISection*>(current->data());
+		segment_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(segment_property_editor_);
+	break;
 
 	case NODE_SECTION:
-		{
-			ISection *object = static_cast<ISection *>(current->data());
-			section_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(section_property_editor_);
-		break;
+	{
+		ISection* object = static_cast<ISection*>(current->data());
+		section_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(section_property_editor_);
+	break;
 
 	case NODE_IMPORT_FUNCTION:
-		{
-			IImportFunction *object = static_cast<IImportFunction *>(current->data());
-			import_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(import_property_editor_);
-		break;
+	{
+		IImportFunction* object = static_cast<IImportFunction*>(current->data());
+		import_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(import_property_editor_);
+	break;
 
 	case NODE_EXPORT:
-		{
-			IExport *object = static_cast<IExport *>(current->data());
-			export_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(export_property_editor_);
-		break;
+	{
+		IExport* object = static_cast<IExport*>(current->data());
+		export_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(export_property_editor_);
+	break;
 
 	case NODE_RESOURCE:
-		{
-			IResource *object = static_cast<IResource *>(current->data());
-			resource_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(resource_property_editor_);
-		break;
+	{
+		IResource* object = static_cast<IResource*>(current->data());
+		resource_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(resource_property_editor_);
+	break;
 
 	case NODE_LOAD_COMMAND:
-		{
-			ILoadCommand *object = static_cast<ILoadCommand *>(current->data());
-			loadcommand_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(loadcommand_property_editor_);
-		break;
+	{
+		ILoadCommand* object = static_cast<ILoadCommand*>(current->data());
+		loadcommand_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(loadcommand_property_editor_);
+	break;
 
 	case NODE_CALC:
-		{
-			IArchitecture *file = static_cast<IArchitecture *>(current->data());
-			address_calculator_manager_->setValue(file);
-		}
-		project_page_->setCurrentWidget(address_calculator_);
-		break;
+	{
+		IArchitecture* file = static_cast<IArchitecture*>(current->data());
+		address_calculator_manager_->setValue(file);
+	}
+	project_page_->setCurrentWidget(address_calculator_);
+	break;
 
 	case NODE_DUMP:
-		{
-			IArchitecture *file = static_cast<IArchitecture *>(current->data());
-			QModelIndex index = disasm_view_->currentIndex();
-			disasm_model_->setFile(file);
-			if (!index.isValid() && file->entry_point())
-				goToDump(file, file->entry_point());
-			dump_model_->setFile(file);
-		}
-		project_page_->setCurrentWidget(dump_page_);
-		break;
+	{
+		IArchitecture* file = static_cast<IArchitecture*>(current->data());
+		QModelIndex index = disasm_view_->currentIndex();
+		disasm_model_->setFile(file);
+		if (!index.isValid() && file->entry_point())
+			goToDump(file, file->entry_point());
+		dump_model_->setFile(file);
+	}
+	project_page_->setCurrentWidget(dump_page_);
+	break;
 #endif
 
 #ifdef ULTIMATE
 	case NODE_LICENSE:
-		{
-			License *object = reinterpret_cast<License *>(current->data());
-			license_property_manager_->setValue(object);
-		}
-		project_page_->setCurrentWidget(license_property_editor_);
-		break;
+	{
+		License* object = reinterpret_cast<License*>(current->data());
+		license_property_manager_->setValue(object);
+	}
+	project_page_->setCurrentWidget(license_property_editor_);
+	break;
 
 	case NODE_FILE:
 		if (project_model_->objectToNode(core_->file_manager()->folder_list())->type() == NODE_ASSEMBLIES) {
-			InternalFile *object = reinterpret_cast<InternalFile *>(current->data());
+			InternalFile* object = reinterpret_cast<InternalFile*>(current->data());
 			assembly_property_manager_->setValue(object);
 			project_page_->setCurrentWidget(assembly_property_editor_);
 		}
 		else {
-			InternalFile *object = reinterpret_cast<InternalFile *>(current->data());
+			InternalFile* object = reinterpret_cast<InternalFile*>(current->data());
 			internal_file_property_manager_->setValue(object);
 			project_page_->setCurrentWidget(internal_file_property_editor_);
 		}
 		break;
 #endif
 	}
-	if(!isContextSearchApplicable())
+	if (!isContextSearchApplicable())
 		context_find_->hide();
 }
 
-void MainWindow::projectContextMenu(const QPoint &p)
+void MainWindow::projectContextMenu(const QPoint& p)
 {
-	ProjectNode *current = currentProjectNode(true);
+	ProjectNode* current = currentProjectNode(true);
 	if (!current)
 		return;
 
@@ -2115,10 +2120,10 @@ void MainWindow::projectContextMenu(const QPoint &p)
 		break;
 #ifdef ULTIMATE
 	case NODE_LICENSE:
-		{
-			License *object = reinterpret_cast<License *>(current->data());
-			block_act_->setChecked(object->blocked());
-		}
+	{
+		License* object = reinterpret_cast<License*>(current->data());
+		block_act_->setChecked(object->blocked());
+	}
 	case NODE_LICENSES:
 		menu.addAction(add_license_act2_);
 		break;
@@ -2153,38 +2158,38 @@ void MainWindow::projectContextMenu(const QPoint &p)
 	case NODE_FILES:
 	case NODE_ASSEMBLIES:
 #ifdef ULTIMATE
-		{
-			FileManager *object = static_cast<FileManager *>(current->data());
-			exclude_act_->setChecked(!object->need_compile());
-		}
+	{
+		FileManager* object = static_cast<FileManager*>(current->data());
+		exclude_act_->setChecked(!object->need_compile());
+	}
 #endif
-		menu.addSeparator();
-		menu.addAction(exclude_act_);
-		break;
+	menu.addSeparator();
+	menu.addAction(exclude_act_);
+	break;
 	case NODE_FUNCTION:
-		{
-			FunctionBundle *object = static_cast<FunctionBundle *>(current->data());
-			exclude_act_->setChecked(!object->need_compile());
-		}
-		menu.addSeparator();
-		menu.addAction(exclude_act_);
-		break;
+	{
+		FunctionBundle* object = static_cast<FunctionBundle*>(current->data());
+		exclude_act_->setChecked(!object->need_compile());
+	}
+	menu.addSeparator();
+	menu.addAction(exclude_act_);
+	break;
 	case NODE_SCRIPT:
 	case NODE_SCRIPT_BOOKMARK:
-		{
-			Script *object = static_cast<Script *>(current->data());
-			exclude_act_->setChecked(!object->need_compile());
-		}
-		menu.addAction(exclude_act_);
-		break;
+	{
+		Script* object = static_cast<Script*>(current->data());
+		exclude_act_->setChecked(!object->need_compile());
+	}
+	menu.addAction(exclude_act_);
+	break;
 	case NODE_MAP_FUNCTION:
-		{
-			MapFunctionBundle *map = static_cast<MapFunctionBundle *>(current->data());
-			FunctionBundle *func = core_->input_file()->function_list()->GetFunctionByName(map->name());
-			exclude_act_->setChecked(func ? !func->need_compile() : true);
-		}
-		menu.addAction(exclude_act_);
-		break;
+	{
+		MapFunctionBundle* map = static_cast<MapFunctionBundle*>(current->data());
+		FunctionBundle* func = core_->input_file()->function_list()->GetFunctionByName(map->name());
+		exclude_act_->setChecked(func ? !func->need_compile() : true);
+	}
+	menu.addAction(exclude_act_);
+	break;
 	}
 
 	if (!menu.isEmpty())
@@ -2192,18 +2197,18 @@ void MainWindow::projectContextMenu(const QPoint &p)
 		rename_act_->setEnabled(current->type() == NODE_FOLDER || current->type() == NODE_LICENSE || current->type() == NODE_FILE_FOLDER || current->type() == NODE_FILE);
 		block_act_->setEnabled(current->type() == NODE_LICENSE);
 		exclude_act_->setEnabled(current->type() == NODE_FUNCTION || current->type() == NODE_SCRIPT_BOOKMARK || current->type() == NODE_SCRIPT || current->type() == NODE_FILES || current->type() == NODE_MAP_FUNCTION || current->type() == NODE_ASSEMBLIES);
-		menu.exec((qobject_cast<QAbstractScrollArea *>(QObject::sender()))->viewport()->mapToGlobal(p));
+		menu.exec((qobject_cast<QAbstractScrollArea*>(QObject::sender()))->viewport()->mapToGlobal(p));
 	}
 }
 
-void MainWindow::scriptContextMenu(const QPoint &p)
+void MainWindow::scriptContextMenu(const QPoint& p)
 {
 	script_menu_->exec(script_editor_->viewport()->mapToGlobal(p));
 }
 
-void MainWindow::functionContextMenu(const QPoint &p)
+void MainWindow::functionContextMenu(const QPoint& p)
 {
-	ICommand *command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
+	ICommand* command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
 	if (command) {
 		QMenu menu;
 		menu.addAction(copy_act_);
@@ -2214,7 +2219,7 @@ void MainWindow::functionContextMenu(const QPoint &p)
 		return;
 	}
 
-	IFunction *func = function_property_manager_->indexToFunction(function_property_editor_->currentIndex());
+	IFunction* func = function_property_manager_->indexToFunction(function_property_editor_->currentIndex());
 	if (func) {
 		QMenu menu;
 		menu.addAction(function_del_act_);
@@ -2225,39 +2230,40 @@ void MainWindow::functionContextMenu(const QPoint &p)
 
 void MainWindow::functionExtAddress()
 {
-	ICommand *command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
+	ICommand* command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
 	if (!command)
 		return;
 
-	ExtCommandList *extCommandList = command->owner()->ext_command_list();
-	ExtCommand *extCommand = extCommandList->GetCommandByAddress(command->address());
+	ExtCommandList* extCommandList = command->owner()->ext_command_list();
+	ExtCommand* extCommand = extCommandList->GetCommandByAddress(command->address());
 	if (extCommand) {
 		delete extCommand;
-	} else {
+	}
+	else {
 		extCommandList->Add(command->address());
 	}
 }
 
 void MainWindow::functionEndAddress()
 {
-	ICommand *command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
+	ICommand* command = function_property_manager_->indexToCommand(function_property_editor_->currentIndex());
 	if (!command)
 		return;
 
-	IFunction *func = command->owner();
+	IFunction* func = command->owner();
 	func->set_break_address(func->is_breaked_address(command->address()) ? 0 : command->address());
 }
 
 void MainWindow::functionDel()
 {
-	IFunction *func = function_property_manager_->indexToFunction(function_property_editor_->currentIndex());
+	IFunction* func = function_property_manager_->indexToFunction(function_property_editor_->currentIndex());
 	if (func)
 		delete func;
 }
 
-void MainWindow::treeItemDoubleClicked(const QModelIndex &index)
+void MainWindow::treeItemDoubleClicked(const QModelIndex& index)
 {
-	ProjectNode *current = static_cast<ProjectNode *>(index.internalPointer());
+	ProjectNode* current = static_cast<ProjectNode*>(index.internalPointer());
 	if (!current)
 		return;
 
@@ -2267,14 +2273,14 @@ void MainWindow::treeItemDoubleClicked(const QModelIndex &index)
 		project_filter_->clear();
 	}
 
-	QTreeView *tree_view = currentTreeView();
-	BaseModel *model = reinterpret_cast<BaseModel*>(tree_view->model());
+	QTreeView* tree_view = currentTreeView();
+	BaseModel* model = reinterpret_cast<BaseModel*>(tree_view->model());
 	assert(model);
 	if (model == NULL) return;
 
 	if (current->type() == NODE_PROPERTY) {
-		Property *prop = static_cast<Property *>(current->data());
-		Property *root = prop;
+		Property* prop = static_cast<Property*>(current->data());
+		Property* root = prop;
 		while (root && root->parent()) {
 			root = root->parent();
 		}
@@ -2290,10 +2296,10 @@ void MainWindow::treeItemDoubleClicked(const QModelIndex &index)
 		context_find_->showAndClear(term);
 }
 
-void MainWindow::notify(MessageType type, IObject *sender, const QString &message)
+void MainWindow::notify(MessageType type, IObject* sender, const QString& message)
 {
 	if (sender) {
-		if (Watermark *watermark = dynamic_cast<Watermark *>(sender)) {
+		if (Watermark* watermark = dynamic_cast<Watermark*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				watermarks_model_->addWatermark(watermark);
@@ -2307,7 +2313,7 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 			}
 			return;
 		}
-		if (ProjectTemplate *pt = dynamic_cast<ProjectTemplate *>(sender)) {
+		if (ProjectTemplate* pt = dynamic_cast<ProjectTemplate*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				templates_model_->addTemplate(pt);
@@ -2342,10 +2348,11 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 
 	QString add;
 	if (sender) {
-		if (dynamic_cast<Core *>(sender)) {
+		if (dynamic_cast<Core*>(sender)) {
 			core_property_manager_->update();
 			projectModified();
-		} else if (IFunction *func = dynamic_cast<IFunction *>(sender)) {
+		}
+		else if (IFunction* func = dynamic_cast<IFunction*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				project_model_->addFunction(func);
@@ -2357,9 +2364,9 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 			case mtChanged:
 				if (temp_function_ && temp_function_->GetArchByFunction(func)) {
 					for (size_t i = 0; i < temp_function_->count(); i++) {
-						FunctionArch *func_arch = temp_function_->item(i);
-						IFunction *func_src = func_arch->func();
-						IFunction *func_dst = func_arch->arch()->function_list()->AddByAddress(func_src->address(), temp_function_->compilation_type(), temp_function_->compilation_options(), temp_function_->need_compile(), NULL);
+						FunctionArch* func_arch = temp_function_->item(i);
+						IFunction* func_src = func_arch->func();
+						IFunction* func_dst = func_arch->arch()->function_list()->AddByAddress(func_src->address(), temp_function_->compilation_type(), temp_function_->compilation_options(), temp_function_->need_compile(), NULL);
 						if (func_dst) {
 							func_dst->set_break_address(func_src->break_address());
 							for (size_t i = 0; i < func_src->ext_command_list()->count(); i++) {
@@ -2375,34 +2382,35 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 #endif
 				break;
 			case mtDeleted:
-				{
-					bool needUpdate = function_property_manager_->removeFunction(func);
-					if (temp_function_) {
-						FunctionArch *func_arch = temp_function_->GetArchByFunction(func);
-						if (func_arch)
-							delete func_arch;
-					}
-					project_model_->removeFunction(func);
-					if (needUpdate)
-						function_property_manager_->update();
+			{
+				bool needUpdate = function_property_manager_->removeFunction(func);
+				if (temp_function_) {
+					FunctionArch* func_arch = temp_function_->GetArchByFunction(func);
+					if (func_arch)
+						delete func_arch;
+				}
+				project_model_->removeFunction(func);
+				if (needUpdate)
+					function_property_manager_->update();
 #ifndef LITE
-					functions_model_->removeFunction(func);
+				functions_model_->removeFunction(func);
 #endif
-				}
-				break;
-			default:
-				{
-					IArchitecture *arch = func->owner()->owner();
-					if (core_->input_file()->IndexOf(arch) == NOT_ID) {
-						sender = NULL;
-						arch = core_->input_file()->GetArchitectureByName(arch->name());
-						if (arch)
-							sender = (func->type() == otUnknown) ? arch->function_list()->GetUnknownByName(func->name()) : arch->function_list()->GetFunctionByAddress(func->address());
-					}
-				}
-				break;
 			}
-		} else if (Folder *folder = dynamic_cast<Folder *>(sender)) {
+			break;
+			default:
+			{
+				IArchitecture* arch = func->owner()->owner();
+				if (core_->input_file()->IndexOf(arch) == NOT_ID) {
+					sender = NULL;
+					arch = core_->input_file()->GetArchitectureByName(arch->name());
+					if (arch)
+						sender = (func->type() == otUnknown) ? arch->function_list()->GetUnknownByName(func->name()) : arch->function_list()->GetFunctionByAddress(func->address());
+				}
+			}
+			break;
+			}
+		}
+		else if (Folder* folder = dynamic_cast<Folder*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				project_model_->addFolder(folder);
@@ -2414,9 +2422,9 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 				project_model_->removeFolder(folder);
 				break;
 			}
-		} 
+		}
 #ifdef ULTIMATE
-		else if (License *license = dynamic_cast<License *>(sender)) {
+		else if (License* license = dynamic_cast<License*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				project_model_->addLicense(license);
@@ -2432,7 +2440,8 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 					license_property_manager_->setValue(NULL);
 				break;
 			}
-		} else if (FileFolder *folder = dynamic_cast<FileFolder *>(sender)) {
+		}
+		else if (FileFolder* folder = dynamic_cast<FileFolder*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				project_model_->addFileFolder(folder);
@@ -2444,7 +2453,8 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 				project_model_->removeFileFolder(folder);
 				break;
 			}
-		} else if (InternalFile *file = dynamic_cast<InternalFile *>(sender)) {
+		}
+		else if (InternalFile* file = dynamic_cast<InternalFile*>(sender)) {
 			switch (type) {
 			case mtAdded:
 				project_model_->addFile(file);
@@ -2464,39 +2474,43 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 					assembly_property_manager_->update();
 				break;
 			}
-		} else if (/*LicensingManager *licensingManager = */dynamic_cast<LicensingManager *>(sender)) {
+		}
+		else if (/*LicensingManager *licensingManager = */dynamic_cast<LicensingManager*>(sender)) {
 			if (type == mtChanged) {
 				updateLicensingActions();
 				core_property_manager_->update();
 				projectModified();
-				ProjectNode *current = currentProjectNode();
+				ProjectNode* current = currentProjectNode();
 				if (current && current->type() == NODE_LICENSES)
 					showCurrentObject();
 			}
-		} else if (dynamic_cast<FileManager *>(sender)) {
+		}
+		else if (dynamic_cast<FileManager*>(sender)) {
 			project_model_->updateFiles();
 			projectModified();
-		} 
+		}
 #endif
-		else if (dynamic_cast<Script *>(sender)) {
+		else if (dynamic_cast<Script*>(sender)) {
 			if (type == mtChanged) {
 				project_model_->updateScript();
 				projectModified();
-				}
-		} else if (ExtCommand *extCommand = dynamic_cast<ExtCommand *>(sender)) {
+			}
+		}
+		else if (ExtCommand* extCommand = dynamic_cast<ExtCommand*>(sender)) {
 			if (!extCommand->owner())
 				return;
 
-			IFunction *func = extCommand->owner()->owner();
+			IFunction* func = extCommand->owner()->owner();
 			if (temp_function_ && temp_function_->GetArchByFunction(func))
 				notify(mtChanged, func, "");
 
 			project_model_->updateFunction(func);
 			if (function_property_manager_->value() && function_property_manager_->value()->GetArchByFunction(func))
 				function_property_manager_->update();
-		} else if (ICommand *command = dynamic_cast<ICommand *>(sender)) {
-			IFunction *func = command->owner();
-			IArchitecture *arch = func->owner()->owner();
+		}
+		else if (ICommand* command = dynamic_cast<ICommand*>(sender)) {
+			IFunction* func = command->owner();
+			IArchitecture* arch = func->owner()->owner();
 
 			std::string func_name = func->display_name();
 			if (!func_name.empty())
@@ -2507,12 +2521,13 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 				arch = core_->input_file()->GetArchitectureByName(arch->name());
 				if (arch)
 					sender = (func->type() == otUnknown) ? arch->function_list()->GetFunctionByName(func->name()) : arch->function_list()->GetFunctionByAddress(func->address());
-			} else {
+			}
+			else {
 				sender = func;
 			}
-		} 
+		}
 #ifndef LITE
-		else if (IResource *resource = dynamic_cast<IResource *>(sender)) {
+		else if (IResource* resource = dynamic_cast<IResource*>(sender)) {
 			switch (type) {
 			case mtChanged:
 				info_model_->updateResource(resource);
@@ -2520,7 +2535,8 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 					resource_property_manager_->update();
 				break;
 			}
-		} else if (ISection *section = dynamic_cast<ISection *>(sender)) {
+		}
+		else if (ISection* section = dynamic_cast<ISection*>(sender)) {
 			switch (type) {
 			case mtChanged:
 				info_model_->updateSegment(section);
@@ -2528,7 +2544,8 @@ void MainWindow::notify(MessageType type, IObject *sender, const QString &messag
 					segment_property_manager_->update();
 				break;
 			}
-		} else if (IImport *import = dynamic_cast<IImport *>(sender)) {
+		}
+		else if (IImport * import = dynamic_cast<IImport*>(sender)) {
 			switch (type) {
 			case mtChanged:
 				info_model_->updateImport(import);
@@ -2561,7 +2578,7 @@ void MainWindow::projectTabMoved()
 	spacer_->setFixedWidth((spacer_->width() > project_separator_widget_->pos().x() ? 0 : spacer_->width()) + project_tab_->width() + icon_project_->width() - project_separator_widget_->pos().x());
 }
 
-void MainWindow::scriptNotify(SCNotification *notification)
+void MainWindow::scriptNotify(SCNotification* notification)
 {
 	switch (notification->nmhdr.code) {
 	case SCN_MODIFIED:
@@ -2606,74 +2623,74 @@ void MainWindow::scriptModeClicked()
 
 void MainWindow::undo()
 {
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	if (widget == script_editor_)
 		script_editor_->undo();
-	else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
 		edit->undo();
-	else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
+	else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
 		edit->undo();
-	else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
 		comboBox->lineEdit()->undo();
 }
 
 void MainWindow::redo()
 {
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	if (widget == script_editor_)
 		script_editor_->redo();
-	else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
 		edit->redo();
-	else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
+	else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
 		edit->redo();
-	else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
 		comboBox->lineEdit()->redo();
 }
 
 void MainWindow::copy()
 {
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	if (widget == script_editor_)
 		script_editor_->copy();
-	else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
 		edit->copy();
-	else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
+	else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
 		edit->copy();
-	else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
 		comboBox->lineEdit()->copy();
 #ifdef ULTIMATE
 	else if (widget == license_property_editor_ && license_property_manager_->indexToProperty(license_property_editor_->currentIndex()) == license_property_manager_->serialNumber())
 		QApplication::clipboard()->setText(license_property_manager_->serialNumber()->value());
 #endif
-	else if (TreeView *tree = dynamic_cast<TreeView *>(widget))
+	else if (TreeView* tree = dynamic_cast<TreeView*>(widget))
 		tree->copy();
-	else if (TableView *table = dynamic_cast<TableView *>(widget))
+	else if (TableView* table = dynamic_cast<TableView*>(widget))
 		table->copy();
 }
 
 void MainWindow::cut()
 {
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	if (widget == script_editor_)
 		script_editor_->cut();
-	else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
 		edit->cut();
-	else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
+	else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
 		edit->cut();
-	else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
 		comboBox->lineEdit()->cut();
 }
 
 void MainWindow::paste()
 {
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	if (widget == script_editor_)
 		script_editor_->paste();
-	else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
 		edit->paste();
-	else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
+	else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
 		edit->paste();
-	else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
 		comboBox->lineEdit()->paste();
 }
 
@@ -2688,27 +2705,27 @@ void MainWindow::addFunction()
 		if (addresses.isEmpty())
 			return;
 
-		ProjectNode *node = currentProjectNode();
+		ProjectNode* node = currentProjectNode();
 		assert(node);
 		if (node == NULL) return;
 
 		while (node->type() == NODE_FUNCTION) {
 			node = node->parent();
 		}
-		Folder *folder = (node->type() == NODE_FOLDER) ? reinterpret_cast<Folder *>(node->data()) : NULL;
+		Folder* folder = (node->type() == NODE_FOLDER) ? reinterpret_cast<Folder*>(node->data()) : NULL;
 
 		WaitCursor wc;
 		/*
 		if (addresses.size() > 1)
 			ProgressDialog::Start((language[lsLoading] + "...").c_str(), addresses.size());
-			
+
 
 		IFile *file = core_->input_file();*/
-		IFunction *func = NULL;
+		IFunction* func = NULL;
 		for (int i = 0; i < addresses.size(); i++) {
 			//ProgressDialog::Step(1);
 			AddressInfo info = addresses[i];
-			IFunction *tmp = info.arch->function_list()->AddByAddress(info.address, compilationType, compilationOptions, true, folder);
+			IFunction* tmp = info.arch->function_list()->AddByAddress(info.address, compilationType, compilationOptions, true, folder);
 			if (!func)
 				func = tmp;
 		}
@@ -2721,7 +2738,7 @@ void MainWindow::addFunction()
 
 void MainWindow::addFolder()
 {
-	ProjectNode *node = currentProjectNode();
+	ProjectNode* node = currentProjectNode();
 	assert(node);
 	if (node == NULL) return;
 
@@ -2742,7 +2759,7 @@ void MainWindow::addFolder()
 
 void MainWindow::addFunctionFolder()
 {
-	ProjectNode *node = currentProjectNode();
+	ProjectNode* node = currentProjectNode();
 	assert(node);
 	if (node == NULL) return;
 
@@ -2750,7 +2767,7 @@ void MainWindow::addFunctionFolder()
 		node = node->parent();
 	}
 
-	Folder *parent = (node->type() == NODE_FOLDER) ? reinterpret_cast<Folder *>(node->data()) : core_->input_file()->folder_list();
+	Folder* parent = (node->type() == NODE_FOLDER) ? reinterpret_cast<Folder*>(node->data()) : core_->input_file()->folder_list();
 
 	QModelIndex index = project_model_->objectToIndex(parent->Add(""));
 	project_tree_->setCurrentIndex(index);
@@ -2768,7 +2785,7 @@ void MainWindow::updateLicensingActions()
 	add_license_act2_->setEnabled(is_ok);
 }
 
-void MainWindow::createLicense(License *license)
+void MainWindow::createLicense(License* license)
 {
 	LicenseDialog dialog(core_->licensing_manager(), license, this);
 
@@ -2809,9 +2826,9 @@ void MainWindow::useOtherProject()
 	QString fileName = FileDialog::getOpenFileName(this, QString::fromUtf8(language[lsOpen].c_str()), FileDialog::defaultPath(),
 		QString(
 #ifdef VMP_GNU
-		"%1 (*.vmp);;%2 (*)"
+			"%1 (*.vmp);;%2 (*)"
 #else
-		"%1 (*.vmp);;%2 (*.*)"
+			"%1 (*.vmp);;%2 (*.*)"
 #endif
 		).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
 
@@ -2840,8 +2857,8 @@ void MainWindow::importLicense()
 
 	if (dialog.exec() == QDialog::Accepted) {
 		std::string serialNumber = dialog.serial().toLatin1().constData();
-		LicensingManager *licensingManager = core_->licensing_manager();
-		License *license = licensingManager->GetLicenseBySerialNumber(serialNumber);
+		LicensingManager* licensingManager = core_->licensing_manager();
+		License* license = licensingManager->GetLicenseBySerialNumber(serialNumber);
 		if (!license) {
 			LicenseInfo licenseInfo;
 			if (!licensingManager->DecryptSerialNumber(serialNumber, licenseInfo)) {
@@ -2849,13 +2866,13 @@ void MainWindow::importLicense()
 				return;
 			}
 			QDate date = QDate::currentDate();
-			license = licensingManager->Add(LicenseDate(date.year(), date.month(), date.day()), 
-											licenseInfo.CustomerName, 
-											licenseInfo.CustomerEmail, 
-											"", 
-											"",
-											serialNumber,
-											false);
+			license = licensingManager->Add(LicenseDate(date.year(), date.month(), date.day()),
+				licenseInfo.CustomerName,
+				licenseInfo.CustomerEmail,
+				"",
+				"",
+				serialNumber,
+				false);
 		}
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(license));
 	}
@@ -2868,9 +2885,9 @@ void MainWindow::importProject()
 	QString fileName = FileDialog::getOpenFileName(this, QString::fromUtf8(language[lsOpen].c_str()), FileDialog::defaultPath(),
 		QString(
 #ifdef VMP_GNU
-		"%1 (*.vmp);;%2 (*)"
+			"%1 (*.vmp);;%2 (*)"
 #else
-		"%1 (*.vmp);;%2 (*.*)"
+			"%1 (*.vmp);;%2 (*.*)"
 #endif
 		).arg(QString::fromUtf8(language[lsProjectFiles].c_str())).arg(QString::fromUtf8(language[lsAllFiles].c_str())));
 	if (fileName.isEmpty())
@@ -2895,21 +2912,22 @@ void MainWindow::importProject()
 	size_t c = 0;
 	size_t b = 0;
 	for (size_t i = 0; i < manager.count(); i++) {
-		License *src_license = manager.item(i);
-		License *dst_license = core_->licensing_manager()->GetLicenseBySerialNumber(src_license->serial_number());
+		License* src_license = manager.item(i);
+		License* dst_license = core_->licensing_manager()->GetLicenseBySerialNumber(src_license->serial_number());
 		if (dst_license) {
 			if (!dst_license->blocked() && src_license->blocked()) {
 				dst_license->set_blocked(src_license->blocked());
 				b++;
 			}
-		} else {
-			/*dst_license =*/ core_->licensing_manager()->Add(src_license->date(), 
-															src_license->customer_name(), 
-															src_license->customer_email(), 
-															src_license->order_ref(), 
-															src_license->comments(), 
-															src_license->serial_number(),
-															src_license->blocked());
+		}
+		else {
+			/*dst_license =*/ core_->licensing_manager()->Add(src_license->date(),
+				src_license->customer_name(),
+				src_license->customer_email(),
+				src_license->order_ref(),
+				src_license->comments(),
+				src_license->serial_number(),
+				src_license->blocked());
 			c++;
 		}
 	}
@@ -2920,7 +2938,7 @@ void MainWindow::importProject()
 void MainWindow::addFileFolder()
 {
 #ifdef ULTIMATE
-	ProjectNode *node = currentProjectNode();
+	ProjectNode* node = currentProjectNode();
 	assert(node);
 	if (node == NULL) return;
 
@@ -2928,7 +2946,7 @@ void MainWindow::addFileFolder()
 		node = node->parent();
 	}
 
-	FileFolder *parent = (node->type() == NODE_FILE_FOLDER) ? reinterpret_cast<FileFolder *>(node->data()) : core_->file_manager()->folder_list();
+	FileFolder* parent = (node->type() == NODE_FILE_FOLDER) ? reinterpret_cast<FileFolder*>(node->data()) : core_->file_manager()->folder_list();
 
 	QModelIndex index = project_model_->objectToIndex(parent->Add(""));
 	project_tree_->setCurrentIndex(index);
@@ -2954,7 +2972,7 @@ void MainWindow::addFile()
 #endif
 		).arg(QString::fromUtf8(language[lsAllFiles].c_str()));
 	}
-	
+
 	QString fileName = FileDialog::getOpenFileName(this, QString::fromUtf8(language[lsOpen].c_str()), FileDialog::defaultPath(), filter);
 	if (fileName.isEmpty())
 		return;
@@ -2963,14 +2981,14 @@ void MainWindow::addFile()
 	if (tmp.mid(0, 2) != "..")
 		fileName = tmp;
 
-	ProjectNode *node = currentProjectNode();
+	ProjectNode* node = currentProjectNode();
 	while (node->type() == NODE_FILE) {
 		node = node->parent();
 	}
-	FileFolder *folder = (node->type() == NODE_FILE_FOLDER) ? reinterpret_cast<FileFolder *>(node->data()) : NULL;
+	FileFolder* folder = (node->type() == NODE_FILE_FOLDER) ? reinterpret_cast<FileFolder*>(node->data()) : NULL;
 
-	FileManager *file_manager = core_->file_manager();
-	InternalFile *file = file_manager->Add(QFileInfo(fileName).fileName().toUtf8().constData(), fileName.toUtf8().constData(), faNone, folder);
+	FileManager* file_manager = core_->file_manager();
+	InternalFile* file = file_manager->Add(QFileInfo(fileName).fileName().toUtf8().constData(), fileName.toUtf8().constData(), faNone, folder);
 	if (file)
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(file));
 #endif
@@ -2978,78 +2996,79 @@ void MainWindow::addFile()
 
 void MainWindow::rename()
 {
-	QTreeView *tree_view = qobject_cast<QTreeView *>(focusWidget());
+	QTreeView* tree_view = qobject_cast<QTreeView*>(focusWidget());
 	if (tree_view)
 		tree_view->edit(tree_view->currentIndex());
 }
 
 void MainWindow::excludeFromCompilation()
 {
-	ProjectNode *node = currentProjectNode(true);
+	ProjectNode* node = currentProjectNode(true);
 	if (!node)
 		return;
 
 	switch (node->type()) {
 	case NODE_FUNCTION:
-		{
-			FunctionBundle *object = reinterpret_cast<FunctionBundle *>(node->data());
-			object->set_need_compile(!object->need_compile());
-		}
-		break;
+	{
+		FunctionBundle* object = reinterpret_cast<FunctionBundle*>(node->data());
+		object->set_need_compile(!object->need_compile());
+	}
+	break;
 	case NODE_SCRIPT:
 	case NODE_SCRIPT_BOOKMARK:
-		{
-			Script *object = reinterpret_cast<Script *>(node->data());
-			object->set_need_compile(!object->need_compile());
-		}
-		break;
+	{
+		Script* object = reinterpret_cast<Script*>(node->data());
+		object->set_need_compile(!object->need_compile());
+	}
+	break;
 #ifdef ULTIMATE
 	case NODE_FILES:
 	case NODE_ASSEMBLIES:
-		{
-			FileManager *object = reinterpret_cast<FileManager *>(node->data());
-			object->set_need_compile(!object->need_compile());
-		}
-		break;
+	{
+		FileManager* object = reinterpret_cast<FileManager*>(node->data());
+		object->set_need_compile(!object->need_compile());
+	}
+	break;
 #endif
 	case NODE_MAP_FUNCTION:
-		{
-			MapFunctionBundle *object = static_cast<MapFunctionBundle *>(node->data());
-			FunctionBundle *func = core_->input_file()->function_list()->GetFunctionByName(object->name());
-			if (func) {
-				func->set_need_compile(!func->need_compile());
-			} else {
-				for (size_t i = 0; i < object->count(); i++) {
-					MapFunctionArch *map_arch = object->item(i);
-					map_arch->arch()->function_list()->AddByAddress(map_arch->func()->address(), ctVirtualization, 0, true, NULL);
-				}
+	{
+		MapFunctionBundle* object = static_cast<MapFunctionBundle*>(node->data());
+		FunctionBundle* func = core_->input_file()->function_list()->GetFunctionByName(object->name());
+		if (func) {
+			func->set_need_compile(!func->need_compile());
+		}
+		else {
+			for (size_t i = 0; i < object->count(); i++) {
+				MapFunctionArch* map_arch = object->item(i);
+				map_arch->arch()->function_list()->AddByAddress(map_arch->func()->address(), ctVirtualization, 0, true, NULL);
 			}
 		}
-		break;
+	}
+	break;
 	}
 }
 
 void MainWindow::block()
 {
 #ifdef ULTIMATE
-	ProjectNode *node = currentProjectNode(true);
+	ProjectNode* node = currentProjectNode(true);
 	if (!node)
 		return;
 
 	switch (node->type()) {
 	case NODE_LICENSE:
-		{
-			License *license = reinterpret_cast<License *>(node->data());
-			license->set_blocked(!license->blocked());
-		}
-		break;
+	{
+		License* license = reinterpret_cast<License*>(node->data());
+		license->set_blocked(!license->blocked());
+	}
+	break;
 	}
 #endif
 }
 
 void MainWindow::del()
 {
-	ProjectNode *node = currentProjectNode(true);
+	ProjectNode* node = currentProjectNode(true);
 	if (!node)
 		return;
 
@@ -3059,55 +3078,55 @@ void MainWindow::del()
 		script_editor_->del();
 		break;
 	case NODE_FOLDER:
-		{
-			Folder *folder = reinterpret_cast<Folder *>(node->data());
-			if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFolder].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-				delete folder;
-		}
-		break;
+	{
+		Folder* folder = reinterpret_cast<Folder*>(node->data());
+		if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFolder].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+			delete folder;
+	}
+	break;
 	case NODE_FUNCTION:
-		{
-			FunctionBundle *func = reinterpret_cast<FunctionBundle *>(node->data());
-			if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFunction].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-				for (size_t i = func->count(); i > 0; i--) {
-					delete func->item(i - 1)->func();
-				}
+	{
+		FunctionBundle* func = reinterpret_cast<FunctionBundle*>(node->data());
+		if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFunction].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+			for (size_t i = func->count(); i > 0; i--) {
+				delete func->item(i - 1)->func();
 			}
 		}
-		break;
+	}
+	break;
 #ifdef ULTIMATE
 	case NODE_LICENSE:
-		{
-			License *license = reinterpret_cast<License *>(node->data());
-			if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteLicense].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-				delete license;
-		}
-		break;
+	{
+		License* license = reinterpret_cast<License*>(node->data());
+		if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteLicense].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+			delete license;
+	}
+	break;
 	case NODE_FILE_FOLDER:
-		{
-			FileFolder *folder = reinterpret_cast<FileFolder *>(node->data());
-			if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFolder].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-				delete folder;
-		}
-		break;
+	{
+		FileFolder* folder = reinterpret_cast<FileFolder*>(node->data());
+		if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFolder].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+			delete folder;
+	}
+	break;
 	case NODE_FILE:
-		{
-			InternalFile *file = reinterpret_cast<InternalFile *>(node->data());
-			if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFile].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
-				delete file;
-		}
-		break;
+	{
+		InternalFile* file = reinterpret_cast<InternalFile*>(node->data());
+		if (MessageDialog::question(this, QString::fromUtf8(language[lsDeleteFile].c_str()) + "?", QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+			delete file;
+	}
+	break;
 #endif
 	default:
-		{
-			QWidget *widget = focusWidget();
-			if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget))
-				edit->del();
-			else if (QPlainTextEdit *edit = qobject_cast<QPlainTextEdit *>(widget))
-				edit->textCursor().removeSelectedText();
-			else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget))
-				comboBox->lineEdit()->del();
-		}
+	{
+		QWidget* widget = focusWidget();
+		if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget))
+			edit->del();
+		else if (QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(widget))
+			edit->textCursor().removeSelectedText();
+		else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget))
+			comboBox->lineEdit()->del();
+	}
 	}
 }
 
@@ -3118,9 +3137,11 @@ bool MainWindow::internalCompile()
 		res = core_->Compile();
 		if (res && QFileInfo(QString::fromUtf8(core_->input_file()->file_name().c_str())) == QFileInfo(QString::fromUtf8(core_->absolute_output_file_name().c_str())))
 			fileChanged_ = false;
-	} catch(canceled_error &error) {
+	}
+	catch (canceled_error& error) {
 		core_->Notify(mtWarning, NULL, error.what());
-	} catch(std::runtime_error &error) {
+	}
+	catch (std::runtime_error& error) {
 		core_->Notify(mtError, NULL, error.what());
 	}
 	return res;
@@ -3137,18 +3158,18 @@ void MainWindow::compile()
 
 		connect(&watcher, SIGNAL(finished()), &progress, SLOT(reject()));
 		connect(&progress, SIGNAL(cancel()), log_, SLOT(cancel()));
-		connect(log_, SIGNAL(startProgress(const QString &, unsigned long long)), &progress, SLOT(startProgress(const QString &, unsigned long long)));
+		connect(log_, SIGNAL(startProgress(const QString&, unsigned long long)), &progress, SLOT(startProgress(const QString&, unsigned long long)));
 		connect(log_, SIGNAL(stepProgress(unsigned long long)), &progress, SLOT(stepProgress(unsigned long long)));
 
-		disconnect(log_, SIGNAL(notify(MessageType, IObject *, const QString &)), this, SLOT(notify(MessageType, IObject *, const QString &)));
-		connect(log_, SIGNAL(notify(MessageType, IObject *, const QString &)), this, SLOT(notify(MessageType, IObject *, const QString &)), Qt::BlockingQueuedConnection);
+		disconnect(log_, SIGNAL(notify(MessageType, IObject*, const QString&)), this, SLOT(notify(MessageType, IObject*, const QString&)));
+		connect(log_, SIGNAL(notify(MessageType, IObject*, const QString&)), this, SLOT(notify(MessageType, IObject*, const QString&)), Qt::BlockingQueuedConnection);
 
 		watcher.setFuture(QtConcurrent::run(this, &MainWindow::internalCompile));
 		progress.exec();
 		watcher.waitForFinished();
 
-		disconnect(log_, SIGNAL(notify(MessageType, IObject *, const QString &)), this, SLOT(notify(MessageType, IObject *, const QString &)));
-		connect(log_, SIGNAL(notify(MessageType, IObject *, const QString &)), this, SLOT(notify(MessageType, IObject *, const QString &)));
+		disconnect(log_, SIGNAL(notify(MessageType, IObject*, const QString&)), this, SLOT(notify(MessageType, IObject*, const QString&)));
+		connect(log_, SIGNAL(notify(MessageType, IObject*, const QString&)), this, SLOT(notify(MessageType, IObject*, const QString&)));
 
 		if (!watcher.result())
 			return;
@@ -3164,7 +3185,8 @@ void MainWindow::compile()
 
 		if (MessageDialog::question(this, QString("%1.\n%2 \"%3\"?").arg(QString::fromUtf8(language[lsCompiled].c_str())).arg(QString::fromUtf8(language[lsExecute].c_str())).arg(execute_protected_act_->getFullText()), QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
 			executeProtected();
-	} else {
+	}
+	else {
 		MessageDialog::information(this, QString::fromUtf8(language[lsCompiled].c_str()), QMessageBox::Ok);
 	}
 }
@@ -3187,7 +3209,7 @@ void MainWindow::executeProtected()
 	executeFile(execute_protected_act_->getFullText());
 }
 
-void MainWindow::executeFile(const QString &fileName)
+void MainWindow::executeFile(const QString& fileName)
 {
 	QString commandLine = parameters_edit_->text().trimmed();
 #ifdef VMP_GNU
@@ -3207,25 +3229,27 @@ void MainWindow::executeFile(const QString &fileName)
 }
 
 #ifndef LITE
-static int luaErrGetLineNumber(const QString &text)
+static int luaErrGetLineNumber(const QString& text)
 {
 	int line = -1;
 	bool afterFirstSemicolon = false;
-	for(int pos = 0; pos < text.length(); pos++)
+	for (int pos = 0; pos < text.length(); pos++)
 	{
 		QChar ch = text.at(pos);
-		if(afterFirstSemicolon)
+		if (afterFirstSemicolon)
 		{
-			if(ch.isDigit())
+			if (ch.isDigit())
 			{
-				if(line < 0)
+				if (line < 0)
 					line = 0;
 				line = 10 * line + ch.digitValue();
-			} else
+			}
+			else
 			{
 				break;
 			}
-		} else if(ch.toLatin1() == ':') 
+		}
+		else if (ch.toLatin1() == ':')
 		{
 			afterFirstSemicolon = true;
 		}
@@ -3234,37 +3258,40 @@ static int luaErrGetLineNumber(const QString &text)
 }
 #endif
 
-void MainWindow::logItemDoubleClicked(const QModelIndex &index)
+void MainWindow::logItemDoubleClicked(const QModelIndex& index)
 {
-	ProjectNode *current = static_cast<ProjectNode *>(index.internalPointer());
+	ProjectNode* current = static_cast<ProjectNode*>(index.internalPointer());
 	if (!current || !current->data())
 		return;
 
-	IObject *sender = static_cast<IObject *>(current->data());
+	IObject* sender = static_cast<IObject*>(current->data());
 	if (sender == core_->script()) {
 		icon_project_->setChecked(true);
 #ifndef LITE
 		project_tree_->setCurrentIndex(project_model_->scriptIndex());
 		int line = luaErrGetLineNumber(current->text());
-		if(line >= 1) 
+		if (line >= 1)
 			script_editor_->send(SCI_GOTOLINE, line - 1);
 #endif
-	} else if (sender == core_->watermark_manager()) {
+	}
+	else if (sender == core_->watermark_manager()) {
 		icon_project_->setChecked(true);
 		project_tree_->setCurrentIndex(project_model_->optionsIndex());
 #ifndef LITE
 		core_property_editor_->setFocus();
 		core_property_editor_->setCurrentIndex(core_property_manager_->watermarkNameIndex());
 #endif
-	} else if (dynamic_cast<IFunction *>(sender)) {
+	}
+	else if (dynamic_cast<IFunction*>(sender)) {
 		icon_project_->setChecked(true);
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(sender));
-	} 
+	}
 #ifdef ULTIMATE
 	else if (sender == core_->licensing_manager()) {
 		icon_project_->setChecked(true);
 		project_tree_->setCurrentIndex(project_model_->licensesIndex());
-	} else if (dynamic_cast<InternalFile *>(sender)) {
+	}
+	else if (dynamic_cast<InternalFile*>(sender)) {
 		icon_project_->setChecked(true);
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(sender));
 		internal_file_property_editor_->setCurrentIndex(internal_file_property_manager_->fileNameIndex());
@@ -3278,15 +3305,15 @@ void MainWindow::logItemDoubleClicked(const QModelIndex &index)
 		cw->setFocus();
 }
 
-void MainWindow::functionItemDoubleClicked(const QModelIndex &index)
+void MainWindow::functionItemDoubleClicked(const QModelIndex& index)
 {
-	Property *prop = function_property_manager_->indexToProperty(index);
+	Property* prop = function_property_manager_->indexToProperty(index);
 	if (!prop)
 		return;
 
-	if (CommandProperty *commandProp = qobject_cast<CommandProperty *>(prop)) {
-		ICommand *command = commandProp->value();
-		if (qobject_cast<CommandProperty *>(commandProp->parent())) {
+	if (CommandProperty* commandProp = qobject_cast<CommandProperty*>(prop)) {
+		ICommand* command = commandProp->value();
+		if (qobject_cast<CommandProperty*>(commandProp->parent())) {
 			// link
 			function_property_editor_->setCurrentIndex(function_property_manager_->commandToIndex(command));
 			return;
@@ -3294,7 +3321,7 @@ void MainWindow::functionItemDoubleClicked(const QModelIndex &index)
 
 		uint64_t branchAddress = command->link() ? command->link()->to_address() : 0;
 		if (branchAddress) {
-			IArchitecture *file = command->owner()->owner()->owner();
+			IArchitecture* file = command->owner()->owner()->owner();
 			if (core_->input_file()->IndexOf(file) != NOT_ID) {
 				command = command->owner()->GetCommandByAddress(branchAddress);
 				if (command) {
@@ -3307,10 +3334,10 @@ void MainWindow::functionItemDoubleClicked(const QModelIndex &index)
 	}
 }
 
-void MainWindow::disasmItemDoubleClicked(const QModelIndex &index)
+void MainWindow::disasmItemDoubleClicked(const QModelIndex& index)
 {
 #ifndef LITE
-	ICommand *command = disasm_model_->indexToCommand(index);
+	ICommand* command = disasm_model_->indexToCommand(index);
 	if (!command)
 		return;
 
@@ -3320,7 +3347,7 @@ void MainWindow::disasmItemDoubleClicked(const QModelIndex &index)
 #endif
 }
 
-void MainWindow::goToDump(IArchitecture *file, uint64_t address, bool mode)
+void MainWindow::goToDump(IArchitecture* file, uint64_t address, bool mode)
 {
 #ifndef LITE
 	info_tree_->setCurrentIndex(info_model_->dumpIndex(file));
@@ -3328,7 +3355,8 @@ void MainWindow::goToDump(IArchitecture *file, uint64_t address, bool mode)
 		QModelIndex index = dump_model_->addressToIndex(address);
 		if (index.isValid())
 			dump_view_->setCurrentIndex(index);
-	} else {
+	}
+	else {
 		QModelIndex index = disasm_model_->addressToIndex(address);
 		if (index.isValid()) {
 			disasm_view_->scrollTo(index, QAbstractItemView::PositionAtTop);
@@ -3340,14 +3368,14 @@ void MainWindow::goToDump(IArchitecture *file, uint64_t address, bool mode)
 #endif
 }
 
-void MainWindow::goToAddress(IArchitecture *file, uint64_t address)
+void MainWindow::goToAddress(IArchitecture* file, uint64_t address)
 {
 #ifdef LITE
-	MapFunctionBundle *mapFunction = file->owner()->map_function_list()->GetFunctionByAddress(file, address);
+	MapFunctionBundle* mapFunction = file->owner()->map_function_list()->GetFunctionByAddress(file, address);
 	if (mapFunction) {
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(mapFunction));
 		if (function_property_manager_->value()) {
-			ICommand *command = function_property_manager_->value()->GetCommandByAddress(file, address);
+			ICommand* command = function_property_manager_->value()->GetCommandByAddress(file, address);
 			if (command) {
 				function_property_editor_->setCurrentIndex(function_property_manager_->commandToIndex(command));
 				return;
@@ -3360,16 +3388,17 @@ void MainWindow::goToAddress(IArchitecture *file, uint64_t address)
 		return;
 	}
 
-	ICommand *command = file->function_list()->GetCommandByAddress(address, false);
-	IFunction *project_function = command ? command->owner() : NULL;
-	MapFunctionBundle *mapFunction = file->owner()->map_function_list()->GetFunctionByAddress(file, address);
+	ICommand* command = file->function_list()->GetCommandByAddress(address, false);
+	IFunction* project_function = command ? command->owner() : NULL;
+	MapFunctionBundle* mapFunction = file->owner()->map_function_list()->GetFunctionByAddress(file, address);
 
 	if (project_function && (icon_project_->isChecked() || !mapFunction)) {
 		icon_project_->setChecked(true);
 		project_tree_->setCurrentIndex(project_model_->objectToIndex(project_function));
 		function_property_editor_->setCurrentIndex(function_property_manager_->commandToIndex(command));
 		return;
-	} else if (mapFunction) {
+	}
+	else if (mapFunction) {
 		icon_functions_->setChecked(true);
 		functions_tree_->setCurrentIndex(functions_model_->objectToIndex(mapFunction));
 		if (function_property_manager_->value()) {
@@ -3405,11 +3434,11 @@ void MainWindow::goTo()
 
 bool MainWindow::isContextSearchApplicable()
 {
-	return project_page_->currentWidget() == script_editor_ || 
+	return project_page_->currentWidget() == script_editor_ ||
 #ifndef LITE
-		project_page_->currentWidget() == dump_page_ || 
+		project_page_->currentWidget() == dump_page_ ||
 #endif
-		dynamic_cast<QTreeView *>(project_page_->currentWidget());
+		dynamic_cast<QTreeView*>(project_page_->currentWidget());
 }
 
 void MainWindow::search()
@@ -3417,7 +3446,8 @@ void MainWindow::search()
 	if (isContextSearchApplicable()) {
 		if (!context_find_->isVisible()) {
 			context_find_->showAndClear(project_filter_->text());
-		} else {
+		}
+		else {
 			context_find_->show();
 		}
 		return;
@@ -3441,19 +3471,20 @@ void MainWindow::contextFindPrevious()
 	contextFind(context_find_->text(), false, false);
 }
 
-void MainWindow::contextFind(const QString &ttf, bool forward, bool incremental)
+void MainWindow::contextFind(const QString& ttf, bool forward, bool incremental)
 {
 	bool found = true;
-	if(!ttf.isEmpty())
+	if (!ttf.isEmpty())
 	{
 		if (project_page_->currentWidget() == script_editor_)
 		{
 			found = findInScript(ttf, forward, incremental);
-		} else if (QAbstractItemView *tv =
+		}
+		else if (QAbstractItemView* tv =
 #ifndef LITE
-				(project_page_->currentWidget() == dump_page_) ? (disasm_view_->geometry().height() ? (QAbstractItemView *)disasm_view_ : (QAbstractItemView *)dump_view_) :
+		(project_page_->currentWidget() == dump_page_) ? (disasm_view_->geometry().height() ? (QAbstractItemView*)disasm_view_ : (QAbstractItemView*)dump_view_) :
 #endif
-				dynamic_cast<QAbstractItemView *>(project_page_->currentWidget()))
+			dynamic_cast<QAbstractItemView*>(project_page_->currentWidget()))
 		{
 			found = findInView(tv, ttf, forward, incremental);
 		}
@@ -3463,31 +3494,32 @@ void MainWindow::contextFind(const QString &ttf, bool forward, bool incremental)
 	context_find_->setPalette(found);
 }
 
-bool MainWindow::findInScript(const QString &ttf, bool forward, bool incremental)
+bool MainWindow::findInScript(const QString& ttf, bool forward, bool incremental)
 {
 	bool found = false;
 
-	uptr_t pos = script_editor_->send(SCI_GETCURRENTPOS), 
-	anc = script_editor_->send(SCI_GETANCHOR);
-	if(!incremental)
+	uptr_t pos = script_editor_->send(SCI_GETCURRENTPOS),
+		anc = script_editor_->send(SCI_GETANCHOR);
+	if (!incremental)
 	{
 		if (forward) // set caret to the end of selection
 		{
 			script_editor_->send(SCI_GOTOPOS, std::max(anc, pos));
-		} else // set caret to the beginning of selection
+		}
+		else // set caret to the beginning of selection
 		{
 			script_editor_->send(SCI_GOTOPOS, std::min(anc, pos));
 		}
 	}
 
 	unsigned int iMessage = SCI_SEARCHPREV;
-	if (forward) 
+	if (forward)
 		iMessage = SCI_SEARCHNEXT;
 	uptr_t wParam = 0;
 	if (context_find_->caseSensitive())
 		wParam = SCFIND_MATCHCASE;
 
-	while(!found) 
+	while (!found)
 	{
 		script_editor_->send(SCI_SEARCHANCHOR);
 		found = (script_editor_->send(iMessage, wParam, (sptr_t)ttf.toUtf8().data()) != -1);
@@ -3495,13 +3527,15 @@ bool MainWindow::findInScript(const QString &ttf, bool forward, bool incremental
 		if (found)
 		{
 			script_editor_->send(SCI_SCROLLCARET);
-		} else
+		}
+		else
 		{
-			if(incremental) // try from the beginning
+			if (incremental) // try from the beginning
 			{
 				script_editor_->send(SCI_GOTOPOS);
 				incremental = false;
-			} else
+			}
+			else
 			{
 				script_editor_->send(SCI_SETSEL, anc, pos);
 				break;
@@ -3511,7 +3545,7 @@ bool MainWindow::findInScript(const QString &ttf, bool forward, bool incremental
 	return found;
 }
 
-bool MainWindow::findInView(QAbstractItemView *tv, const QString &ttf, bool forward, bool incremental)
+bool MainWindow::findInView(QAbstractItemView* tv, const QString& ttf, bool forward, bool incremental)
 {
 	WaitCursor wc;
 
@@ -3525,7 +3559,7 @@ bool MainWindow::findInView(QAbstractItemView *tv, const QString &ttf, bool forw
 
 	QModelIndex ci = searcher.result();
 	bool found = ci.isValid();
-	if(found && ci != tv->currentIndex()) {
+	if (found && ci != tv->currentIndex()) {
 		tv->selectionModel()->setCurrentIndex(ci, QItemSelectionModel::ClearAndSelect);
 	}
 	return found;
@@ -3533,30 +3567,31 @@ bool MainWindow::findInView(QAbstractItemView *tv, const QString &ttf, bool forw
 
 void MainWindow::contextFindClosed()
 {
-	QWidget *page = project_page_->currentWidget();
-	if (page) 
+	QWidget* page = project_page_->currentWidget();
+	if (page)
 		page->setFocus();
 }
 
 void MainWindow::updateTemplates()
 {
 	QList<QAction*> actions = templates_menu_->actions();
-	ProjectTemplateManager *template_manager = core_->template_manager();
+	ProjectTemplateManager* template_manager = core_->template_manager();
 	int separator_pos = actions.size() - 3;
 	size_t c = 0;
 	for (int i = 0; i < separator_pos; i++) {
-		QAction *action = actions.at(i);
+		QAction* action = actions.at(i);
 		if (i < (int)template_manager->count()) {
-			ProjectTemplate *pt = template_manager->item(i);
+			ProjectTemplate* pt = template_manager->item(i);
 			action->setText(QString::fromUtf8(pt->display_name().c_str()));
 			c++;
-		} else {
+		}
+		else {
 			templates_menu_->removeAction(action);
 		}
 	}
 	for (size_t i = c; i < template_manager->count(); i++) {
-		ProjectTemplate *pt = template_manager->item(i);
-		QAction *action = new QAction(QString::fromUtf8(pt->display_name().c_str()), this);
+		ProjectTemplate* pt = template_manager->item(i);
+		QAction* action = new QAction(QString::fromUtf8(pt->display_name().c_str()), this);
 		action->setCheckable(true);
 		connect(action, SIGNAL(triggered()), this, SLOT(templateSelect()));
 		templates_menu_->insertAction(actions.at(separator_pos), action);
@@ -3567,15 +3602,16 @@ void MainWindow::templatesShow()
 {
 	QList<QAction*> actions = templates_menu_->actions();
 	ProjectTemplate current(NULL, "");
-	ProjectTemplateManager *template_manager = core_->template_manager();
+	ProjectTemplateManager* template_manager = core_->template_manager();
 	current.ReadFromCore(*core_);
 	bool isChecked = false;
 	for (int i = 0; i < (int)template_manager->count(); i++) {
-		ProjectTemplate *pt = template_manager->item(i);
+		ProjectTemplate* pt = template_manager->item(i);
 		if (!isChecked && *pt == current) {
 			isChecked = true;
 			actions.at(i)->setChecked(true);
-		} else {
+		}
+		else {
 			actions.at(i)->setChecked(false);
 		}
 	}
@@ -3596,7 +3632,7 @@ void MainWindow::templatesEdit()
 
 void MainWindow::templateSelect()
 {
-	QAction *action = qobject_cast<QAction *>(sender());
+	QAction* action = qobject_cast<QAction*>(sender());
 	if (action) {
 		core_property_editor_->closePersistentEditor(core_property_editor_->currentIndex());
 		core_->LoadFromTemplate(*core_->template_manager()->item(templates_menu_->actions().indexOf(action)));
@@ -3611,7 +3647,7 @@ void MainWindow::updateEditActions()
 	if (QApplication::activeWindow() != this)
 		return;
 
-	QWidget *widget = focusWidget();
+	QWidget* widget = focusWidget();
 	bool canCopy = false;
 #ifdef ULTIMATE
 	if (widget == license_property_editor_ && license_property_manager_->indexToProperty(license_property_editor_->currentIndex()) == license_property_manager_->serialNumber())
@@ -3621,7 +3657,7 @@ void MainWindow::updateEditActions()
 	bool canPaste = false;
 	bool canRedo = false;
 	bool canUndo = false;
-	ProjectNode *current = currentProjectNode();
+	ProjectNode* current = currentProjectNode();
 	assert(current);
 	if (!current)
 		return;
@@ -3642,14 +3678,17 @@ void MainWindow::updateEditActions()
 		canCut = script_editor_->hasSelection();
 		canDel = script_editor_->hasSelection();
 		canPaste = script_editor_->canPaste();
-	} else if (QAbstractItemView *view = qobject_cast<QAbstractItemView *>(widget)) {
+	}
+	else if (QAbstractItemView* view = qobject_cast<QAbstractItemView*>(widget)) {
 		canCopy = view->selectionModel()->selectedIndexes().size() > 0;
 		canDel = canCopy && currentTreeView() == project_tree_;
 #ifdef ULTIMATE
-	} else if (widget == license_property_editor_ && license_property_manager_->indexToProperty(license_property_editor_->currentIndex()) == license_property_manager_->serialNumber()) {
+	}
+	else if (widget == license_property_editor_ && license_property_manager_->indexToProperty(license_property_editor_->currentIndex()) == license_property_manager_->serialNumber()) {
 		canCopy = true;
 #endif
-	} else if (QLineEdit *edit = qobject_cast<QLineEdit *>(widget)) {
+	}
+	else if (QLineEdit* edit = qobject_cast<QLineEdit*>(widget)) {
 		canCopy = edit->hasSelectedText();
 		if (!edit->isReadOnly()) {
 			canPaste = !QApplication::clipboard()->text().isEmpty();
@@ -3658,7 +3697,8 @@ void MainWindow::updateEditActions()
 			canRedo = edit->isRedoAvailable();
 			canUndo = edit->isUndoAvailable();
 		}
-	} else if (QPlainTextEdit *pt_edit = qobject_cast<QPlainTextEdit *>(widget)) {
+	}
+	else if (QPlainTextEdit* pt_edit = qobject_cast<QPlainTextEdit*>(widget)) {
 		canCopy = pt_edit->textCursor().hasSelection();
 		if (!pt_edit->isReadOnly()) {
 			canPaste = !QApplication::clipboard()->text().isEmpty();
@@ -3667,9 +3707,10 @@ void MainWindow::updateEditActions()
 			canRedo = pt_edit->document()->isRedoAvailable();
 			canUndo = pt_edit->document()->isUndoAvailable();
 		}
-	} else if (QComboBox *comboBox = qobject_cast<QComboBox *>(widget)) {
+	}
+	else if (QComboBox* comboBox = qobject_cast<QComboBox*>(widget)) {
 		if (comboBox->isEditable()) {
-			QLineEdit *edit = comboBox->lineEdit();
+			QLineEdit* edit = comboBox->lineEdit();
 			canCopy = edit->hasSelectedText();
 			if (!edit->isReadOnly()) {
 				canPaste = !QApplication::clipboard()->text().isEmpty();
@@ -3698,7 +3739,7 @@ void MainWindow::updateEditActions()
 
 void MainWindow::treeSectionClicked(int index)
 {
-	ProjectNode *current = currentProjectNode();
+	ProjectNode* current = currentProjectNode();
 	if (!current)
 		return;
 
@@ -3706,7 +3747,7 @@ void MainWindow::treeSectionClicked(int index)
 	directory_model_->setDirectory(current);
 }
 
-void MainWindow::fileChanged(const QString & path)
+void MainWindow::fileChanged(const QString& path)
 {
 	fileChanged_ = true;
 }

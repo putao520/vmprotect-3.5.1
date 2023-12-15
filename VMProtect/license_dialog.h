@@ -1,6 +1,9 @@
 #ifndef LICENSE_DIALOG_H
 #define LICENSE_DIALOG_H
 
+#include "../core/core.h"
+#include "widgets.h"
+
 class LicenseDialog : public QDialog
 {
     Q_OBJECT

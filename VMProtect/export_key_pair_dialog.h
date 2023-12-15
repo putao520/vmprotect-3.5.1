@@ -1,6 +1,8 @@
 #ifndef EXPORT_KEY_PAIR_DIALOG_H
 #define EXPORT_KEY_PAIR_DIALOG_H
 
+#include "../core/core.h"
+
 class ExportKeyPairDialog : public QDialog
 {
     Q_OBJECT

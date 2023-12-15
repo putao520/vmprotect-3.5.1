@@ -1,6 +1,9 @@
 #ifndef TEMPLATES_WINDOW_H
 #define TEMPLATES_WINDOW_H
 
+#include "models.h"
+#include "../core/core.h"
+
 class TemplatesWindow : public QDialog
 {
 	Q_OBJECT

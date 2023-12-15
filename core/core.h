@@ -2,6 +2,8 @@
 #define CORE_H
 
 #include "../runtime/common.h"
+#include "../core/objects.h"
+#include "../core/files.h"
 
 enum ProjectOption {
 	cpDebugMode             = 0x00000002,

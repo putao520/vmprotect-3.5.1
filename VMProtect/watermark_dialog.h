@@ -1,6 +1,9 @@
 #ifndef WATERMARK_DIALOG_H
 #define WATERMARK_DIALOG_H
 
+#include "../core/core.h"
+#include "widgets.h"
+
 class WatermarkDialog : public QDialog
 {
     Q_OBJECT

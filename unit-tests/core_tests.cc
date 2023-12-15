@@ -13,14 +13,14 @@ TEST(CoreTest, OpenAndCompile)
 
 	ASSERT_TRUE(vmp.Open("test-binaries/win32-app-test1-i386.vmp"));
 	EXPECT_EQ(vmp.vm_section_name().compare(".test"), 0);
-	IFile &file = *vmp.input_file();
+	IFile& file = *vmp.input_file();
 	ASSERT_EQ(file.count(), 1ul);
-	IArchitecture &arch = *file.item(0);
+	IArchitecture& arch = *file.item(0);
 	// Check folders.
-	Folder &folder = *file.folder_list();
+	Folder& folder = *file.folder_list();
 	ASSERT_EQ(folder.count(), 2ul);
-	EXPECT_EQ(folder.item(0)->name().compare("Folder1") , 0);
-	EXPECT_EQ(folder.item(1)->name().compare("Folder2") , 0);
+	EXPECT_EQ(folder.item(0)->name().compare("Folder1"), 0);
+	EXPECT_EQ(folder.item(1)->name().compare("Folder2"), 0);
 	ASSERT_EQ(folder.item(1)->count(), 1ul);
 	EXPECT_EQ(folder.item(1)->item(0)->name().compare("Strings"), 0);
 	EXPECT_EQ(file.folder_list()->GetFolderList().size(), 3ul);
@@ -30,7 +30,7 @@ TEST(CoreTest, OpenAndCompile)
 	EXPECT_EQ(arch.function_list()->item(1)->folder()->name().compare("Strings"), 0);
 	EXPECT_EQ(arch.function_list()->item(2)->folder()->name().compare("Strings"), 0);
 	// Check external commands.
-	ExtCommandList *ext_command_list = arch.function_list()->item(0)->ext_command_list();
+	ExtCommandList* ext_command_list = arch.function_list()->item(0)->ext_command_list();
 	ASSERT_EQ(ext_command_list->count(), 2ul);
 	EXPECT_EQ(ext_command_list->item(0)->address(), 0x00401007ull);
 	EXPECT_EQ(ext_command_list->item(1)->address(), 0x00401011ull);
@@ -43,7 +43,7 @@ TEST(CoreTest, CryptRSA)
 
 	size_t key_lengths[] = { 1024ul, 1536ul, 2048ul, 2560ul, 3072ul, 3584ul, 4096ul };
 	//for(size_t i = 0; i < _countof(key_lengths); i++)
-	size_t i = rand() % _countof(key_lengths); 
+	size_t i = rand() % _countof(key_lengths);
 	{
 		size_t key_length = key_lengths[i];
 		ASSERT_TRUE(cryptor.CreateKeyPair(key_length)) << key_length;
@@ -61,7 +61,7 @@ TEST(CoreTest, CryptRSA)
 TEST(CoreTest, IsUniqueWatermark)
 {
 	WatermarkManager wm(NULL);
-	
+
 	wm.Add("name", "AbCdE?");
 	ASSERT_FALSE(wm.IsUniqueWatermark("AB"));
 	ASSERT_FALSE(wm.IsUniqueWatermark("b?"));
@@ -77,11 +77,11 @@ TEST(CoreTest, IsUniqueWatermark)
 TEST(CoreTest, UTF8Validator)
 {
 	ASSERT_TRUE(os::ValidateUTF8(std::string()));
-	ASSERT_TRUE(os::ValidateUTF8(os::ToUTF8(os::unicode_string(L"êèðèëëèöà"))));
-	ASSERT_FALSE(os::ValidateUTF8(std::string("êèðèëëèöà 1251")));
+	ASSERT_TRUE(os::ValidateUTF8(os::ToUTF8(os::unicode_string(L"§Ü§Ú§â§Ú§Ý§Ý§Ú§è§Ñ"))));
+	ASSERT_FALSE(os::ValidateUTF8(std::string("§Ü§Ú§â§Ú§Ý§Ý§Ú§è§Ñ 1251")));
 }
 TEST(CoreTest, FromACP)
 {
-	ASSERT_TRUE(os::FromACP(std::string("êèðèëëèöà 1251")) == os::unicode_string(L"êèðèëëèöà 1251"));
+	ASSERT_TRUE(os::FromACP(std::string("§Ü§Ú§â§Ú§Ý§Ý§Ú§è§Ñ 1251")) == os::unicode_string(L"§Ü§Ú§â§Ú§Ý§Ý§Ú§è§Ñ 1251"));
 }
 #endif

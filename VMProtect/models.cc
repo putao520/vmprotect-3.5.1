@@ -112,7 +112,8 @@ static QIcon nodeIcon(NodeType type, bool is_disabled = false)
 			res.addPixmap(firstImage, QIcon::Normal, QIcon::On);
 
 			return res;
-		} else {
+		}
+		else {
 			QIcon res = QIcon(":/images/folder_close.png");
 			res.addPixmap(QPixmap(":/images/folder.png"), QIcon::Normal, QIcon::On);
 			return res;
@@ -127,13 +128,14 @@ static QIcon nodeIcon(NodeType type, bool is_disabled = false)
 		painter.drawPixmap(firstImage.width() - secondImage.width(), firstImage.height() - secondImage.height(), secondImage);
 
 		return QIcon(firstImage);
-	} else {
+	}
+	else {
 		return QIcon(iconName);
 	}
 }
 
 template<typename F>
-static QIcon functionIcon(F *func)
+static QIcon functionIcon(F* func)
 {
 	if (!func || !func->need_compile())
 		return nodeIcon(NODE_FUNCTION, true);
@@ -174,7 +176,7 @@ static QIcon functionIcon(F *func)
  * ProjectNode
  */
 
-ProjectNode::ProjectNode(ProjectNode *parent, NodeType type, void *data)
+ProjectNode::ProjectNode(ProjectNode* parent, NodeType type, void* data)
 	: parent_(NULL), data_(data), type_(type), properties_(NULL)
 {
 	if (parent)
@@ -184,7 +186,7 @@ ProjectNode::ProjectNode(ProjectNode *parent, NodeType type, void *data)
 void ProjectNode::clear()
 {
 	for (int i = 0; i < children_.size(); i++) {
-		ProjectNode *node = children_[i];
+		ProjectNode* node = children_[i];
 		node->parent_ = NULL;
 		delete node;
 	}
@@ -203,12 +205,12 @@ ProjectNode::~ProjectNode()
 		parent_->removeChild(this);
 }
 
-QString functionProtection(const FunctionBundle *func)
+QString functionProtection(const FunctionBundle* func)
 {
 	return func ? QString::fromUtf8(func->display_protection().c_str()) : QString::fromUtf8(language[lsNone].c_str());
 }
 
-bool ProjectNode::contains(const QRegExp &filter) const
+bool ProjectNode::contains(const QRegExp& filter) const
 {
 	for (int i = 0; i < 2; i++) {
 		if (text(i).contains(filter))
@@ -226,115 +228,124 @@ QString ProjectNode::text(int column) const
 	switch (type_) {
 	case NODE_SCRIPT:
 	case NODE_SCRIPT_BOOKMARK:
-		{
-			Script *object = static_cast<Script *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(object->text().c_str());
-			}
+	{
+		Script* object = static_cast<Script*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(object->text().c_str());
 		}
-		break;
+	}
+	break;
 	case NODE_FUNCTION:
-		{
-			FunctionBundle *object = static_cast<FunctionBundle *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(object->display_address().c_str());
-			} else if (column == 2) {
-				return QString::fromUtf8(object->display_protection().c_str());
-			}
+	{
+		FunctionBundle* object = static_cast<FunctionBundle*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(object->display_address().c_str());
 		}
-		break;
+		else if (column == 2) {
+			return QString::fromUtf8(object->display_protection().c_str());
+		}
+	}
+	break;
 	case NODE_MAP_FUNCTION:
-		{
-			MapFunctionBundle *object = static_cast<MapFunctionBundle *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(object->display_address().c_str());
-			} else if (column == 2) {
-				IFile *file = object->owner()->owner();
-				return functionProtection(file->function_list()->GetFunctionByName(object->name()));
-			}
+	{
+		MapFunctionBundle* object = static_cast<MapFunctionBundle*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(object->display_address().c_str());
 		}
-		break;
+		else if (column == 2) {
+			IFile* file = object->owner()->owner();
+			return functionProtection(file->function_list()->GetFunctionByName(object->name()));
+		}
+	}
+	break;
 	case NODE_LOAD_COMMAND:
-		{
-			ILoadCommand *object = static_cast<ILoadCommand *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
-			} else if (column == 2) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
-			}
+	{
+		ILoadCommand* object = static_cast<ILoadCommand*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
 		}
-		break;
+		else if (column == 2) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
+		}
+	}
+	break;
 	case NODE_SEGMENT:
 	case NODE_SECTION:
-		{
-			ISection *object = static_cast<ISection *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
-			} else if (column == 2) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
-			} else if (column == 3) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->physical_offset()).c_str());
-			} else if (column == 4) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->physical_size()).c_str());
-			} else if (column == 5) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->flags()).c_str());
-			}
+	{
+		ISection* object = static_cast<ISection*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
 		}
-		break;
+		else if (column == 2) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
+		}
+		else if (column == 3) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->physical_offset()).c_str());
+		}
+		else if (column == 4) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->physical_size()).c_str());
+		}
+		else if (column == 5) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->flags()).c_str());
+		}
+	}
+	break;
 	case NODE_RESOURCE:
-		{
-			IResource *object = static_cast<IResource *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
-			} else 	if (column == 2) {
-				return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
-			}
+	{
+		IResource* object = static_cast<IResource*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
 		}
-		break;
+		else 	if (column == 2) {
+			return QString::fromUtf8(DisplayValue(osDWord, object->size()).c_str());
+		}
+	}
+	break;
 	case NODE_IMPORT_FUNCTION:
-		{
-			IImportFunction *object = static_cast<IImportFunction *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
-			}
+	{
+		IImportFunction* object = static_cast<IImportFunction*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
 		}
-		break;
+	}
+	break;
 	case NODE_EXPORT:
-		{
-			IExport *object = static_cast<IExport *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
-			}
+	{
+		IExport* object = static_cast<IExport*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(DisplayValue(object->address_size(), object->address()).c_str());
 		}
-		break;
+	}
+	break;
 	case NODE_PROPERTY:
-		{
-			Property *object = static_cast<Property *>(data_);
-			if (column == 1) {
-				return object->valueText();
-			}
+	{
+		Property* object = static_cast<Property*>(data_);
+		if (column == 1) {
+			return object->valueText();
 		}
-		break;
+	}
+	break;
 #ifdef ULTIMATE
 	case NODE_LICENSE:
-		{
-			License *object = static_cast<License *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(object->customer_email().c_str());
-			} else if (column == 2) {
-				LicenseDate date = object->date();
-				return QDate(date.Year, date.Month, date.Day).toString(Qt::SystemLocaleShortDate);
-			}
+	{
+		License* object = static_cast<License*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(object->customer_email().c_str());
 		}
-		break;
+		else if (column == 2) {
+			LicenseDate date = object->date();
+			return QDate(date.Year, date.Month, date.Day).toString(Qt::SystemLocaleShortDate);
+		}
+	}
+	break;
 	case NODE_FILE:
-		{
-			InternalFile *object = static_cast<InternalFile *>(data_);
-			if (column == 1) {
-				return QString::fromUtf8(object->file_name().c_str());
-			}
+	{
+		InternalFile* object = static_cast<InternalFile*>(data_);
+		if (column == 1) {
+			return QString::fromUtf8(object->file_name().c_str());
 		}
-		break;
+	}
+	break;
 #endif
 	}
 	return QString();
@@ -343,7 +354,7 @@ QString ProjectNode::text(int column) const
 QString ProjectNode::path() const
 {
 	QString res;
-	for (ProjectNode *p = parent(); p && p->type() != NODE_ROOT; p = p->parent()) {
+	for (ProjectNode* p = parent(); p && p->type() != NODE_ROOT; p = p->parent()) {
 		if (!res.isEmpty())
 			res = " > " + res;
 		res = p->text() + res;
@@ -351,13 +362,13 @@ QString ProjectNode::path() const
 	return res;
 }
 
-void ProjectNode::addChild(ProjectNode *child)
+void ProjectNode::addChild(ProjectNode* child)
 {
 	insertChild(childCount(), child);
 }
 
-void ProjectNode::insertChild(int index, ProjectNode *child)
-{ 
+void ProjectNode::insertChild(int index, ProjectNode* child)
+{
 	if (child->parent())
 		return;
 
@@ -365,13 +376,13 @@ void ProjectNode::insertChild(int index, ProjectNode *child)
 	children_.insert(index, child);
 }
 
-void ProjectNode::removeChild(ProjectNode *child)
+void ProjectNode::removeChild(ProjectNode* child)
 {
 	if (children_.removeOne(child))
 		child->parent_ = NULL;
 }
 
-void ProjectNode::setPropertyManager(PropertyManager *propertyManager)
+void ProjectNode::setPropertyManager(PropertyManager* propertyManager)
 {
 	if (properties_) {
 		delete properties_;
@@ -381,19 +392,19 @@ void ProjectNode::setPropertyManager(PropertyManager *propertyManager)
 	if (!propertyManager)
 		return;
 
-	properties_ = new ProjectNode(NULL, type_, data_); 
+	properties_ = new ProjectNode(NULL, type_, data_);
 	properties_->setText(text_);
 	properties_->setIcon(nodeIcon(type_));
 
-	QList<Property *> propertyList;
-	QMap<Property *, ProjectNode *> propertyMap;
+	QList<Property*> propertyList;
+	QMap<Property*, ProjectNode*> propertyMap;
 	propertyMap[propertyManager->root()] = properties_;
 	propertyList.append(propertyManager->root()->children());
 	for (int i = 0; i < propertyList.size(); i++) {
-		Property *prop = propertyList[i];
+		Property* prop = propertyList[i];
 		propertyList.append(prop->children());
 
-		ProjectNode *node = new ProjectNode(propertyMap[prop->parent()], NODE_PROPERTY, prop); 
+		ProjectNode* node = new ProjectNode(propertyMap[prop->parent()], NODE_PROPERTY, prop);
 		node->setText(prop->name());
 		node->setIcon(nodeIcon(node->type()));
 		propertyMap[prop] = node;
@@ -452,10 +463,10 @@ void ProjectNode::localize()
 	}
 
 	if (properties_) {
-		QList<ProjectNode *> list;
+		QList<ProjectNode*> list;
 		list.append(properties_);
 		for (int i = 0; i < list.size(); i++) {
-			ProjectNode *node = list[i];
+			ProjectNode* node = list[i];
 			node->localize();
 
 			list.append(node->children());
@@ -467,7 +478,7 @@ void ProjectNode::localize()
  * BaseModel
  */
 
-BaseModel::BaseModel(QObject *parent)
+BaseModel::BaseModel(QObject* parent)
 	: QAbstractItemModel(parent), root_(NULL), core_(NULL)
 {
 	root_ = new ProjectNode(NULL, NODE_ROOT);
@@ -478,67 +489,67 @@ BaseModel::~BaseModel()
 	delete root_;
 }
 
-ProjectNode *BaseModel::indexToNode(const QModelIndex &index) const 
+ProjectNode* BaseModel::indexToNode(const QModelIndex& index) const
 {
 	if (index.isValid())
-		return static_cast<ProjectNode *>(index.internalPointer());
+		return static_cast<ProjectNode*>(index.internalPointer());
 	return root_;
 }
 
-QModelIndex BaseModel::parent(const QModelIndex &index) const
+QModelIndex BaseModel::parent(const QModelIndex& index) const
 {
 	if (!index.isValid())
 		return QModelIndex();
 
-	ProjectNode *childNode = indexToNode(index);
-	ProjectNode *parentNode = childNode->parent();
+	ProjectNode* childNode = indexToNode(index);
+	ProjectNode* parentNode = childNode->parent();
 	if (parentNode == root_)
 		return QModelIndex();
 
 	return createIndex(parentNode->parent()->children().indexOf(parentNode), 0, parentNode);
 }
 
-int BaseModel::columnCount(const QModelIndex & /* parent */) const
+int BaseModel::columnCount(const QModelIndex& /* parent */) const
 {
 	return 1;
 }
 
-int BaseModel::rowCount(const QModelIndex &parent) const
+int BaseModel::rowCount(const QModelIndex& parent) const
 {
-	ProjectNode *parentNode = indexToNode(parent);
+	ProjectNode* parentNode = indexToNode(parent);
 	return parentNode->childCount();
 }
 
-QVariant BaseModel::data(const QModelIndex &index, int role) const
+QVariant BaseModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
 
-	ProjectNode *node = indexToNode(index);
+	ProjectNode* node = indexToNode(index);
 	switch (role) {
 	case Qt::DisplayRole:
 		return node->text();
 	case Qt::DecorationRole:
 		return node->icon();
 	case Qt::FontRole:
-		{
-			switch (node->type()) {
-			case NODE_MAP_FUNCTION:
-			case NODE_WATERMARK:
-			case NODE_MESSAGE:
-			case NODE_WARNING:
-			case NODE_ERROR:
-			case NODE_TEMPLATE:
-				break;
-			default:
-				if (node->parent()->type() == NODE_ROOT) {
-					QFont font;
-					font.setBold(true);
-					return font;
-				}
+	{
+		switch (node->type()) {
+		case NODE_MAP_FUNCTION:
+		case NODE_WATERMARK:
+		case NODE_MESSAGE:
+		case NODE_WARNING:
+		case NODE_ERROR:
+		case NODE_TEMPLATE:
+			break;
+		default:
+			if (node->parent()->type() == NODE_ROOT) {
+				QFont font;
+				font.setBold(true);
+				return font;
 			}
 		}
-		break;
+	}
+	break;
 	case Qt::BackgroundColorRole:
 		if (node->type() == NODE_WARNING)
 			return QColor(0xff, 0xf8, 0xe3);
@@ -550,70 +561,70 @@ QVariant BaseModel::data(const QModelIndex &index, int role) const
 			return QColor(0xff, 0x3c, 0x08);
 		break;
 	case Qt::Vmp::StaticTextRole:
+	{
+		int size = 0;
+		switch (node->type())
 		{
-			int size = 0;
-			switch (node->type())
-			{
-			case NODE_FUNCTIONS:
-				size = (int)reinterpret_cast<FunctionBundleList*>(node->data())->count();
-				break;
-			case NODE_MAP_FOLDER:
-				if (node->parent()->type() == NODE_ROOT) {
-					QList<ProjectNode *> nodeList = node->children();
-					for (int i = 0; i < nodeList.size(); i++) {
-						ProjectNode *child = nodeList[i];
-						if (child->type() == NODE_MAP_FOLDER)
-							nodeList.append(child->children());
-						else
-							size++;
-					}
-					break;
+		case NODE_FUNCTIONS:
+			size = (int)reinterpret_cast<FunctionBundleList*>(node->data())->count();
+			break;
+		case NODE_MAP_FOLDER:
+			if (node->parent()->type() == NODE_ROOT) {
+				QList<ProjectNode*> nodeList = node->children();
+				for (int i = 0; i < nodeList.size(); i++) {
+					ProjectNode* child = nodeList[i];
+					if (child->type() == NODE_MAP_FOLDER)
+						nodeList.append(child->children());
+					else
+						size++;
 				}
-			case NODE_FOLDER:
-			case NODE_IMPORT_FOLDER:
-			case NODE_EXPORT_FOLDER:
-			case NODE_FILE_FOLDER:
-				{
-					QListIterator<ProjectNode *> i(node->children());
-					while (i.hasNext()) {
-						NodeType childType = i.next()->type();
-						if (childType != NODE_FOLDER && childType != NODE_MAP_FOLDER && childType != NODE_FILE_FOLDER)
-							size++;
-					}
-				}
-				break;
-			case NODE_RESOURCE_FOLDER:
-			case NODE_IMPORT:
-			case NODE_IMPORTS:
-			case NODE_EXPORTS:
-			case NODE_SEGMENTS:
-			case NODE_RESOURCES:
-			case NODE_LICENSES:
-			case NODE_LOAD_COMMANDS:
-			case NODE_SEGMENT:
-				size = node->childCount();
-				break;
-#ifdef ULTIMATE
-			case NODE_FILES:
-			case NODE_ASSEMBLIES:
-				size = (int)reinterpret_cast<FileManager*>(node->data())->count();
-				break;
-#endif
-			case NODE_WATERMARK:
-				size = (int)reinterpret_cast<Watermark*>(node->data())->use_count();
 				break;
 			}
-			if (size > 0) 
-				return QString("(%1)").arg(size);
+		case NODE_FOLDER:
+		case NODE_IMPORT_FOLDER:
+		case NODE_EXPORT_FOLDER:
+		case NODE_FILE_FOLDER:
+		{
+			QListIterator<ProjectNode*> i(node->children());
+			while (i.hasNext()) {
+				NodeType childType = i.next()->type();
+				if (childType != NODE_FOLDER && childType != NODE_MAP_FOLDER && childType != NODE_FILE_FOLDER)
+					size++;
+			}
 		}
 		break;
-	case Qt::Vmp::StaticColorRole: 
+		case NODE_RESOURCE_FOLDER:
+		case NODE_IMPORT:
+		case NODE_IMPORTS:
+		case NODE_EXPORTS:
+		case NODE_SEGMENTS:
+		case NODE_RESOURCES:
+		case NODE_LICENSES:
+		case NODE_LOAD_COMMANDS:
+		case NODE_SEGMENT:
+			size = node->childCount();
+			break;
+#ifdef ULTIMATE
+		case NODE_FILES:
+		case NODE_ASSEMBLIES:
+			size = (int)reinterpret_cast<FileManager*>(node->data())->count();
+			break;
+#endif
+		case NODE_WATERMARK:
+			size = (int)reinterpret_cast<Watermark*>(node->data())->use_count();
+			break;
+		}
+		if (size > 0)
+			return QString("(%1)").arg(size);
+	}
+	break;
+	case Qt::Vmp::StaticColorRole:
 		return QColor(0x9b, 0xa2, 0xaa);
 	}
 	return QVariant();
 }
 
-QModelIndex BaseModel::nodeToIndex(ProjectNode *node) const
+QModelIndex BaseModel::nodeToIndex(ProjectNode* node) const
 {
 	if (!node || node == root_)
 		return QModelIndex();
@@ -621,20 +632,20 @@ QModelIndex BaseModel::nodeToIndex(ProjectNode *node) const
 	return createIndex(node->parent()->children().indexOf(node), 0, node);
 }
 
-QModelIndex BaseModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex BaseModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	ProjectNode *parentNode = indexToNode(parent);
-	ProjectNode *childNode = parentNode->children().value(row);
+	ProjectNode* parentNode = indexToNode(parent);
+	ProjectNode* childNode = parentNode->children().value(row);
 	if (!childNode)
 		return QModelIndex();
 
 	return createIndex(row, column, childNode);
 }
 
-void BaseModel::setCore(Core *core)
+void BaseModel::setCore(Core* core)
 {
 	clear();
 	core_ = core;
@@ -646,30 +657,30 @@ void BaseModel::clear()
 	objectToNode_.clear();
 }
 
-void BaseModel::setObjectNode(void *object, ProjectNode *node)
+void BaseModel::setObjectNode(void* object, ProjectNode* node)
 {
 	objectToNode_[object] = node;
 }
 
-QModelIndex BaseModel::objectToIndex(void *object) const
+QModelIndex BaseModel::objectToIndex(void* object) const
 {
 	return nodeToIndex(objectToNode(object));
 }
 
-ProjectNode *BaseModel::objectToNode(void *object) const
+ProjectNode* BaseModel::objectToNode(void* object) const
 {
 	return objectToNode_[object];
 }
 
-bool BaseModel::removeNode(void *object)
+bool BaseModel::removeNode(void* object)
 {
-	ProjectNode *node = objectToNode(object);
+	ProjectNode* node = objectToNode(object);
 	if (!node)
 		return false;
 
 	removeObject(object);
 
-	ProjectNode *parent = node->parent();
+	ProjectNode* parent = node->parent();
 	int i = parent->children().indexOf(node);
 	beginRemoveRows(nodeToIndex(parent), i, i);
 	emit nodeRemoved(node);
@@ -678,35 +689,35 @@ bool BaseModel::removeNode(void *object)
 	return true;
 }
 
-void BaseModel::updateNode(ProjectNode *node)
+void BaseModel::updateNode(ProjectNode* node)
 {
 	QModelIndex index = nodeToIndex(node);
 	dataChanged(index, index);
 	emit nodeUpdated(node);
 }
 
-void BaseModel::removeObject(void *object)
+void BaseModel::removeObject(void* object)
 {
 	objectToNode_.remove(object);
 	emit objectRemoved(object);
 }
 
-void BaseModel::createFunctionsTree(ProjectNode *root)
+void BaseModel::createFunctionsTree(ProjectNode* root)
 {
 	size_t i, count;
 	int k, j;
 	QList<QString> classList;
 	QList<QString> delimList;
-	QList<ProjectNode *> folderList;
-	QMap<ProjectNode *, QString> delimMap;
-	QMap<QString, ProjectNode *> classMap;
+	QList<ProjectNode*> folderList;
+	QMap<ProjectNode*, QString> delimMap;
+	QMap<QString, ProjectNode*> classMap;
 	NodeType folder_type;
 	QString delim;
 	ushort u;
-	ProjectNode *folder, *node, *child;
-	MapFunctionBundleList *map_function_list = NULL;
-	IImport *import = NULL;
-	IExportList *export_list = NULL;
+	ProjectNode* folder, * node, * child;
+	MapFunctionBundleList* map_function_list = NULL;
+	IImport * import = NULL;
+	IExportList* export_list = NULL;
 
 	switch (root->type()) {
 #ifdef LITE
@@ -721,7 +732,7 @@ void BaseModel::createFunctionsTree(ProjectNode *root)
 		folder_type = NODE_MAP_FOLDER;
 		break;
 	case NODE_IMPORT:
-		import = static_cast<IImport*>(root->data());
+import = static_cast<IImport*>(root->data());
 		count = import->count();
 		folder_type = NODE_IMPORT_FOLDER;
 		break;
@@ -735,9 +746,9 @@ void BaseModel::createFunctionsTree(ProjectNode *root)
 	}
 
 	for (i = 0; i < count; i++) {
-		MapFunctionBundle *func = NULL;
-		IImportFunction *import_func = NULL;
-		IExport *export_func = NULL;
+		MapFunctionBundle* func = NULL;
+		IImportFunction* import_func = NULL;
+		IExport* export_func = NULL;
 		QString funcName;
 
 		switch (root->type()) {
@@ -819,7 +830,7 @@ void BaseModel::createFunctionsTree(ProjectNode *root)
 			delim = delimList[k];
 			fullClassName = fullClassName + delim + className;
 
-			ProjectNode *classFolder;
+			ProjectNode* classFolder;
 			auto it = classMap.upperBound(fullClassName);
 			if (it != classMap.begin() && (it - 1).key() == fullClassName)
 				classFolder = (it - 1).value();
@@ -849,28 +860,28 @@ void BaseModel::createFunctionsTree(ProjectNode *root)
 #else
 		case NODE_ROOT:
 #endif
-			{
-				node = new ProjectNode(folder, NODE_MAP_FUNCTION, func);
-				node->setText(QString::fromUtf8(func->display_name().c_str()));
-				node->setIcon(functionIcon(core()->input_file()->function_list()->GetFunctionByName(func->name())));
-				setObjectNode(func, node);
-			}
-			break;
+		{
+			node = new ProjectNode(folder, NODE_MAP_FUNCTION, func);
+			node->setText(QString::fromUtf8(func->display_name().c_str()));
+			node->setIcon(functionIcon(core()->input_file()->function_list()->GetFunctionByName(func->name())));
+			setObjectNode(func, node);
+		}
+		break;
 		case NODE_IMPORT:
-			{
-				node = new ProjectNode(folder, NODE_IMPORT_FUNCTION, import_func);
-				node->setText(QString::fromUtf8(import_func->display_name().c_str()));
-				node->setIcon(nodeIcon(node->type()));
-				setObjectNode(import_func, node);
-			}
-			break;
+		{
+			node = new ProjectNode(folder, NODE_IMPORT_FUNCTION, import_func);
+			node->setText(QString::fromUtf8(import_func->display_name().c_str()));
+			node->setIcon(nodeIcon(node->type()));
+			setObjectNode(import_func, node);
+		}
+		break;
 		case NODE_EXPORTS:
-			{
-				node = new ProjectNode(folder, NODE_EXPORT, export_func);
-				node->setText(QString::fromUtf8(export_func->display_name().c_str()));
-				node->setIcon(nodeIcon(node->type()));
-			}
-			break;
+		{
+			node = new ProjectNode(folder, NODE_EXPORT, export_func);
+			node->setText(QString::fromUtf8(export_func->display_name().c_str()));
+			node->setIcon(nodeIcon(node->type()));
+		}
+		break;
 		}
 	}
 
@@ -905,7 +916,7 @@ void BaseModel::localize()
 		nodes.append(root());
 
 	for (int i = 0; i < nodes.count(); i++) {
-		ProjectNode *node = nodes[i];
+		ProjectNode* node = nodes[i];
 		node->localize();
 		updateNode(node);
 	}
@@ -915,8 +926,8 @@ void BaseModel::localize()
  * ProjectModel
  */
 
-ProjectModel::ProjectModel(QObject *parent)
-	: BaseModel(parent), nodeFunctions_(NULL), 
+ProjectModel::ProjectModel(QObject* parent)
+	: BaseModel(parent), nodeFunctions_(NULL),
 #ifdef ULTIMATE
 	nodeLicenses_(NULL), nodeFiles_(NULL),
 #endif
@@ -933,17 +944,17 @@ ProjectModel::~ProjectModel()
 
 }
 
-Qt::ItemFlags ProjectModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
 {
 	Qt::ItemFlags res = QAbstractItemModel::flags(index);
 	if (res & Qt::ItemIsSelectable) {
-		ProjectNode *node = indexToNode(index);
+		ProjectNode* node = indexToNode(index);
 		if (node) {
 			if (node->type() == NODE_FOLDER || node->type() == NODE_FUNCTION || node->type() == NODE_FILE_FOLDER || node->type() == NODE_FILE)
 				res |= Qt::ItemIsDragEnabled;
 			if (node->type() == NODE_FUNCTIONS || node->type() == NODE_FOLDER || node->type() == NODE_FILES || node->type() == NODE_FILE_FOLDER || node->type() == NODE_ASSEMBLIES)
 				res |= Qt::ItemIsDropEnabled;
-			if ((node->type() == NODE_FOLDER && !static_cast<Folder *>(node->data())->read_only()) || node->type() == NODE_LICENSE || node->type() == NODE_FILE_FOLDER || node->type() == NODE_FILE)
+			if ((node->type() == NODE_FOLDER && !static_cast<Folder*>(node->data())->read_only()) || node->type() == NODE_LICENSE || node->type() == NODE_FILE_FOLDER || node->type() == NODE_FILE)
 				res |= Qt::ItemIsEditable;
 		}
 	}
@@ -952,82 +963,82 @@ Qt::ItemFlags ProjectModel::flags(const QModelIndex &index) const
 
 QStringList ProjectModel::mimeTypes() const
 {
-    return QStringList() << QLatin1String("application/x-projectmodeldatalist");
+	return QStringList() << QLatin1String("application/x-projectmodeldatalist");
 }
 
-QMimeData *ProjectModel::mimeData(const QModelIndexList &indexes) const
+QMimeData* ProjectModel::mimeData(const QModelIndexList& indexes) const
 {
-    if (indexes.count() <= 0)
-        return 0;
-    QStringList types = mimeTypes();
-    if (types.isEmpty())
-        return 0;
-    QMimeData *data = new QMimeData();
-    QString format = types.at(0);
-    QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
-    for (QModelIndexList::ConstIterator it = indexes.begin(); it != indexes.end(); ++it) {
-		ProjectNode *node = indexToNode(*it);
+	if (indexes.count() <= 0)
+		return 0;
+	QStringList types = mimeTypes();
+	if (types.isEmpty())
+		return 0;
+	QMimeData* data = new QMimeData();
+	QString format = types.at(0);
+	QByteArray encoded;
+	QDataStream stream(&encoded, QIODevice::WriteOnly);
+	for (QModelIndexList::ConstIterator it = indexes.begin(); it != indexes.end(); ++it) {
+		ProjectNode* node = indexToNode(*it);
 		if (!node)
 			continue;
 
 		stream << node->type();
 		switch (node->type()) {
 		case NODE_FUNCTION:
-			{
-				FunctionBundle *func = reinterpret_cast<FunctionBundle *>(node->data());
-				stream << QString::fromUtf8(func->id().c_str());
-			}
-			break;
+		{
+			FunctionBundle* func = reinterpret_cast<FunctionBundle*>(node->data());
+			stream << QString::fromUtf8(func->id().c_str());
+		}
+		break;
 		case NODE_FOLDER:
-			{
-				Folder *folder = reinterpret_cast<Folder *>(node->data());
-				stream << QString::fromUtf8(folder->id().c_str());
-			}
-			break;
+		{
+			Folder* folder = reinterpret_cast<Folder*>(node->data());
+			stream << QString::fromUtf8(folder->id().c_str());
+		}
+		break;
 #ifdef ULTIMATE
 		case NODE_FILE_FOLDER:
-			{
-				FileFolder *folder = reinterpret_cast<FileFolder *>(node->data());
-				stream << QString::fromUtf8(folder->id().c_str());
-			}
-			break;
+		{
+			FileFolder* folder = reinterpret_cast<FileFolder*>(node->data());
+			stream << QString::fromUtf8(folder->id().c_str());
+		}
+		break;
 		case NODE_FILE:
-			{
-				InternalFile *file = reinterpret_cast<InternalFile *>(node->data());
-				stream << (int)file->id();
-			}
-			break;
+		{
+			InternalFile* file = reinterpret_cast<InternalFile*>(node->data());
+			stream << (int)file->id();
+		}
+		break;
 #endif
 		}
 	}
-    data->setData(format, encoded);
-    return data;
+	data->setData(format, encoded);
+	return data;
 }
 
-bool ProjectModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex &parent)
+bool ProjectModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int /*row*/, int /*column*/, const QModelIndex& parent)
 {
-    if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction))
-        return false;
-    QStringList types = mimeTypes();
-    if (types.isEmpty())
-        return false;
-    QString format = types.at(0);
-    if (!data->hasFormat(format))
-        return false;
-	ProjectNode *dst = indexToNode(parent);
+	if (!data || !(action == Qt::CopyAction || action == Qt::MoveAction))
+		return false;
+	QStringList types = mimeTypes();
+	if (types.isEmpty())
+		return false;
+	QString format = types.at(0);
+	if (!data->hasFormat(format))
+		return false;
+	ProjectNode* dst = indexToNode(parent);
 	if (!dst)
 		return false;
 
-	if (dst->type()== NODE_FILES || dst->type() == NODE_ASSEMBLIES || dst->type()== NODE_FILE_FOLDER || dst->type()== NODE_FILE) {
+	if (dst->type() == NODE_FILES || dst->type() == NODE_ASSEMBLIES || dst->type() == NODE_FILE_FOLDER || dst->type() == NODE_FILE) {
 #ifdef ULTIMATE
-		FileFolder *dst_folder;
+		FileFolder* dst_folder;
 		switch (dst->type()) {
 		case NODE_FILE:
-			dst_folder = reinterpret_cast<InternalFile *>(dst->data())->folder();
+			dst_folder = reinterpret_cast<InternalFile*>(dst->data())->folder();
 			break;
 		case NODE_FILE_FOLDER:
-			dst_folder = reinterpret_cast<FileFolder *>(dst->data());
+			dst_folder = reinterpret_cast<FileFolder*>(dst->data());
 			break;
 		case NODE_FILES:
 		case NODE_ASSEMBLIES:
@@ -1043,33 +1054,34 @@ bool ProjectModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
 			stream >> t;
 			switch (t) {
 			case NODE_FILE:
-				{
-					int id;
-					stream >> id;
-					InternalFile *file = core()->file_manager()->item((size_t)id);
-					file->set_folder(dst_folder);
-				}
-				break;
+			{
+				int id;
+				stream >> id;
+				InternalFile* file = core()->file_manager()->item((size_t)id);
+				file->set_folder(dst_folder);
+			}
+			break;
 			case NODE_FILE_FOLDER:
-				{
-					QString str_id;
-					stream >> str_id;
-					FileFolder *folder = core()->file_manager()->folder_list()->GetFolderById(str_id.toUtf8().constData());
-					if (folder)
-						folder->set_owner(dst_folder ? dst_folder : core()->file_manager()->folder_list());
-				}
-				break;
+			{
+				QString str_id;
+				stream >> str_id;
+				FileFolder* folder = core()->file_manager()->folder_list()->GetFolderById(str_id.toUtf8().constData());
+				if (folder)
+					folder->set_owner(dst_folder ? dst_folder : core()->file_manager()->folder_list());
+			}
+			break;
 			}
 		}
 #endif
-	} else {
-		Folder *dst_folder;
+	}
+	else {
+		Folder* dst_folder;
 		switch (dst->type()) {
 		case NODE_FUNCTION:
-			dst_folder = reinterpret_cast<IFunction *>(dst->data())->folder();
+			dst_folder = reinterpret_cast<IFunction*>(dst->data())->folder();
 			break;
 		case NODE_FOLDER:
-			dst_folder = reinterpret_cast<Folder *>(dst->data());
+			dst_folder = reinterpret_cast<Folder*>(dst->data());
 			break;
 		case NODE_FUNCTIONS:
 			dst_folder = NULL;
@@ -1084,23 +1096,23 @@ bool ProjectModel::dropMimeData(const QMimeData *data, Qt::DropAction action, in
 			stream >> t;
 			switch (t) {
 			case NODE_FUNCTION:
-				{
-					QString str_id;
-					stream >> str_id;
-					FunctionBundle *func = core()->input_file()->function_list()->GetFunctionById(str_id.toUtf8().constData());
-					if (func)
-						func->set_folder(dst_folder);
-				}
-				break;
+			{
+				QString str_id;
+				stream >> str_id;
+				FunctionBundle* func = core()->input_file()->function_list()->GetFunctionById(str_id.toUtf8().constData());
+				if (func)
+					func->set_folder(dst_folder);
+			}
+			break;
 			case NODE_FOLDER:
-				{
-					QString str_id;
-					stream >> str_id;
-					Folder *folder = core()->input_file()->folder_list()->GetFolderById(str_id.toUtf8().constData());
-					if (folder)
-						folder->set_owner(dst_folder ? dst_folder : core()->input_file()->folder_list());
-				}
-				break;
+			{
+				QString str_id;
+				stream >> str_id;
+				Folder* folder = core()->input_file()->folder_list()->GetFolderById(str_id.toUtf8().constData());
+				if (folder)
+					folder->set_owner(dst_folder ? dst_folder : core()->input_file()->folder_list());
+			}
+			break;
 			}
 		}
 	}
@@ -1116,42 +1128,42 @@ QVariant ProjectModel::headerData(int section, Qt::Orientation /*orientation*/, 
 	return QVariant();
 }
 
-void ProjectModel::addFolder(Folder *folder)
+void ProjectModel::addFolder(Folder* folder)
 {
-	ProjectNode *node = internalAddFolder(folder);
+	ProjectNode* node = internalAddFolder(folder);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::updateFolder(Folder *folder)
+void ProjectModel::updateFolder(Folder* folder)
 {
-	ProjectNode *node = internalUpdateFolder(folder);
+	ProjectNode* node = internalUpdateFolder(folder);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::removeFolder(Folder *folder)
+void ProjectModel::removeFolder(Folder* folder)
 {
 	if (removeNode(folder))
 		emit modified();
 }
 
-ProjectNode *ProjectModel::internalAddFolder(Folder *folder)
+ProjectNode* ProjectModel::internalAddFolder(Folder* folder)
 {
 #ifdef LITE
 	return NULL;
 #else
-	ProjectNode *nodeFolder = objectToNode(folder->owner());
+	ProjectNode* nodeFolder = objectToNode(folder->owner());
 	if (!nodeFolder)
 		nodeFolder = nodeFunctions_;
-	ProjectNode *node = new ProjectNode(NULL, NODE_FOLDER, (void *)folder);
+	ProjectNode* node = new ProjectNode(NULL, NODE_FOLDER, (void*)folder);
 	node->setText(QString::fromUtf8(folder->name().c_str()));
 	node->setIcon(nodeIcon(node->type()));
-	QList<ProjectNode *> folderList = nodeFolder->children();
+	QList<ProjectNode*> folderList = nodeFolder->children();
 	int index = folderList.size();
 	for (int i = 0; i < folderList.size(); i++) {
 		if (folderList[i]->type() != NODE_FOLDER) {
@@ -1168,19 +1180,19 @@ ProjectNode *ProjectModel::internalAddFolder(Folder *folder)
 #endif
 }
 
-ProjectNode *ProjectModel::internalUpdateFolder(Folder *folder)
+ProjectNode* ProjectModel::internalUpdateFolder(Folder* folder)
 {
 #ifdef LITE
 	return NULL;
 #else
-	ProjectNode *node = objectToNode(folder);
+	ProjectNode* node = objectToNode(folder);
 	if (!node)
 		return NULL;
 
 	node->setText(QString::fromUtf8(folder->name().c_str()));
 
-	ProjectNode *folder_node = folder->owner() ? objectToNode(folder->owner()) : nodeFunctions_;
-	ProjectNode *parent_node = node->parent();
+	ProjectNode* folder_node = folder->owner() ? objectToNode(folder->owner()) : nodeFunctions_;
+	ProjectNode* parent_node = node->parent();
 	if (folder_node && parent_node && parent_node != folder_node) {
 		int index_from = parent_node->children().indexOf(node);
 		int index_to = folder_node->childCount();
@@ -1200,49 +1212,49 @@ ProjectNode *ProjectModel::internalUpdateFolder(Folder *folder)
 #endif
 }
 
-void ProjectModel::addFunction(IFunction *func)
+void ProjectModel::addFunction(IFunction* func)
 {
-	ProjectNode *node = internalAddFunction(func);
+	ProjectNode* node = internalAddFunction(func);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::updateFunction(IFunction *func)
+void ProjectModel::updateFunction(IFunction* func)
 {
-	ProjectNode *node = internalUpdateFunction(func);
+	ProjectNode* node = internalUpdateFunction(func);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::removeFunction(IFunction *func)
+void ProjectModel::removeFunction(IFunction* func)
 {
 #ifdef LITE
-	FunctionBundle *bundle = core()->input_file()->function_list()->GetFunctionByFunc(func);
+	FunctionBundle* bundle = core()->input_file()->function_list()->GetFunctionByFunc(func);
 	if (!bundle)
 		return;
 
 	removeObject(func);
 
-	FunctionArch *func_arch = bundle->GetArchByFunction(func);
+	FunctionArch* func_arch = bundle->GetArchByFunction(func);
 	if (func_arch)
 		delete func_arch;
 	if (bundle->count() == 0)
 		delete bundle;
-	ProjectNode *node = internalUpdateFunction(func);
+	ProjectNode* node = internalUpdateFunction(func);
 	if (node)
 		updateNode(node);
 #else
-	ProjectNode *node = objectToNode(func);
+	ProjectNode* node = objectToNode(func);
 	if (!node)
 		return;
 	removeObject(func);
 
-	FunctionBundle *bundle = reinterpret_cast<FunctionBundle *>(node->data());
-	FunctionArch *func_arch = bundle->GetArchByFunction(func);
+	FunctionBundle* bundle = reinterpret_cast<FunctionBundle*>(node->data());
+	FunctionArch* func_arch = bundle->GetArchByFunction(func);
 	if (func_arch)
 		delete func_arch;
 	if (bundle->count() == 0) {
@@ -1253,18 +1265,18 @@ void ProjectModel::removeFunction(IFunction *func)
 	emit modified();
 }
 
-ProjectNode *ProjectModel::internalAddFunction(IFunction *func)
+ProjectNode* ProjectModel::internalAddFunction(IFunction* func)
 {
 #ifndef LITE
-	FunctionBundle *bundle = 
+	FunctionBundle* bundle =
 #endif
 		core()->input_file()->function_list()->Add(func->owner()->owner(), func);
 #ifndef LITE
-	ProjectNode *nodeFolder = objectToNode(func->folder());
+	ProjectNode* nodeFolder = objectToNode(func->folder());
 	if (!nodeFolder)
 		nodeFolder = nodeFunctions_;
 
-	ProjectNode *node = objectToNode(bundle);
+	ProjectNode* node = objectToNode(bundle);
 	if (!node) {
 		beginInsertRows(nodeToIndex(nodeFolder), nodeFolder->childCount(), nodeFolder->childCount());
 		node = new ProjectNode(nodeFolder, NODE_FUNCTION, bundle);
@@ -1277,31 +1289,31 @@ ProjectNode *ProjectModel::internalAddFunction(IFunction *func)
 	return internalUpdateFunction(func);
 }
 
-ProjectNode *ProjectModel::internalUpdateFunction(IFunction *func)
+ProjectNode* ProjectModel::internalUpdateFunction(IFunction* func)
 {
 #ifdef LITE
-	IArchitecture *arch = func->owner()->owner();
-	MapFunctionBundle *map_func = core()->input_file()->map_function_list()->GetFunctionByAddress(arch, func->address());
+	IArchitecture* arch = func->owner()->owner();
+	MapFunctionBundle* map_func = core()->input_file()->map_function_list()->GetFunctionByAddress(arch, func->address());
 	if (!map_func)
 		return NULL;
-	
-	ProjectNode *node = objectToNode(map_func);
+
+	ProjectNode* node = objectToNode(map_func);
 	if (!node)
 		return NULL;
 
 	node->setIcon(functionIcon(core()->input_file()->function_list()->GetFunctionByAddress(arch, func->address())));
 #else
-	ProjectNode *node = objectToNode(func);
+	ProjectNode* node = objectToNode(func);
 	if (!node)
 		return NULL;
 
-	FunctionBundle *bundle = reinterpret_cast<FunctionBundle *>(node->data());
+	FunctionBundle* bundle = reinterpret_cast<FunctionBundle*>(node->data());
 	std::string func_name = bundle->display_name();
 	node->setText(func_name.empty() ? QString::fromUtf8(bundle->display_address().c_str()) : QString::fromUtf8(func_name.c_str()));
 	node->setIcon(functionIcon(bundle));
 
-	ProjectNode *folder_node = bundle->folder() ? objectToNode(bundle->folder()) : nodeFunctions_;
-	ProjectNode *parent_node = node->parent();
+	ProjectNode* folder_node = bundle->folder() ? objectToNode(bundle->folder()) : nodeFunctions_;
+	ProjectNode* parent_node = node->parent();
 	if (folder_node && parent_node && parent_node != folder_node) {
 		int i = parent_node->children().indexOf(node);
 		beginMoveRows(nodeToIndex(parent_node), i, i, nodeToIndex(folder_node), folder_node->childCount());
@@ -1317,7 +1329,7 @@ ProjectNode *ProjectModel::internalUpdateFunction(IFunction *func)
 void ProjectModel::updateScript()
 {
 #ifndef LITE
-	ProjectNode *node = nodeScript_;
+	ProjectNode* node = nodeScript_;
 	if (!node)
 		return;
 
@@ -1326,82 +1338,82 @@ void ProjectModel::updateScript()
 }
 
 #ifdef ULTIMATE
-void ProjectModel::addLicense(License *license)
+void ProjectModel::addLicense(License* license)
 {
-	ProjectNode *node = internalAddLicense(license);
+	ProjectNode* node = internalAddLicense(license);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::updateLicense(License *license)
+void ProjectModel::updateLicense(License* license)
 {
-	ProjectNode *node = internalUpdateLicense(license);
+	ProjectNode* node = internalUpdateLicense(license);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::removeLicense(License *license)
+void ProjectModel::removeLicense(License* license)
 {
 	if (removeNode(license))
 		emit modified();
 }
 
-void ProjectModel::addFileFolder(FileFolder *folder)
+void ProjectModel::addFileFolder(FileFolder* folder)
 {
-	ProjectNode *node = internalAddFileFolder(folder);
+	ProjectNode* node = internalAddFileFolder(folder);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::updateFileFolder(FileFolder *folder)
+void ProjectModel::updateFileFolder(FileFolder* folder)
 {
-	ProjectNode *node = internalUpdateFileFolder(folder);
+	ProjectNode* node = internalUpdateFileFolder(folder);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::removeFileFolder(FileFolder *folder)
+void ProjectModel::removeFileFolder(FileFolder* folder)
 {
 	if (removeNode(folder))
 		emit modified();
 }
 
-void ProjectModel::addFile(InternalFile *file)
+void ProjectModel::addFile(InternalFile* file)
 {
-	ProjectNode *node = internalAddFile(file);
+	ProjectNode* node = internalAddFile(file);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::updateFile(InternalFile *file)
+void ProjectModel::updateFile(InternalFile* file)
 {
-	ProjectNode *node = internalUpdateFile(file);
+	ProjectNode* node = internalUpdateFile(file);
 	if (node) {
 		updateNode(node);
 		emit modified();
 	}
 }
 
-void ProjectModel::removeFile(InternalFile *file)
+void ProjectModel::removeFile(InternalFile* file)
 {
 	if (removeNode(file))
 		emit modified();
 }
 
-ProjectNode *ProjectModel::internalAddLicense(License *license)
+ProjectNode* ProjectModel::internalAddLicense(License* license)
 {
 	beginInsertRows(nodeToIndex(nodeLicenses_), nodeLicenses_->childCount(), nodeLicenses_->childCount());
-	ProjectNode *node = new ProjectNode(nodeLicenses_, NODE_LICENSE, license);
+	ProjectNode* node = new ProjectNode(nodeLicenses_, NODE_LICENSE, license);
 	endInsertRows();
 
 	setObjectNode(license, node);
@@ -1409,9 +1421,9 @@ ProjectNode *ProjectModel::internalAddLicense(License *license)
 	return node;
 }
 
-ProjectNode *ProjectModel::internalUpdateLicense(License *license)
+ProjectNode* ProjectModel::internalUpdateLicense(License* license)
 {
-	ProjectNode *node = objectToNode(license);
+	ProjectNode* node = objectToNode(license);
 	if (!node)
 		return NULL;
 
@@ -1420,15 +1432,15 @@ ProjectNode *ProjectModel::internalUpdateLicense(License *license)
 	return node;
 }
 
-ProjectNode *ProjectModel::internalAddFileFolder(FileFolder *folder)
+ProjectNode* ProjectModel::internalAddFileFolder(FileFolder* folder)
 {
-	ProjectNode *nodeFolder = objectToNode(folder->owner());
+	ProjectNode* nodeFolder = objectToNode(folder->owner());
 	if (!nodeFolder)
 		nodeFolder = nodeFiles_;
-	ProjectNode *node = new ProjectNode(NULL, NODE_FILE_FOLDER, (void *)folder);
+	ProjectNode* node = new ProjectNode(NULL, NODE_FILE_FOLDER, (void*)folder);
 	node->setText(QString::fromUtf8(folder->name().c_str()));
 	node->setIcon(nodeIcon(node->type()));
-	QList<ProjectNode *> folderList = nodeFolder->children();
+	QList<ProjectNode*> folderList = nodeFolder->children();
 	int index = folderList.size();
 	for (int i = 0; i < folderList.size(); i++) {
 		if (folderList[i]->type() != NODE_FILE_FOLDER) {
@@ -1444,16 +1456,16 @@ ProjectNode *ProjectModel::internalAddFileFolder(FileFolder *folder)
 	return node;
 }
 
-ProjectNode *ProjectModel::internalUpdateFileFolder(FileFolder *folder)
+ProjectNode* ProjectModel::internalUpdateFileFolder(FileFolder* folder)
 {
-	ProjectNode *node = objectToNode(folder);
+	ProjectNode* node = objectToNode(folder);
 	if (!node)
 		return NULL;
 
 	node->setText(QString::fromUtf8(folder->name().c_str()));
 
-	ProjectNode *folder_node = folder->owner() ? objectToNode(folder->owner()) : nodeFiles_;
-	ProjectNode *parent_node = node->parent();
+	ProjectNode* folder_node = folder->owner() ? objectToNode(folder->owner()) : nodeFiles_;
+	ProjectNode* parent_node = node->parent();
 	if (folder_node && parent_node && parent_node != folder_node) {
 		int index_from = parent_node->children().indexOf(node);
 		int index_to = folder_node->childCount();
@@ -1472,17 +1484,17 @@ ProjectNode *ProjectModel::internalUpdateFileFolder(FileFolder *folder)
 	return node;
 }
 
-ProjectNode *ProjectModel::internalAddFile(InternalFile *file)
+ProjectNode* ProjectModel::internalAddFile(InternalFile* file)
 {
 	if (!nodeFiles_)
 		return NULL;
 
-	ProjectNode *nodeFolder = objectToNode(file->folder());
+	ProjectNode* nodeFolder = objectToNode(file->folder());
 	if (!nodeFolder)
 		nodeFolder = nodeFiles_;
 
 	beginInsertRows(nodeToIndex(nodeFiles_), nodeFiles_->childCount(), nodeFiles_->childCount());
-	ProjectNode *node = new ProjectNode(nodeFolder, NODE_FILE, file);
+	ProjectNode* node = new ProjectNode(nodeFolder, NODE_FILE, file);
 	endInsertRows();
 
 	setObjectNode(file, node);
@@ -1490,16 +1502,16 @@ ProjectNode *ProjectModel::internalAddFile(InternalFile *file)
 	return node;
 }
 
-ProjectNode *ProjectModel::internalUpdateFile(InternalFile *file)
+ProjectNode* ProjectModel::internalUpdateFile(InternalFile* file)
 {
-	ProjectNode *node = objectToNode(file);
+	ProjectNode* node = objectToNode(file);
 	if (!node)
 		return NULL;
 
 	node->setText(QString::fromUtf8(file->name().c_str()));
 	node->setIcon(nodeIcon(node->type()));
-	ProjectNode *folder_node = file->folder() ? objectToNode(file->folder()) : nodeFiles_;
-	ProjectNode *parent_node = node->parent();
+	ProjectNode* folder_node = file->folder() ? objectToNode(file->folder()) : nodeFiles_;
+	ProjectNode* parent_node = node->parent();
 	if (folder_node && parent_node && parent_node != folder_node) {
 		int i = parent_node->children().indexOf(node);
 		beginMoveRows(nodeToIndex(parent_node), i, i, nodeToIndex(folder_node), folder_node->childCount());
@@ -1513,7 +1525,7 @@ ProjectNode *ProjectModel::internalUpdateFile(InternalFile *file)
 
 void ProjectModel::updateFiles()
 {
-	ProjectNode *node = nodeFiles_;
+	ProjectNode* node = nodeFiles_;
 	if (!node)
 		return;
 
@@ -1525,7 +1537,7 @@ void ProjectModel::updateFiles()
 QRegularExpression FuncRegex("function\\s+[_a-zA-Z]+[_a-zA-Z0-9]*\\s*\\([^\\)]*\\)");
 void ProjectModel::updateScriptBookmarks()
 {
-	ProjectNode *parent = nodeScript_;
+	ProjectNode* parent = nodeScript_;
 	if (!parent)
 		return;
 
@@ -1533,35 +1545,36 @@ void ProjectModel::updateScriptBookmarks()
 	QRegularExpression multi_space("\\s+");
 	int nChild = 0;
 	auto it = FuncRegex.globalMatch(script);
-	while(it.hasNext()) {
+	while (it.hasNext()) {
 		QString newText = it.next().captured().replace(multi_space, " ");
 
 		if (nChild >= parent->childCount()) {
 			beginInsertRows(nodeToIndex(nodeScript_), nodeScript_->childCount(), nodeScript_->childCount());
-			ProjectNode *node = new ProjectNode(nodeScript_, NODE_SCRIPT_BOOKMARK, core()->script());
+			ProjectNode* node = new ProjectNode(nodeScript_, NODE_SCRIPT_BOOKMARK, core()->script());
 			node->setText(newText);
 			node->setIcon(nodeIcon(node->type()));
 			endInsertRows();
-		} else {
-			ProjectNode *node = parent->child(nChild);
-			if(node->text(0).compare(newText)) {
+		}
+		else {
+			ProjectNode* node = parent->child(nChild);
+			if (node->text(0).compare(newText)) {
 				node->setText(newText);
 				updateNode(node);
 			}
 		}
 		nChild++;
 	}
-	if(nChild != parent->childCount()) {
+	if (nChild != parent->childCount()) {
 		beginRemoveRows(nodeToIndex(parent), nChild, parent->childCount() - 1);
 		while (nChild != parent->childCount()) {
-			ProjectNode *node = parent->child(nChild);
+			ProjectNode* node = parent->child(nChild);
 			emit nodeRemoved(node);
 			delete node;
 		}
 		endRemoveRows();
 	}
 }
-uptr_t ProjectModel::bookmarkNodeToPos(ProjectNode *node) const
+uptr_t ProjectModel::bookmarkNodeToPos(ProjectNode* node) const
 {
 	uptr_t ret = 0;
 	int bookIdx = nodeToIndex(node).row();
@@ -1578,7 +1591,7 @@ uptr_t ProjectModel::bookmarkNodeToPos(ProjectNode *node) const
 }
 #endif
 
-void ProjectModel::setCore(Core *core)
+void ProjectModel::setCore(Core* core)
 {
 	BaseModel::setCore(core);
 
@@ -1599,7 +1612,7 @@ void ProjectModel::setCore(Core *core)
 
 	size_t i, j;
 
-	IFile *file = core->input_file();
+	IFile* file = core->input_file();
 	if (file) {
 		nodeFunctions_ = new ProjectNode(root(), NODE_FUNCTIONS, file->function_list());
 		nodeFunctions_->setText(QString::fromUtf8(language[lsFunctionsForProtection].c_str()));
@@ -1617,7 +1630,7 @@ void ProjectModel::setCore(Core *core)
 #endif
 
 		for (i = 0; i < file->count(); i++) {
-			IArchitecture *arch = file->item(i);
+			IArchitecture* arch = file->item(i);
 			if (!arch->visible())
 				continue;
 
@@ -1628,7 +1641,7 @@ void ProjectModel::setCore(Core *core)
 	}
 
 #ifdef ULTIMATE
-	LicensingManager *licensing_manager = core->licensing_manager();
+	LicensingManager* licensing_manager = core->licensing_manager();
 	nodeLicenses_ = new ProjectNode(root(), NODE_LICENSES, licensing_manager);
 	nodeLicenses_->setText(QString::fromUtf8(language[lsLicenses].c_str()));
 	nodeLicenses_->setIcon(nodeIcon(nodeLicenses_->type()));
@@ -1637,7 +1650,7 @@ void ProjectModel::setCore(Core *core)
 	}
 
 	if (file && (file->disable_options() & cpVirtualFiles) == 0) {
-		FileManager *file_manager = core->file_manager();
+		FileManager* file_manager = core->file_manager();
 		if (file->format_name() == "PE" && file->count() > 1) {
 			nodeFiles_ = new ProjectNode(root(), NODE_ASSEMBLIES, file_manager);
 			nodeFiles_->setText(QString::fromUtf8(language[lsAssemblies].c_str()));
@@ -1674,10 +1687,10 @@ void ProjectModel::setCore(Core *core)
 }
 
 struct FunctionBundleListCompareHelper {
-	Folder *folder;
+	Folder* folder;
 	int field;
-	FunctionBundleListCompareHelper(Folder *_folder, int _field) : folder(_folder), field(_field) {}
-	bool operator () (const FunctionBundle *func1, const FunctionBundle *func2) const
+	FunctionBundleListCompareHelper(Folder* _folder, int _field) : folder(_folder), field(_field) {}
+	bool operator () (const FunctionBundle* func1, const FunctionBundle* func2) const
 	{
 		if (func1->folder() == func2->folder() && func1->folder() == folder) {
 			switch (field) {
@@ -1686,11 +1699,11 @@ struct FunctionBundleListCompareHelper {
 			case 1:
 				return func1->display_address() < func2->display_address();
 			case 2:
-				{
-					CompilationType ct1 = func1->need_compile() ? func1->compilation_type() : ctNone;
-					CompilationType ct2 = func2->need_compile() ? func2->compilation_type() : ctNone;
-					return (ct1 == ct2) ? (func1->compilation_options() < func2->compilation_options()) : (ct1 < ct2);
-				}
+			{
+				CompilationType ct1 = func1->need_compile() ? func1->compilation_type() : ctNone;
+				CompilationType ct2 = func2->need_compile() ? func2->compilation_type() : ctNone;
+				return (ct1 == ct2) ? (func1->compilation_options() < func2->compilation_options()) : (ct1 < ct2);
+			}
 			}
 		}
 		return func1->folder() < func2->folder();
@@ -1701,7 +1714,7 @@ struct FunctionBundleListCompareHelper {
 struct LicensingManagerCompareHelper {
 	int field;
 	LicensingManagerCompareHelper(int _field) : field(_field) {}
-	bool operator () (const License *license1, const License *license2) const
+	bool operator () (const License* license1, const License* license2) const
 	{
 		switch (field) {
 		case 0:
@@ -1716,10 +1729,10 @@ struct LicensingManagerCompareHelper {
 };
 
 struct FileManagerCompareHelper {
-	FileFolder *folder;
+	FileFolder* folder;
 	int field;
-	FileManagerCompareHelper(FileFolder *_folder, int _field) : folder(_folder), field(_field) {}
-	bool operator () (const InternalFile *file1, const InternalFile *file2) const
+	FileManagerCompareHelper(FileFolder* _folder, int _field) : folder(_folder), field(_field) {}
+	bool operator () (const InternalFile* file1, const InternalFile* file2) const
 	{
 		if (file1->folder() == file2->folder() && file1->folder() == folder) {
 			switch (field) {
@@ -1734,7 +1747,7 @@ struct FileManagerCompareHelper {
 };
 
 struct FileFolderCompareHelper {
-	bool operator () (const FileFolder *folder1, const FileFolder *folder2) const
+	bool operator () (const FileFolder* folder1, const FileFolder* folder2) const
 	{
 		return QString::compare(QString::fromUtf8(folder1->name().c_str()), QString::fromUtf8(folder2->name().c_str()), Qt::CaseInsensitive) < 0;
 	}
@@ -1742,13 +1755,13 @@ struct FileFolderCompareHelper {
 #endif
 
 struct FolderCompareHelper {
-	bool operator () (const Folder *folder1, const Folder *folder2) const
+	bool operator () (const Folder* folder1, const Folder* folder2) const
 	{
 		return QString::compare(QString::fromUtf8(folder1->name().c_str()), QString::fromUtf8(folder2->name().c_str()), Qt::CaseInsensitive) < 0;
 	}
 };
 
-void ProjectModel::sortNode(ProjectNode *node, int field)
+void ProjectModel::sortNode(ProjectNode* node, int field)
 {
 	bool isModified = false;
 	QModelIndex parent = nodeToIndex(node);
@@ -1757,96 +1770,20 @@ void ProjectModel::sortNode(ProjectNode *node, int field)
 	switch (node->type()) {
 	case NODE_FUNCTIONS:
 	case NODE_FOLDER:
-		{
-			IFile *file = core()->input_file();
-			Folder *folder = (node->type() == NODE_FUNCTIONS) ? core()->input_file()->folder_list() : reinterpret_cast<Folder *>(node->data());
+	{
+		IFile* file = core()->input_file();
+		Folder* folder = (node->type() == NODE_FUNCTIONS) ? core()->input_file()->folder_list() : reinterpret_cast<Folder*>(node->data());
 
-			if (field == 0) {
-				std::sort(folder->_begin(),folder->_end(), FolderCompareHelper());
+		if (field == 0) {
+			std::sort(folder->_begin(), folder->_end(), FolderCompareHelper());
 
-				QList<int> posList;
-				for (int i = 0; i < nodeList.size(); i++) {
-					ProjectNode *child = nodeList[i];
-					if (child->type() != NODE_FOLDER) 
-						break;
-
-					int j = (int)folder->IndexOf(reinterpret_cast<Folder *>(child->data()));
-					if (j == -1)
-						continue;
-
-					int p = posList.size();
-					for (int c = 0; c < posList.size(); c++) {
-						if (posList[c] > j) {
-							p = c;
-							break;
-						}
-					}
-
-					if (p < i) {
-						beginMoveRows(parent, i, i, parent, p);
-						node->removeChild(child);
-						node->insertChild(p, child);
-						endMoveRows();
-						isModified = true;
-					}
-					posList.insert(p, j);
-				}
-			}
-
-			if (node->type() == NODE_FUNCTIONS)
-				folder = NULL;
-
-			std::sort(file->function_list()->_begin(), file->function_list()->_end(), FunctionBundleListCompareHelper(folder, field));
-
-			QList<FunctionBundle *> funcList;
-			for (size_t i = 0; i < file->function_list()->count(); i++) {
-				FunctionBundle *func = file->function_list()->item(i);
-				if (func->folder() == folder)
-					funcList.append(func);
-			}
-
-			int k = 0;
 			QList<int> posList;
 			for (int i = 0; i < nodeList.size(); i++) {
-				ProjectNode *child = nodeList[i];
-				if (child->type() == NODE_FOLDER) {
-					k++;
-					continue;
-				}
+				ProjectNode* child = nodeList[i];
+				if (child->type() != NODE_FOLDER)
+					break;
 
-				int j = funcList.indexOf(reinterpret_cast<FunctionBundle *>(child->data()));
-				if (j == -1)
-					continue;
-
-				int p = posList.size();
-				for (int c = 0; c < posList.size(); c++) {
-					if (posList[c] > j) {
-						p = c;
-						break;
-					}
-				}
-
-				if (k + p < i) {
-					beginMoveRows(parent, i, i, parent, k + p);
-					node->removeChild(child);
-					node->insertChild(k + p, child);
-					endMoveRows();
-					isModified = true;
-				}
-				posList.insert(p, j);
-			}
-		}
-		break;
-#ifdef ULTIMATE
-	case NODE_LICENSES:
-		{
-			std::sort(core()->licensing_manager()->_begin(), core()->licensing_manager()->_end(), LicensingManagerCompareHelper(field));
-
-			QList<int> posList;
-			for (int i = 0; i < node->childCount(); i++) {
-				ProjectNode *child = node->child(i);
-
-				int j = (int)core()->licensing_manager()->IndexOf(reinterpret_cast<License *>(child->data()));
+				int j = (int)folder->IndexOf(reinterpret_cast<Folder*>(child->data()));
 				if (j == -1)
 					continue;
 
@@ -1868,67 +1805,99 @@ void ProjectModel::sortNode(ProjectNode *node, int field)
 				posList.insert(p, j);
 			}
 		}
-		break;
+
+		if (node->type() == NODE_FUNCTIONS)
+			folder = NULL;
+
+		std::sort(file->function_list()->_begin(), file->function_list()->_end(), FunctionBundleListCompareHelper(folder, field));
+
+		QList<FunctionBundle*> funcList;
+		for (size_t i = 0; i < file->function_list()->count(); i++) {
+			FunctionBundle* func = file->function_list()->item(i);
+			if (func->folder() == folder)
+				funcList.append(func);
+		}
+
+		int k = 0;
+		QList<int> posList;
+		for (int i = 0; i < nodeList.size(); i++) {
+			ProjectNode* child = nodeList[i];
+			if (child->type() == NODE_FOLDER) {
+				k++;
+				continue;
+			}
+
+			int j = funcList.indexOf(reinterpret_cast<FunctionBundle*>(child->data()));
+			if (j == -1)
+				continue;
+
+			int p = posList.size();
+			for (int c = 0; c < posList.size(); c++) {
+				if (posList[c] > j) {
+					p = c;
+					break;
+				}
+			}
+
+			if (k + p < i) {
+				beginMoveRows(parent, i, i, parent, k + p);
+				node->removeChild(child);
+				node->insertChild(k + p, child);
+				endMoveRows();
+				isModified = true;
+			}
+			posList.insert(p, j);
+		}
+	}
+	break;
+#ifdef ULTIMATE
+	case NODE_LICENSES:
+	{
+		std::sort(core()->licensing_manager()->_begin(), core()->licensing_manager()->_end(), LicensingManagerCompareHelper(field));
+
+		QList<int> posList;
+		for (int i = 0; i < node->childCount(); i++) {
+			ProjectNode* child = node->child(i);
+
+			int j = (int)core()->licensing_manager()->IndexOf(reinterpret_cast<License*>(child->data()));
+			if (j == -1)
+				continue;
+
+			int p = posList.size();
+			for (int c = 0; c < posList.size(); c++) {
+				if (posList[c] > j) {
+					p = c;
+					break;
+				}
+			}
+
+			if (p < i) {
+				beginMoveRows(parent, i, i, parent, p);
+				node->removeChild(child);
+				node->insertChild(p, child);
+				endMoveRows();
+				isModified = true;
+			}
+			posList.insert(p, j);
+		}
+	}
+	break;
 	case NODE_FILES:
 	case NODE_FILE_FOLDER:
 	case NODE_ASSEMBLIES:
-		{
-			FileFolder *folder = (node->type() == NODE_FILES || node->type() == NODE_ASSEMBLIES) ? core()->file_manager()->folder_list() : reinterpret_cast<FileFolder *>(node->data());
+	{
+		FileFolder* folder = (node->type() == NODE_FILES || node->type() == NODE_ASSEMBLIES) ? core()->file_manager()->folder_list() : reinterpret_cast<FileFolder*>(node->data());
 
-			if (field == 0) {
-				std::sort(folder->_begin(),folder->_end(), FileFolderCompareHelper());
+		if (field == 0) {
+			std::sort(folder->_begin(), folder->_end(), FileFolderCompareHelper());
 
-				QList<int> posList;
-				for (int i = 0; i < node->childCount(); i++) {
-					ProjectNode *child = node->child(i);
-					if (child->type() != NODE_FILE_FOLDER) 
-						break;
-
-					int j = (int)folder->IndexOf(reinterpret_cast<FileFolder *>(child->data()));
-					if (j == -1)
-						continue;
-
-					int p = posList.size();
-					for (int c = 0; c < posList.size(); c++) {
-						if (posList[c] > j) {
-							p = c;
-							break;
-						}
-					}
-
-					if (p < i) {
-						beginMoveRows(parent, i, i, parent, p);
-						node->removeChild(child);
-						node->insertChild(p, child);
-						endMoveRows();
-						isModified = true;
-					}
-					posList.insert(p, j);
-				}
-			}
-
-			if (node->type() == NODE_FILES || node->type() == NODE_ASSEMBLIES)
-				folder = NULL;
-
-			std::sort(core()->file_manager()->_begin(), core()->file_manager()->_end(), FileManagerCompareHelper(folder, field));
-
-			QList<InternalFile *> fileList;
-			for (size_t i = 0; i < core()->file_manager()->count(); i++) {
-				InternalFile *file = core()->file_manager()->item(i);
-				if (file->folder() == folder)
-					fileList.append(file);
-			}
-
-			int k = 0;
 			QList<int> posList;
 			for (int i = 0; i < node->childCount(); i++) {
-				ProjectNode *child = node->child(i);
-				if (child->type() == NODE_FILE_FOLDER) {
-					k++;
-					continue;
-				}
+				ProjectNode* child = node->child(i);
+				if (child->type() != NODE_FILE_FOLDER)
+					break;
 
-				int j = fileList.indexOf(reinterpret_cast<InternalFile *>(child->data()));
+				int j = (int)folder->IndexOf(reinterpret_cast<FileFolder*>(child->data()));
 				if (j == -1)
 					continue;
 
@@ -1940,17 +1909,61 @@ void ProjectModel::sortNode(ProjectNode *node, int field)
 					}
 				}
 
-				if (k + p < i) {
-					beginMoveRows(parent, i, i, parent, k + p);
+				if (p < i) {
+					beginMoveRows(parent, i, i, parent, p);
 					node->removeChild(child);
-					node->insertChild(k + p, child);
+					node->insertChild(p, child);
 					endMoveRows();
 					isModified = true;
 				}
 				posList.insert(p, j);
 			}
 		}
-		break;
+
+		if (node->type() == NODE_FILES || node->type() == NODE_ASSEMBLIES)
+			folder = NULL;
+
+		std::sort(core()->file_manager()->_begin(), core()->file_manager()->_end(), FileManagerCompareHelper(folder, field));
+
+		QList<InternalFile*> fileList;
+		for (size_t i = 0; i < core()->file_manager()->count(); i++) {
+			InternalFile* file = core()->file_manager()->item(i);
+			if (file->folder() == folder)
+				fileList.append(file);
+		}
+
+		int k = 0;
+		QList<int> posList;
+		for (int i = 0; i < node->childCount(); i++) {
+			ProjectNode* child = node->child(i);
+			if (child->type() == NODE_FILE_FOLDER) {
+				k++;
+				continue;
+			}
+
+			int j = fileList.indexOf(reinterpret_cast<InternalFile*>(child->data()));
+			if (j == -1)
+				continue;
+
+			int p = posList.size();
+			for (int c = 0; c < posList.size(); c++) {
+				if (posList[c] > j) {
+					p = c;
+					break;
+				}
+			}
+
+			if (k + p < i) {
+				beginMoveRows(parent, i, i, parent, k + p);
+				node->removeChild(child);
+				node->insertChild(k + p, child);
+				endMoveRows();
+				isModified = true;
+			}
+			posList.insert(p, j);
+		}
+	}
+	break;
 
 #endif
 	}
@@ -1963,13 +1976,13 @@ void ProjectModel::sortNode(ProjectNode *node, int field)
  * FunctionsModel
  */
 
-FunctionsModel::FunctionsModel(QObject *parent)
+FunctionsModel::FunctionsModel(QObject* parent)
 	: BaseModel(parent)
 {
 
 }
 
-void FunctionsModel::setCore(Core *core)
+void FunctionsModel::setCore(Core* core)
 {
 	beginResetModel();
 	BaseModel::setCore(core);
@@ -1980,14 +1993,14 @@ void FunctionsModel::setCore(Core *core)
 	endResetModel();
 }
 
-void FunctionsModel::updateFunction(IFunction *func)
+void FunctionsModel::updateFunction(IFunction* func)
 {
-	IArchitecture *arch = func->owner()->owner();
-	MapFunctionBundle *map_func = core()->input_file()->map_function_list()->GetFunctionByAddress(arch, func->address());
+	IArchitecture* arch = func->owner()->owner();
+	MapFunctionBundle* map_func = core()->input_file()->map_function_list()->GetFunctionByAddress(arch, func->address());
 	if (!map_func)
 		return;
-	
-	ProjectNode *node = objectToNode(map_func);
+
+	ProjectNode* node = objectToNode(map_func);
 	if (!node)
 		return;
 
@@ -1995,7 +2008,7 @@ void FunctionsModel::updateFunction(IFunction *func)
 	updateNode(node);
 }
 
-void FunctionsModel::removeFunction(IFunction *func)
+void FunctionsModel::removeFunction(IFunction* func)
 {
 	updateFunction(func);
 }
@@ -2013,13 +2026,13 @@ QVariant FunctionsModel::headerData(int section, Qt::Orientation /*orientation*/
  * InfoModel
  */
 
-InfoModel::InfoModel(QObject *parent)
+InfoModel::InfoModel(QObject* parent)
 	: BaseModel(parent)
 {
 
 }
 
-void InfoModel::setCore(Core *core)
+void InfoModel::setCore(Core* core)
 {
 	BaseModel::setCore(core);
 
@@ -2032,17 +2045,17 @@ void InfoModel::setCore(Core *core)
 	size_t i, j, k;
 	QList<ProjectNode*> nodes;
 	for (i = 0; i < core->input_file()->count(); i++) {
-		IArchitecture *arch = core->input_file()->item(i);
+		IArchitecture* arch = core->input_file()->item(i);
 		if (!arch->visible())
 			continue;
 
-		ProjectNode *node = new ProjectNode(root(), NODE_ARCHITECTURE, arch);
+		ProjectNode* node = new ProjectNode(root(), NODE_ARCHITECTURE, arch);
 		node->setText(arch->name().c_str());
 		node->setIcon(nodeIcon(node->type()));
 		nodes.append(node);
 	}
 
-	IArchitecture *default_arch = NULL;
+	IArchitecture* default_arch = NULL;
 	if (nodes.size() == 1) {
 		default_arch = reinterpret_cast<IArchitecture*>(nodes[0]->data());
 		delete nodes[0];
@@ -2050,34 +2063,34 @@ void InfoModel::setCore(Core *core)
 	}
 
 	for (int f = 0; f < nodes.size(); f++) {
-		ProjectNode *nodeFile = nodes[f];
-		IArchitecture *file = (nodeFile->type() == NODE_ROOT) ? default_arch : reinterpret_cast<IArchitecture*>(nodeFile->data());
+		ProjectNode* nodeFile = nodes[f];
+		IArchitecture* file = (nodeFile->type() == NODE_ROOT) ? default_arch : reinterpret_cast<IArchitecture*>(nodeFile->data());
 		assert(file);
 		if (file == NULL) continue;
 
 		if (file->command_list()->count()) {
-			ProjectNode *nodeCommands = new ProjectNode(nodeFile, NODE_LOAD_COMMANDS);
+			ProjectNode* nodeCommands = new ProjectNode(nodeFile, NODE_LOAD_COMMANDS);
 			nodeCommands->setText(QString::fromUtf8(language[lsDirectories].c_str()));
 			nodeCommands->setIcon(nodeIcon(nodeCommands->type()));
 			for (i = 0; i < file->command_list()->count(); i++) {
-				ILoadCommand *command = file->command_list()->item(i);
+				ILoadCommand* command = file->command_list()->item(i);
 				if (!command->visible())
 					continue;
 
-				ProjectNode *node = new ProjectNode(nodeCommands, NODE_LOAD_COMMAND, command);
+				ProjectNode* node = new ProjectNode(nodeCommands, NODE_LOAD_COMMAND, command);
 				node->setText(QString::fromUtf8(command->name().c_str()));
 				node->setIcon(nodeIcon(node->type()));
 				setObjectNode(command, node);
 			}
 		}
 
-		ProjectNode *nodeSegments = new ProjectNode(nodeFile, NODE_SEGMENTS);
+		ProjectNode* nodeSegments = new ProjectNode(nodeFile, NODE_SEGMENTS);
 		nodeSegments->setText(QString::fromUtf8(language[lsSegments].c_str()));
 		nodeSegments->setIcon(nodeIcon(nodeSegments->type()));
 		for (i = 0; i < file->segment_list()->count(); i++) {
-			ISection *segment = file->segment_list()->item(i);
+			ISection* segment = file->segment_list()->item(i);
 
-			ProjectNode *node = new ProjectNode(nodeSegments, NODE_SEGMENT, segment);
+			ProjectNode* node = new ProjectNode(nodeSegments, NODE_SEGMENT, segment);
 			node->setText(QString::fromUtf8(segment->name().c_str()));
 			bool has_children = false;
 			for (j = 0; j < file->section_list()->count(); j++) {
@@ -2092,24 +2105,24 @@ void InfoModel::setCore(Core *core)
 		}
 
 		for (i = 0; i < file->section_list()->count(); i++) {
-			ISection *section = file->section_list()->item(i);
-			j =  file->segment_list()->IndexOf(section->parent());
+			ISection* section = file->section_list()->item(i);
+			j = file->segment_list()->IndexOf(section->parent());
 			if (j == NOT_ID)
 				continue;
 
-			ProjectNode *node = new ProjectNode(nodeSegments->child((int)j), NODE_SECTION, section);
+			ProjectNode* node = new ProjectNode(nodeSegments->child((int)j), NODE_SECTION, section);
 			node->setText(QString::fromUtf8(section->name().c_str()));
 			node->setIcon(nodeIcon(node->type()));
 		}
 
 		if (file->import_list()->count()) {
-			ProjectNode *nodeImports = new ProjectNode(nodeFile, NODE_IMPORTS, file->import_list());
+			ProjectNode* nodeImports = new ProjectNode(nodeFile, NODE_IMPORTS, file->import_list());
 			nodeImports->setText(QString::fromUtf8(language[lsImports].c_str()));
 			nodeImports->setIcon(nodeIcon(nodeImports->type()));
 			for (i = 0; i < file->import_list()->count(); i++) {
-				IImport *import = file->import_list()->item(i);
+				IImport * import = file->import_list()->item(i);
 
-				ProjectNode *nodeImport = new ProjectNode(nodeImports, NODE_IMPORT, import);
+				ProjectNode * nodeImport = new ProjectNode(nodeImports, NODE_IMPORT, import);
 				nodeImport->setText(QString::fromUtf8(import->name().c_str()));
 				nodeImport->setIcon(nodeIcon(nodeImport->type(), import->excluded_from_import_protection()));
 				setObjectNode(import, nodeImport);
@@ -2117,9 +2130,9 @@ void InfoModel::setCore(Core *core)
 				createFunctionsTree(nodeImport);
 
 				if (import->name().empty()) {
-					QList<ProjectNode *> nodeList = nodeImport->children();
+					QList<ProjectNode*> nodeList = nodeImport->children();
 					for (int k = 0; k < nodeList.count(); k++) {
-						ProjectNode *child = nodeList[k];
+						ProjectNode* child = nodeList[k];
 						nodeImport->removeChild(child);
 						nodeImports->addChild(child);
 					}
@@ -2129,7 +2142,7 @@ void InfoModel::setCore(Core *core)
 		}
 
 		if (file->export_list()->count()) {
-			ProjectNode *nodeExports = new ProjectNode(nodeFile, NODE_EXPORTS, file->export_list());
+			ProjectNode* nodeExports = new ProjectNode(nodeFile, NODE_EXPORTS, file->export_list());
 			nodeExports->setText(QString::fromUtf8(language[lsExports].c_str()));
 			nodeExports->setIcon(nodeIcon(nodeExports->type()));
 
@@ -2137,46 +2150,46 @@ void InfoModel::setCore(Core *core)
 		}
 
 		if (file->resource_list() && file->resource_list()->count()) {
-			ProjectNode *nodeResources = new ProjectNode(nodeFile, NODE_RESOURCES, file->resource_list());
+			ProjectNode* nodeResources = new ProjectNode(nodeFile, NODE_RESOURCES, file->resource_list());
 			nodeResources->setText(QString::fromUtf8(language[lsResources].c_str()));
 			nodeResources->setIcon(nodeIcon(nodeResources->type()));
-			std::vector<IResource *> resourceList;
+			std::vector<IResource*> resourceList;
 			for (i = 0; i < file->resource_list()->count(); i++) {
 				resourceList.push_back(file->resource_list()->item(i));
 			}
 			for (k = 0; k < resourceList.size(); k++) {
-				IResource *resource = resourceList[k];
+				IResource* resource = resourceList[k];
 				for (j = 0; j < resource->count(); j++) {
 					resourceList.push_back(resource->item(j));
 				}
 			}
 			for (k = 0; k < resourceList.size(); k++) {
-				IResource *resource = resourceList[k];
+				IResource* resource = resourceList[k];
 
-				ProjectNode *nodeParent = objectToNode(resource->owner());
+				ProjectNode* nodeParent = objectToNode(resource->owner());
 				if (!nodeParent)
 					nodeParent = nodeResources;
-				ProjectNode *node = new ProjectNode(nodeParent, resource->is_directory() ? NODE_RESOURCE_FOLDER : NODE_RESOURCE, resource);
+				ProjectNode* node = new ProjectNode(nodeParent, resource->is_directory() ? NODE_RESOURCE_FOLDER : NODE_RESOURCE, resource);
 				node->setText(QString::fromUtf8(resource->name().c_str()));
 				node->setIcon(nodeIcon(node->type(), node->type() == NODE_RESOURCE && resource->excluded_from_packing()));
 				setObjectNode(resource, node);
 			}
 		}
 
-		ProjectNode *nodeCalc = new ProjectNode(nodeFile, NODE_CALC, file);
+		ProjectNode* nodeCalc = new ProjectNode(nodeFile, NODE_CALC, file);
 		nodeCalc->setText(QString::fromUtf8(language[lsCalculator].c_str()));
 		nodeCalc->setIcon(nodeIcon(nodeCalc->type()));
-		
-		ProjectNode *nodeDump = new ProjectNode(nodeFile, NODE_DUMP, file);
+
+		ProjectNode* nodeDump = new ProjectNode(nodeFile, NODE_DUMP, file);
 		nodeDump->setText(QString::fromUtf8(language[lsDump].c_str()));
 		nodeDump->setIcon(nodeIcon(nodeDump->type()));
 		setObjectNode(file, nodeDump);
 	}
 }
 
-void InfoModel::updateResource(IResource *resource)
+void InfoModel::updateResource(IResource* resource)
 {
-	ProjectNode *node = objectToNode(resource);
+	ProjectNode* node = objectToNode(resource);
 	if (!node)
 		return;
 
@@ -2185,9 +2198,9 @@ void InfoModel::updateResource(IResource *resource)
 	emit modified();
 }
 
-void InfoModel::updateSegment(ISection *segment)
+void InfoModel::updateSegment(ISection* segment)
 {
-	ProjectNode *node = objectToNode(segment);
+	ProjectNode* node = objectToNode(segment);
 	if (!node)
 		return;
 
@@ -2196,9 +2209,9 @@ void InfoModel::updateSegment(ISection *segment)
 	emit modified();
 }
 
-void InfoModel::updateImport(IImport *import)
+void InfoModel::updateImport(IImport * import)
 {
-	ProjectNode *node = objectToNode(import);
+	ProjectNode * node = objectToNode(import);
 	if (!node)
 		return;
 
@@ -2220,7 +2233,7 @@ QVariant InfoModel::headerData(int section, Qt::Orientation /*orientation*/, int
  * SearchModel
  */
 
-SearchModel::SearchModel(QObject *parent)
+SearchModel::SearchModel(QObject* parent)
 	: QAbstractItemModel(parent)
 {
 
@@ -2232,16 +2245,16 @@ void SearchModel::clear()
 		removeRows(0, items_.count());
 }
 
-void SearchModel::search(ProjectNode *directory, const QString &text, bool protectedFunctionsOnly)
+void SearchModel::search(ProjectNode* directory, const QString& text, bool protectedFunctionsOnly)
 {
 	beginResetModel();
-	QList<ProjectNode *> list;
+	QList<ProjectNode*> list;
 	QRegExp filter(text, Qt::CaseInsensitive, QRegExp::Wildcard);
 
 	items_.clear();
 	list.append(directory);
 	for (int i = 0; i < list.count(); i++) {
-		ProjectNode *node = list[i];
+		ProjectNode* node = list[i];
 		for (int j = 0; j < node->childCount(); j++) {
 			list.insert(i + 1 + j, node->child(j));
 		}
@@ -2253,13 +2266,13 @@ void SearchModel::search(ProjectNode *directory, const QString &text, bool prote
 			if (protectedFunctionsOnly) {
 				switch (node->type()) {
 				case NODE_MAP_FUNCTION:
-					{
-						MapFunctionBundle *map = reinterpret_cast<MapFunctionBundle*>(node->data());
-						FunctionBundle *func = map->owner()->owner()->function_list()->GetFunctionByName(map->name());
-						if (!func || !func->need_compile())
-							continue;
-					}
-					break;
+				{
+					MapFunctionBundle* map = reinterpret_cast<MapFunctionBundle*>(node->data());
+					FunctionBundle* func = map->owner()->owner()->function_list()->GetFunctionByName(map->name());
+					if (!func || !func->need_compile())
+						continue;
+				}
+				break;
 				default:
 					continue;
 				}
@@ -2271,24 +2284,24 @@ void SearchModel::search(ProjectNode *directory, const QString &text, bool prote
 	endResetModel();
 }
 
-QModelIndex SearchModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex SearchModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	ProjectNode *node = items_.value(row);
+	ProjectNode* node = items_.value(row);
 	if (!node)
 		return QModelIndex();
 
 	return createIndex(row, column, node);
 }
 
-QModelIndex SearchModel::parent(const QModelIndex & /*index*/) const
+QModelIndex SearchModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-int SearchModel::rowCount(const QModelIndex &parent) const
+int SearchModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
 		return 0;
@@ -2296,24 +2309,24 @@ int SearchModel::rowCount(const QModelIndex &parent) const
 	return items_.size();
 }
 
-int SearchModel::columnCount(const QModelIndex & /*parent*/) const
+int SearchModel::columnCount(const QModelIndex& /*parent*/) const
 {
 	return 1;
 }
 
-ProjectNode *SearchModel::indexToNode(const QModelIndex &index) const 
+ProjectNode* SearchModel::indexToNode(const QModelIndex& index) const
 {
 	if (index.isValid())
-		return static_cast<ProjectNode *>(index.internalPointer());
+		return static_cast<ProjectNode*>(index.internalPointer());
 	return NULL;
 }
 
-QVariant SearchModel::data(const QModelIndex &index, int role) const
+QVariant SearchModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
 
-	ProjectNode *node = indexToNode(index);
+	ProjectNode* node = indexToNode(index);
 	assert(node);
 	if (node != NULL) {
 		switch (role) {
@@ -2324,13 +2337,13 @@ QVariant SearchModel::data(const QModelIndex &index, int role) const
 				return node->icon();
 			break;
 		case Qt::ToolTipRole:
-			{
-				QString text = node->path();
-				if (!text.isEmpty())
-					text += " > " + node->text(index.column());
-				return text;
-			}
-			break;
+		{
+			QString text = node->path();
+			if (!text.isEmpty())
+				text += " > " + node->text(index.column());
+			return text;
+		}
+		break;
 		}
 	}
 	return QVariant();
@@ -2343,7 +2356,7 @@ QVariant SearchModel::headerData(int /*section*/, Qt::Orientation /*orientation*
 	return QVariant();
 }
 
-QModelIndex SearchModel::nodeToIndex(ProjectNode *node) const
+QModelIndex SearchModel::nodeToIndex(ProjectNode* node) const
 {
 	int i = items_.indexOf(node);
 	if (i == -1)
@@ -2352,7 +2365,7 @@ QModelIndex SearchModel::nodeToIndex(ProjectNode *node) const
 	return createIndex(i, 0, node);
 }
 
-void SearchModel::updateNode(ProjectNode *node)
+void SearchModel::updateNode(ProjectNode* node)
 {
 	int i = items_.indexOf(node);
 	if (i == -1)
@@ -2362,24 +2375,25 @@ void SearchModel::updateNode(ProjectNode *node)
 	dataChanged(index, index);
 }
 
-bool SearchModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool SearchModel::removeRows(int position, int rows, const QModelIndex& parent)
 {
-    bool res;
+	bool res;
 
-    beginRemoveRows(parent, position, position + rows - 1);
-    if (position < 0 || position + rows > items_.size()) {
+	beginRemoveRows(parent, position, position + rows - 1);
+	if (position < 0 || position + rows > items_.size()) {
 		res = false;
-	} else {
+	}
+	else {
 		for (int row = position; row < rows; ++row)
 			items_.removeAt(position);
 		res = true;
 	}
 	endRemoveRows();
 
-    return res;
+	return res;
 }
 
-void SearchModel::removeNode(ProjectNode *node)
+void SearchModel::removeNode(ProjectNode* node)
 {
 	int i = items_.indexOf(node);
 	if (i == -1)
@@ -2392,17 +2406,17 @@ void SearchModel::removeNode(ProjectNode *node)
  * DirectoryModel
  */
 
-DirectoryModel::DirectoryModel(QObject *parent)
+DirectoryModel::DirectoryModel(QObject* parent)
 	: QAbstractItemModel(parent), directory_(NULL)
 {
 
 }
 
-Qt::ItemFlags DirectoryModel::flags(const QModelIndex &index) const
+Qt::ItemFlags DirectoryModel::flags(const QModelIndex& index) const
 {
 	Qt::ItemFlags res = QAbstractItemModel::flags(index);
 	if (res & Qt::ItemIsSelectable) {
-		ProjectNode *node = indexToNode(index);
+		ProjectNode* node = indexToNode(index);
 		if (node) {
 			if (node->type() == NODE_FILE_FOLDER || node->type() == NODE_FOLDER || node->type() == NODE_FILE || node->type() == NODE_LICENSE)
 				res |= Qt::ItemIsEditable;
@@ -2411,37 +2425,38 @@ Qt::ItemFlags DirectoryModel::flags(const QModelIndex &index) const
 	return res;
 }
 
-void DirectoryModel::setDirectory(ProjectNode *directory)
+void DirectoryModel::setDirectory(ProjectNode* directory)
 {
 	beginResetModel();
 	directory_ = directory;
 	if (directory_) {
 		items_ = directory->children();
-	} else {
+	}
+	else {
 		items_.clear();
 	}
 
 	endResetModel();
 }
 
-QModelIndex DirectoryModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DirectoryModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	ProjectNode *node = items_.value(row);
+	ProjectNode* node = items_.value(row);
 	if (!node)
 		return QModelIndex();
 
 	return createIndex(row, column, node);
 }
 
-QModelIndex DirectoryModel::parent(const QModelIndex & /*index*/) const
+QModelIndex DirectoryModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-int DirectoryModel::rowCount(const QModelIndex &parent) const
+int DirectoryModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
 		return 0;
@@ -2456,7 +2471,7 @@ QStringList headerLabels(NodeType type)
 	case NODE_FUNCTIONS:
 	case NODE_FOLDER:
 	case NODE_MAP_FOLDER:
-		res << QString::fromUtf8(language[lsName].c_str()) << QString::fromUtf8(language[lsAddress].c_str()) <<  QString::fromUtf8(language[lsProtection].c_str());
+		res << QString::fromUtf8(language[lsName].c_str()) << QString::fromUtf8(language[lsAddress].c_str()) << QString::fromUtf8(language[lsProtection].c_str());
 		break;
 	case NODE_RESOURCES:
 	case NODE_RESOURCE_FOLDER:
@@ -2488,7 +2503,7 @@ QStringList headerLabels(NodeType type)
 	return res;
 };
 
-int DirectoryModel::columnCount(const QModelIndex & /*parent*/) const
+int DirectoryModel::columnCount(const QModelIndex& /*parent*/) const
 {
 	if (!directory_)
 		return 0;
@@ -2496,23 +2511,24 @@ int DirectoryModel::columnCount(const QModelIndex & /*parent*/) const
 	return headerLabels(directory_->type()).size();
 }
 
-ProjectNode *DirectoryModel::indexToNode(const QModelIndex &index) const 
+ProjectNode* DirectoryModel::indexToNode(const QModelIndex& index) const
 {
 	if (index.isValid())
-		return static_cast<ProjectNode *>(index.internalPointer());
+		return static_cast<ProjectNode*>(index.internalPointer());
 	return NULL;
 }
 
-QVariant DirectoryModel::data(const QModelIndex &index, int role) const
+QVariant DirectoryModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
 
-	ProjectNode *node = indexToNode(index);
+	ProjectNode* node = indexToNode(index);
 	if (node != NULL) {
 		if (role == Qt::DisplayRole) {
 			return node->text(index.column());
-		} else if (role == Qt::DecorationRole) {
+		}
+		else if (role == Qt::DecorationRole) {
 			if (index.column() == 0)
 				return node->icon();
 		}
@@ -2531,7 +2547,7 @@ QVariant DirectoryModel::headerData(int section, Qt::Orientation /*orientation*/
 	return QVariant();
 }
 
-QModelIndex DirectoryModel::nodeToIndex(ProjectNode *node) const
+QModelIndex DirectoryModel::nodeToIndex(ProjectNode* node) const
 {
 	int i = items_.indexOf(node);
 	if (i == -1)
@@ -2540,7 +2556,7 @@ QModelIndex DirectoryModel::nodeToIndex(ProjectNode *node) const
 	return createIndex(i, 0, node);
 }
 
-void DirectoryModel::updateNode(ProjectNode *node)
+void DirectoryModel::updateNode(ProjectNode* node)
 {
 	int i = items_.indexOf(node);
 	if (i == -1)
@@ -2550,26 +2566,27 @@ void DirectoryModel::updateNode(ProjectNode *node)
 	dataChanged(index, index);
 }
 
-bool DirectoryModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool DirectoryModel::removeRows(int position, int rows, const QModelIndex& parent)
 {
-    bool res;
+	bool res;
 
-    beginRemoveRows(parent, position, position + rows - 1);
-    if (position < 0 || position + rows > items_.size()) {
+	beginRemoveRows(parent, position, position + rows - 1);
+	if (position < 0 || position + rows > items_.size()) {
 		res = false;
-	} else {
+	}
+	else {
 		for (int row = 0; row < rows; ++row)
 			items_.removeAt(position);
 		res = true;
 	}
 	endRemoveRows();
 
-    return res;
+	return res;
 }
 
-void DirectoryModel::removeNode(ProjectNode *node)
+void DirectoryModel::removeNode(ProjectNode* node)
 {
-	ProjectNode *parent = directory_;
+	ProjectNode* parent = directory_;
 	while (parent) {
 		if (parent == node) {
 			setDirectory(NULL);
@@ -2589,12 +2606,12 @@ void DirectoryModel::removeNode(ProjectNode *node)
  * MapFunctionBundleListModel
  */
 
-MapFunctionBundleListModel::MapFunctionBundleListModel(IFile &file, bool codeOnly, QObject *parent)
+MapFunctionBundleListModel::MapFunctionBundleListModel(IFile& file, bool codeOnly, QObject* parent)
 	: QAbstractItemModel(parent)
 {
-	MapFunctionBundleList *map_function_list = file.map_function_list();
+	MapFunctionBundleList* map_function_list = file.map_function_list();
 	for (size_t i = 0; i < map_function_list->count(); i++) {
-		MapFunctionBundle *func = map_function_list->item(i);
+		MapFunctionBundle* func = map_function_list->item(i);
 		switch (func->type()) {
 		case otCode:
 		case otExport:
@@ -2616,7 +2633,7 @@ MapFunctionBundleListModel::MapFunctionBundleListModel(IFile &file, bool codeOnl
 	items_ = mapFunctionList_;
 }
 
-int MapFunctionBundleListModel::rowCount(const QModelIndex &parent) const
+int MapFunctionBundleListModel::rowCount(const QModelIndex& parent) const
 {
 	if (!parent.isValid())
 		return items_.size();
@@ -2624,43 +2641,45 @@ int MapFunctionBundleListModel::rowCount(const QModelIndex &parent) const
 	return 0;
 }
 
-int MapFunctionBundleListModel::columnCount(const QModelIndex &parent) const
+int MapFunctionBundleListModel::columnCount(const QModelIndex& parent) const
 {
 	Q_UNUSED(parent);
 	return 2;
 }
 
-QModelIndex MapFunctionBundleListModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex MapFunctionBundleListModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	MapFunctionBundle *bundle = items_.value(row);
+	MapFunctionBundle* bundle = items_.value(row);
 	if (!bundle)
 		return QModelIndex();
 
 	return createIndex(row, column, bundle);
 }
 
-QModelIndex MapFunctionBundleListModel::parent(const QModelIndex & /*index*/) const
+QModelIndex MapFunctionBundleListModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-QVariant MapFunctionBundleListModel::data(const QModelIndex &index, int role) const
+QVariant MapFunctionBundleListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+	if (!index.isValid())
+		return QVariant();
 
-	MapFunctionBundle *func = items_.at(index.row());
+	MapFunctionBundle* func = items_.at(index.row());
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0) {
 			return QString::fromUtf8(func->display_name().c_str());
-		} else if (index.column() == 1) {
+		}
+		else if (index.column() == 1) {
 			return QString::fromLatin1(func->display_address().c_str());
 		}
-	} else if (role == Qt::DecorationRole)	{
+	}
+	else if (role == Qt::DecorationRole) {
 		if (index.column() == 0) {
 			switch (func->type()) {
 			case otImport:
@@ -2675,29 +2694,30 @@ QVariant MapFunctionBundleListModel::data(const QModelIndex &index, int role) co
 
 QVariant MapFunctionBundleListModel::headerData(int section, Qt::Orientation /*orientation*/, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    switch (section) {
-    case 0:
-        return QString::fromUtf8(language[lsName].c_str());
-    case 1:
-        return QString::fromUtf8(language[lsAddress].c_str());
-    }
-    return QVariant();
+	switch (section) {
+	case 0:
+		return QString::fromUtf8(language[lsName].c_str());
+	case 1:
+		return QString::fromUtf8(language[lsAddress].c_str());
+	}
+	return QVariant();
 }
 
-void MapFunctionBundleListModel::search(const QString &text)
+void MapFunctionBundleListModel::search(const QString& text)
 {
 	beginResetModel();
 	if (text.isEmpty()) {
 		items_ = mapFunctionList_;
-	} else {
+	}
+	else {
 		items_.clear();
 		QRegExp filter(text, Qt::CaseInsensitive, QRegExp::Wildcard);
 
 		for (int i = 0; i < mapFunctionList_.size(); i++) {
-			MapFunctionBundle *func = mapFunctionList_[i];
+			MapFunctionBundle* func = mapFunctionList_[i];
 			QString name = QString::fromUtf8(func->name().c_str());
 			if (name.contains(filter))
 				items_.append(func);
@@ -2710,7 +2730,7 @@ void MapFunctionBundleListModel::search(const QString &text)
 struct MapFunctionBundleListCompareHelper {
 	int column;
 	MapFunctionBundleListCompareHelper(int _column) : column(_column) {}
-	bool operator () (const MapFunctionBundle *func1, const MapFunctionBundle *func2) const
+	bool operator () (const MapFunctionBundle* func1, const MapFunctionBundle* func2) const
 	{
 		switch (column) {
 		case 0:
@@ -2737,12 +2757,12 @@ void MapFunctionBundleListModel::sort(int column, Qt::SortOrder order)
  * MapFunctionListModel
  */
 
-MapFunctionListModel::MapFunctionListModel(IArchitecture &file, bool codeOnly, QObject *parent)
+MapFunctionListModel::MapFunctionListModel(IArchitecture& file, bool codeOnly, QObject* parent)
 	: QAbstractItemModel(parent)
 {
-	MapFunctionList *map_function_list = file.map_function_list();
+	MapFunctionList* map_function_list = file.map_function_list();
 	for (size_t i = 0; i < map_function_list->count(); i++) {
-		MapFunction *func = map_function_list->item(i);
+		MapFunction* func = map_function_list->item(i);
 		switch (func->type()) {
 		case otCode:
 		case otExport:
@@ -2764,7 +2784,7 @@ MapFunctionListModel::MapFunctionListModel(IArchitecture &file, bool codeOnly, Q
 	items_ = mapFunctionList_;
 }
 
-int MapFunctionListModel::rowCount(const QModelIndex &parent) const
+int MapFunctionListModel::rowCount(const QModelIndex& parent) const
 {
 	if (!parent.isValid())
 		return items_.size();
@@ -2772,43 +2792,45 @@ int MapFunctionListModel::rowCount(const QModelIndex &parent) const
 	return 0;
 }
 
-int MapFunctionListModel::columnCount(const QModelIndex &parent) const
+int MapFunctionListModel::columnCount(const QModelIndex& parent) const
 {
 	Q_UNUSED(parent);
 	return 2;
 }
 
-QModelIndex MapFunctionListModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex MapFunctionListModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	MapFunction *func = items_.value(row);
+	MapFunction* func = items_.value(row);
 	if (!func)
 		return QModelIndex();
 
 	return createIndex(row, column, func);
 }
 
-QModelIndex MapFunctionListModel::parent(const QModelIndex & /*index*/) const
+QModelIndex MapFunctionListModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-QVariant MapFunctionListModel::data(const QModelIndex &index, int role) const
+QVariant MapFunctionListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
+	if (!index.isValid())
+		return QVariant();
 
-	MapFunction *func = items_.at(index.row());
+	MapFunction* func = items_.at(index.row());
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0) {
 			return QString::fromUtf8(func->display_name().c_str());
-		} else if (index.column() == 1) {
+		}
+		else if (index.column() == 1) {
 			return QString::fromLatin1(func->display_address("").c_str());
 		}
-	} else if (role == Qt::DecorationRole)	{
+	}
+	else if (role == Qt::DecorationRole) {
 		if (index.column() == 0) {
 			switch (func->type()) {
 			case otImport:
@@ -2823,29 +2845,30 @@ QVariant MapFunctionListModel::data(const QModelIndex &index, int role) const
 
 QVariant MapFunctionListModel::headerData(int section, Qt::Orientation /*orientation*/, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    switch (section) {
-    case 0:
-        return QString::fromUtf8(language[lsName].c_str());
-    case 1:
-        return QString::fromUtf8(language[lsAddress].c_str());
-    }
-    return QVariant();
+	switch (section) {
+	case 0:
+		return QString::fromUtf8(language[lsName].c_str());
+	case 1:
+		return QString::fromUtf8(language[lsAddress].c_str());
+	}
+	return QVariant();
 }
 
-void MapFunctionListModel::search(const QString &text)
+void MapFunctionListModel::search(const QString& text)
 {
 	beginResetModel();
 	if (text.isEmpty()) {
 		items_ = mapFunctionList_;
-	} else {
+	}
+	else {
 		items_.clear();
 		QRegExp filter(text, Qt::CaseInsensitive, QRegExp::Wildcard);
 
 		for (int i = 0; i < mapFunctionList_.size(); i++) {
-			MapFunction *func = mapFunctionList_[i];
+			MapFunction* func = mapFunctionList_[i];
 			QString name = QString::fromUtf8(func->name().c_str());
 			if (name.contains(filter))
 				items_.append(func);
@@ -2858,7 +2881,7 @@ void MapFunctionListModel::search(const QString &text)
 struct MapFunctionListCompareHelper {
 	int column;
 	MapFunctionListCompareHelper(int _column) : column(_column) {}
-	bool operator () (const MapFunction *func1, const MapFunction *func2) const
+	bool operator () (const MapFunction* func1, const MapFunction* func2) const
 	{
 		switch (column) {
 		case 0:
@@ -2885,7 +2908,7 @@ void MapFunctionListModel::sort(int column, Qt::SortOrder order)
  * WatermarksModel
  */
 
-WatermarksModel::WatermarksModel(QObject *parent)
+WatermarksModel::WatermarksModel(QObject* parent)
 	: BaseModel(parent)
 {
 
@@ -2900,11 +2923,11 @@ QVariant WatermarksModel::headerData(int section, Qt::Orientation /*orientation*
 	return QVariant();
 }
 
-Qt::ItemFlags WatermarksModel::flags(const QModelIndex &index) const
+Qt::ItemFlags WatermarksModel::flags(const QModelIndex& index) const
 {
 	Qt::ItemFlags res = QAbstractItemModel::flags(index);
 	if (res & Qt::ItemIsSelectable) {
-		ProjectNode *node = indexToNode(index);
+		ProjectNode* node = indexToNode(index);
 		if (node) {
 			if (node->type() == NODE_WATERMARK)
 				res |= Qt::ItemIsEditable;
@@ -2913,10 +2936,10 @@ Qt::ItemFlags WatermarksModel::flags(const QModelIndex &index) const
 	return res;
 }
 
-ProjectNode *WatermarksModel::internalAddWatermark(Watermark *watermark)
+ProjectNode* WatermarksModel::internalAddWatermark(Watermark* watermark)
 {
 	beginInsertRows(nodeToIndex(NULL), root()->childCount(), root()->childCount());
-	ProjectNode *node = new ProjectNode(root(), NODE_WATERMARK, (void *)watermark);
+	ProjectNode* node = new ProjectNode(root(), NODE_WATERMARK, (void*)watermark);
 	endInsertRows();
 
 	setObjectNode(watermark, node);
@@ -2924,9 +2947,9 @@ ProjectNode *WatermarksModel::internalAddWatermark(Watermark *watermark)
 	return node;
 }
 
-ProjectNode *WatermarksModel::internalUpdateWatermark(Watermark *watermark)
+ProjectNode* WatermarksModel::internalUpdateWatermark(Watermark* watermark)
 {
-	ProjectNode *node = objectToNode(watermark);
+	ProjectNode* node = objectToNode(watermark);
 	if (!node)
 		return NULL;
 
@@ -2935,13 +2958,13 @@ ProjectNode *WatermarksModel::internalUpdateWatermark(Watermark *watermark)
 	return node;
 }
 
-void WatermarksModel::setCore(Core *core)
+void WatermarksModel::setCore(Core* core)
 {
 	beginResetModel();
 	BaseModel::setCore(core);
 
 	if (core) {
-		WatermarkManager *manager = core->watermark_manager();
+		WatermarkManager* manager = core->watermark_manager();
 		for (size_t i = 0; i < manager->count(); i++) {
 			internalAddWatermark(manager->item(i));
 		}
@@ -2949,25 +2972,25 @@ void WatermarksModel::setCore(Core *core)
 	endResetModel();
 }
 
-void WatermarksModel::addWatermark(Watermark *watermark)
+void WatermarksModel::addWatermark(Watermark* watermark)
 {
 	updateNode(internalAddWatermark(watermark));
 }
 
-void WatermarksModel::updateWatermark(Watermark *watermark)
+void WatermarksModel::updateWatermark(Watermark* watermark)
 {
 	updateNode(internalUpdateWatermark(watermark));
 }
 
-void WatermarksModel::removeWatermark(Watermark *watermark)
+void WatermarksModel::removeWatermark(Watermark* watermark)
 {
 	removeNode(watermark);
 }
 
-QModelIndex WatermarksModel::indexByName(const QString &watermarkName) const
+QModelIndex WatermarksModel::indexByName(const QString& watermarkName) const
 {
 	for (int i = 0; i < root()->childCount(); i++) {
-		ProjectNode *node = root()->child(i);
+		ProjectNode* node = root()->child(i);
 		if (node->text() == watermarkName)
 			return nodeToIndex(node);
 	}
@@ -2975,7 +2998,7 @@ QModelIndex WatermarksModel::indexByName(const QString &watermarkName) const
 	return QModelIndex();
 }
 
-WatermarkManager * WatermarksModel::manager() const
+WatermarkManager* WatermarksModel::manager() const
 {
 	return core() ? core()->watermark_manager() : NULL;
 }
@@ -2984,30 +3007,30 @@ WatermarkManager * WatermarksModel::manager() const
  * WatermarkScanModel
  */
 
-WatermarkScanModel::WatermarkScanModel(QObject *parent)
+WatermarkScanModel::WatermarkScanModel(QObject* parent)
 	: QAbstractItemModel(parent)
 {
 
 }
 
-QModelIndex WatermarkScanModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex WatermarkScanModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
 
-	Watermark *watermark = items_.keys().value(row);
+	Watermark* watermark = items_.keys().value(row);
 	if (!watermark)
 		return QModelIndex();
 
 	return createIndex(row, column, watermark);
 }
 
-QModelIndex WatermarkScanModel::parent(const QModelIndex & /*index*/) const
+QModelIndex WatermarkScanModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-int WatermarkScanModel::rowCount(const QModelIndex &parent) const
+int WatermarkScanModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
 		return 0;
@@ -3015,33 +3038,35 @@ int WatermarkScanModel::rowCount(const QModelIndex &parent) const
 	return items_.size();
 }
 
-int WatermarkScanModel::columnCount(const QModelIndex & /*parent*/) const
+int WatermarkScanModel::columnCount(const QModelIndex& /*parent*/) const
 {
 	return 2;
 }
 
-Watermark *WatermarkScanModel::indexToWatermark(const QModelIndex &index) const 
+Watermark* WatermarkScanModel::indexToWatermark(const QModelIndex& index) const
 {
 	if (index.isValid())
-		return static_cast<Watermark *>(index.internalPointer());
+		return static_cast<Watermark*>(index.internalPointer());
 	return NULL;
 }
 
-QVariant WatermarkScanModel::data(const QModelIndex &index, int role) const
+QVariant WatermarkScanModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
 
-	Watermark *watermark = indexToWatermark(index);
+	Watermark* watermark = indexToWatermark(index);
 	assert(watermark);
-	if (watermark != NULL ) {
+	if (watermark != NULL) {
 		if (role == Qt::DisplayRole) {
 			if (index.column() == 0) {
 				return QString::fromUtf8(watermark->name().c_str());
-			} else if (index.column() == 1) {
+			}
+			else if (index.column() == 1) {
 				return QString::number(items_[watermark]);
 			}
-		} else if (role == Qt::DecorationRole) {
+		}
+		else if (role == Qt::DecorationRole) {
 			if (index.column() == 0)
 				return watermark->enabled() ? QIcon(":/images/item_watermark.png") : QIcon(":/images/item_watermark_black.png");
 		}
@@ -3054,25 +3079,26 @@ QVariant WatermarkScanModel::headerData(int section, Qt::Orientation /*orientati
 	if (role == Qt::DisplayRole) {
 		if (section == 0) {
 			return QString::fromUtf8(language[lsName].c_str());
-		} else if (section == 1) {
+		}
+		else if (section == 1) {
 			return QString::fromUtf8(language[lsCount].c_str());
 		}
 	}
 	return QVariant();
 }
 
-void WatermarkScanModel::setWatermarkData(std::map<Watermark *, size_t> data)
+void WatermarkScanModel::setWatermarkData(std::map<Watermark*, size_t> data)
 {
 	beginResetModel();
 	items_.clear();
-	for (std::map<Watermark *, size_t>::const_iterator it = data.begin(); it != data.end(); it++) {
+	for (std::map<Watermark*, size_t>::const_iterator it = data.begin(); it != data.end(); it++) {
 		items_[it->first] = it->second;
 	}
 
 	endResetModel();
 }
 
-void WatermarkScanModel::removeWatermark(Watermark *watermark)
+void WatermarkScanModel::removeWatermark(Watermark* watermark)
 {
 	int position = items_.keys().indexOf(watermark);
 	if (position == -1)
@@ -3093,7 +3119,7 @@ void WatermarkScanModel::clear()
  * TemplatesModel
  */
 
-TemplatesModel::TemplatesModel(QObject *parent)
+TemplatesModel::TemplatesModel(QObject* parent)
 	: BaseModel(parent)
 {
 
@@ -3108,51 +3134,51 @@ QVariant TemplatesModel::headerData(int section, Qt::Orientation /*orientation*/
 	return QVariant();
 }
 
-Qt::ItemFlags TemplatesModel::flags(const QModelIndex &index) const
+Qt::ItemFlags TemplatesModel::flags(const QModelIndex& index) const
 {
 	Qt::ItemFlags res = QAbstractItemModel::flags(index);
 	if (res & Qt::ItemIsSelectable) {
-		if (index.row() != 0) 
+		if (index.row() != 0)
 			res |= Qt::ItemIsEditable;
 	}
 	return res;
 }
 
-QVariant TemplatesModel::data(const QModelIndex &index, int role) const
+QVariant TemplatesModel::data(const QModelIndex& index, int role) const
 {
 	if (role == Qt::DisplayRole && index.row() == 0)
 		return "(" + QString::fromUtf8(language[lsDefault].c_str()) + ")";
 	return BaseModel::data(index, role);
 }
 
-void TemplatesModel::setCore(Core *core)
+void TemplatesModel::setCore(Core* core)
 {
 	beginResetModel();
 	BaseModel::setCore(core);
 
 	if (core) {
-		ProjectTemplateManager *manager = core->template_manager();
+		ProjectTemplateManager* manager = core->template_manager();
 		for (size_t i = 0; i < manager->count(); i++) {
-			ProjectTemplate *pt = manager->item(i);
+			ProjectTemplate* pt = manager->item(i);
 			internalAddTemplate(pt);
 		}
 	}
 	endResetModel();
 }
 
-void TemplatesModel::updateTemplate(ProjectTemplate *pt)
+void TemplatesModel::updateTemplate(ProjectTemplate* pt)
 {
 	updateNode(internalUpdateTemplate(pt));
 }
 
-void TemplatesModel::removeTemplate(ProjectTemplate *pt)
+void TemplatesModel::removeTemplate(ProjectTemplate* pt)
 {
 	removeNode(pt);
 }
 
-ProjectNode * TemplatesModel::internalUpdateTemplate(ProjectTemplate *pt)
+ProjectNode* TemplatesModel::internalUpdateTemplate(ProjectTemplate* pt)
 {
-	ProjectNode *node = objectToNode(pt);
+	ProjectNode* node = objectToNode(pt);
 	if (!node)
 		return NULL;
 
@@ -3161,10 +3187,10 @@ ProjectNode * TemplatesModel::internalUpdateTemplate(ProjectTemplate *pt)
 	return node;
 }
 
-ProjectNode * TemplatesModel::internalAddTemplate(ProjectTemplate *pt)
+ProjectNode* TemplatesModel::internalAddTemplate(ProjectTemplate* pt)
 {
 	beginInsertRows(nodeToIndex(NULL), root()->childCount(), root()->childCount());
-	ProjectNode *node = new ProjectNode(root(), NODE_TEMPLATE, (void *)pt);
+	ProjectNode* node = new ProjectNode(root(), NODE_TEMPLATE, (void*)pt);
 	endInsertRows();
 
 	setObjectNode(pt, node);
@@ -3172,7 +3198,7 @@ ProjectNode * TemplatesModel::internalAddTemplate(ProjectTemplate *pt)
 	return node;
 }
 
-void TemplatesModel::addTemplate(ProjectTemplate * pt)
+void TemplatesModel::addTemplate(ProjectTemplate* pt)
 {
 	updateNode(internalAddTemplate(pt));
 }
@@ -3181,26 +3207,28 @@ void TemplatesModel::addTemplate(ProjectTemplate * pt)
  * LogModel
  */
 
-LogModel::LogModel(QObject *parent)
+LogModel::LogModel(QObject* parent)
 	: BaseModel(parent)
 {
 
 }
 
-void LogModel::addMessage(MessageType type, IObject *sender, const QString &text)
+void LogModel::addMessage(MessageType type, IObject* sender, const QString& text)
 {
 	NodeType node_type;
 	QString icon_name;
 	if (type == mtWarning) {
 		node_type = NODE_WARNING;
 		icon_name = ":/images/warning.png";
-	} else if (type == mtError) {
+	}
+	else if (type == mtError) {
 		node_type = NODE_ERROR;
 		icon_name = ":/images/error.png";
-	} else
+	}
+	else
 		node_type = NODE_MESSAGE;
 
-	ProjectNode *node;
+	ProjectNode* node;
 	beginInsertRows(QModelIndex(), root()->childCount(), root()->childCount());
 	node = new ProjectNode(root(), node_type, sender);
 	endInsertRows();
@@ -3228,7 +3256,7 @@ void LogModel::clear()
 	endRemoveRows();
 }
 
-void LogModel::removeObject(void *object)
+void LogModel::removeObject(void* object)
 {
 	removeNode(object);
 }
@@ -3237,28 +3265,28 @@ void LogModel::removeObject(void *object)
  * ProjectTreeDelegate
  */
 
-ProjectTreeDelegate::ProjectTreeDelegate(QObject *parent)
+ProjectTreeDelegate::ProjectTreeDelegate(QObject* parent)
 	: TreeViewItemDelegate(parent)
 {
 
 }
 
-QWidget *ProjectTreeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+QWidget* ProjectTreeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
-	QLineEdit *editor = new LineEdit(parent);
+	QLineEdit* editor = new LineEdit(parent);
 	editor->setObjectName("editor");
 	editor->setFrame(false);
 
 	return editor;
 }
 
-void ProjectTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /*model*/, const QModelIndex &index) const
+void ProjectTreeDelegate::setModelData(QWidget* editor, QAbstractItemModel* /*model*/, const QModelIndex& index) const
 {
-	ProjectNode *node = static_cast<ProjectNode *>(index.internalPointer());
+	ProjectNode* node = static_cast<ProjectNode*>(index.internalPointer());
 	if (!node)
 		return;
 
-	auto le = qobject_cast<QLineEdit *>(editor);
+	auto le = qobject_cast<QLineEdit*>(editor);
 	assert(le);
 	if (!le)
 		return;
@@ -3267,21 +3295,21 @@ void ProjectTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /*m
 
 	switch (node->type()) {
 	case NODE_FOLDER:
-		static_cast<Folder *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<Folder*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 #ifdef ULTIMATE
 	case NODE_LICENSE:
-		static_cast<License *>(node->data())->set_customer_name(text.toUtf8().constData());
+		static_cast<License*>(node->data())->set_customer_name(text.toUtf8().constData());
 		break;
 	case NODE_FILE_FOLDER:
-		static_cast<FileFolder *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<FileFolder*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 	case NODE_FILE:
-		static_cast<InternalFile *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<InternalFile*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 #endif
 	case NODE_WATERMARK:
-		static_cast<Watermark *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<Watermark*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 	}
 }
@@ -3290,32 +3318,32 @@ void ProjectTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /*m
  * WatermarksTreeDelegate
  */
 
-WatermarksTreeDelegate::WatermarksTreeDelegate(QObject *parent)
+WatermarksTreeDelegate::WatermarksTreeDelegate(QObject* parent)
 	: TreeViewItemDelegate(parent)
 {
 
 }
 
-QWidget *WatermarksTreeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+QWidget* WatermarksTreeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
-	QLineEdit *editor = new LineEdit(parent);
+	QLineEdit* editor = new LineEdit(parent);
 	editor->setObjectName("editor");
 	editor->setFrame(false);
 
 	return editor;
 }
 
-void WatermarksTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /*model*/, const QModelIndex &index) const
+void WatermarksTreeDelegate::setModelData(QWidget* editor, QAbstractItemModel* /*model*/, const QModelIndex& index) const
 {
-	ProjectNode *node = static_cast<ProjectNode *>(index.internalPointer());
+	ProjectNode* node = static_cast<ProjectNode*>(index.internalPointer());
 	if (!node)
 		return;
 
-	QString text = qobject_cast<QLineEdit *>(editor)->text();
+	QString text = qobject_cast<QLineEdit*>(editor)->text();
 
 	switch (node->type()) {
 	case NODE_WATERMARK:
-		static_cast<Watermark *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<Watermark*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 	}
 }
@@ -3324,28 +3352,28 @@ void WatermarksTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * 
  * TemplatesTreeDelegate
  */
 
-TemplatesTreeDelegate::TemplatesTreeDelegate(QObject *parent)
+TemplatesTreeDelegate::TemplatesTreeDelegate(QObject* parent)
 	: TreeViewItemDelegate(parent)
 {
 
 }
 
-QWidget *TemplatesTreeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const
+QWidget* TemplatesTreeDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
-	QLineEdit *editor = new LineEdit(parent);
+	QLineEdit* editor = new LineEdit(parent);
 	editor->setObjectName("editor");
 	editor->setFrame(false);
 
 	return editor;
 }
 
-void TemplatesTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /*model*/, const QModelIndex &index) const
+void TemplatesTreeDelegate::setModelData(QWidget* editor, QAbstractItemModel* /*model*/, const QModelIndex& index) const
 {
-	ProjectNode *node = static_cast<ProjectNode *>(index.internalPointer());
+	ProjectNode* node = static_cast<ProjectNode*>(index.internalPointer());
 	if (!node)
 		return;
 
-	QString text = qobject_cast<QLineEdit *>(editor)->text();
+	QString text = qobject_cast<QLineEdit*>(editor)->text();
 	if (text.isEmpty())
 	{
 		//FIXME i18n
@@ -3354,7 +3382,7 @@ void TemplatesTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /
 	}
 	switch (node->type()) {
 	case NODE_TEMPLATE:
-		static_cast<ProjectTemplate *>(node->data())->set_name(text.toUtf8().constData());
+		static_cast<ProjectTemplate*>(node->data())->set_name(text.toUtf8().constData());
 		break;
 	}
 }
@@ -3363,13 +3391,13 @@ void TemplatesTreeDelegate::setModelData(QWidget *editor, QAbstractItemModel * /
  * DumpModel
  */
 
-DumpModel::DumpModel(QObject *parent)
+DumpModel::DumpModel(QObject* parent)
 	: QAbstractItemModel(parent), file_(NULL), rowCountCache_(0), cacheAddress_(0)
 {
 
 }
 
-QModelIndex DumpModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DumpModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
@@ -3377,17 +3405,17 @@ QModelIndex DumpModel::index(int row, int column, const QModelIndex &parent) con
 	return createIndex(row, column);
 }
 
-QModelIndex DumpModel::parent(const QModelIndex & /*index*/) const
+QModelIndex DumpModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-int DumpModel::rowCount(const QModelIndex &parent) const
+int DumpModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
 		return 0;
 
-	if(rowCountCache_ == 0) {
+	if (rowCountCache_ == 0) {
 		QMapIterator<uint64_t, int> i(addrsToRows_);
 		while (i.hasNext()) {
 			i.next();
@@ -3397,12 +3425,12 @@ int DumpModel::rowCount(const QModelIndex &parent) const
 	return rowCountCache_;
 }
 
-int DumpModel::columnCount(const QModelIndex & /*parent*/) const
+int DumpModel::columnCount(const QModelIndex& /*parent*/) const
 {
 	return 3;
 }
 
-void DumpModel::setFile(IArchitecture *file) 
+void DumpModel::setFile(IArchitecture* file)
 {
 	if (file_ == file)
 		return;
@@ -3416,8 +3444,8 @@ void DumpModel::setFile(IArchitecture *file)
 
 	if (file_) {
 		size_t i;
-		ISection *segment;
-		std::vector<ISection *> segmentList;
+		ISection* segment;
+		std::vector<ISection*> segmentList;
 		std::string formatName = file->owner()->format_name();
 
 		if (formatName == "PE") {
@@ -3444,20 +3472,20 @@ void DumpModel::setFile(IArchitecture *file)
 			uint64_t address = segment->address();
 			uint32_t rows = (uint32_t)(segment->size() + 15) / 16;
 
-			if(curRows == 0) {
+			if (curRows == 0) {
 				curAddr = address;
 				curRows = rows;
 				continue;
-			} 
+			}
 			uint64_t curEndAddr = curAddr + 16 * curRows;
-			if(curEndAddr < address) { //gap
+			if (curEndAddr < address) { //gap
 				addrsToRows_.insert(curAddr, curRows);
 				curAddr = address;
 				curRows = rows;
 				continue;
 			}
 			uint64_t nextEndAddr = address + 16 * rows;
-			if(nextEndAddr > curEndAddr) curRows = (nextEndAddr - curAddr) / 16;
+			if (nextEndAddr > curEndAddr) curRows = (nextEndAddr - curAddr) / 16;
 		}
 		if (curRows) addrsToRows_.insert(curAddr, curRows);
 	}
@@ -3468,7 +3496,7 @@ QByteArray DumpModel::read(uint64_t address, int size) const
 {
 	if (!cacheAddress_ || address < cacheAddress_ || address + size > cacheAddress_ + cache_.size()) {
 		if (file_->AddressSeek(address)) {
-			ISection *segment = file_->selected_segment();
+			ISection* segment = file_->selected_segment();
 			cacheAddress_ = address;
 			int cacheSize = (int)qMin(segment->physical_size(), (uint32_t)segment->size()) - (address - segment->address());
 			if (cacheSize > 0x100000 && cacheSize > size) // 1Mbyte read ahead limit
@@ -3476,10 +3504,12 @@ QByteArray DumpModel::read(uint64_t address, int size) const
 			if (cacheSize) {
 				cache_.resize(cacheSize);
 				file_->Read(cache_.data(), cacheSize);
-			} else {
+			}
+			else {
 				cache_.clear();
 			}
-		} else {
+		}
+		else {
 			return QByteArray();
 		}
 	}
@@ -3488,7 +3518,7 @@ QByteArray DumpModel::read(uint64_t address, int size) const
 	return cache_.mid(offset, qMin(cache_.size() - (int)offset, size));
 }
 
-QVariant DumpModel::data(const QModelIndex &index, int role) const
+QVariant DumpModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
@@ -3497,64 +3527,67 @@ QVariant DumpModel::data(const QModelIndex &index, int role) const
 		uint64_t address = indexToAddress(index);
 		switch (index.column()) {
 		case 0:
-			{
-				QString res;
-				ISection *segment = file_->segment_list()->GetSectionByAddress(address);
-				if (segment)
-					res = QString::fromLatin1(segment->name().c_str()).append(':');
-				res.append(QString::fromUtf8(DisplayValue(file_->cpu_address_size(), address).c_str()));
-				return res;
-			}
-			
+		{
+			QString res;
+			ISection* segment = file_->segment_list()->GetSectionByAddress(address);
+			if (segment)
+				res = QString::fromLatin1(segment->name().c_str()).append(':');
+			res.append(QString::fromUtf8(DisplayValue(file_->cpu_address_size(), address).c_str()));
+			return res;
+		}
+
 		case 1:
-			{
-				QByteArray data = read(address, 0x10);
-				unsigned char res[16*3] = "?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??";
-				static char hex[] = "0123456789ABCDEF";
-				for (int i = 0; i < 16; i++) {
-					int value = -1;
-					if (i < data.size()) {
-						value = (unsigned char)data[i];
-					} else {
-						data = read(address + i, 1);
-						if(data.size()) {
-							value = (unsigned char)data[0];
-						}
-					}
-					if (value >= 0) {
-						res[3 * i] = hex[value >> 4];
-						res[3 * i + 1] = hex[value & 0x0f];
+		{
+			QByteArray data = read(address, 0x10);
+			unsigned char res[16 * 3] = "?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? ??";
+			static char hex[] = "0123456789ABCDEF";
+			for (int i = 0; i < 16; i++) {
+				int value = -1;
+				if (i < data.size()) {
+					value = (unsigned char)data[i];
+				}
+				else {
+					data = read(address + i, 1);
+					if (data.size()) {
+						value = (unsigned char)data[0];
 					}
 				}
-				return QString((char *)res);
+				if (value >= 0) {
+					res[3 * i] = hex[value >> 4];
+					res[3 * i + 1] = hex[value & 0x0f];
+				}
+			}
+			return QString((char*)res);
 		}
 
 		case 2:
-			{
-				QByteArray data = read(address, 0x10);
-				char res[17], *ptr = res;
-				for (int i = 0; i < 16; i++) {
-					if (i < data.size()) {
-						unsigned char value = data[i];
+		{
+			QByteArray data = read(address, 0x10);
+			char res[17], * ptr = res;
+			for (int i = 0; i < 16; i++) {
+				if (i < data.size()) {
+					unsigned char value = data[i];
+					if (value < 32 || value > 127) value = 0xB7;
+					*ptr++ = value;
+				}
+				else {
+					data = read(address + i, 1);
+					if (data.size()) {
+						unsigned char value = data[0];
 						if (value < 32 || value > 127) value = 0xB7;
 						*ptr++ = value;
-					} else {
-						data = read(address + i, 1);
-						if (data.size()) {
-							unsigned char value = data[0];
-							if (value < 32 || value > 127) value = 0xB7;
-							*ptr++ = value;
-						}
-						else {
-							*ptr++ = '?';
-						}
+					}
+					else {
+						*ptr++ = '?';
 					}
 				}
-				*ptr = 0;
-				return QString::fromLatin1((char *)res);
 			}
+			*ptr = 0;
+			return QString::fromLatin1((char*)res);
 		}
-	} else if (role == Qt::FontRole) {
+		}
+	}
+	else if (role == Qt::FontRole) {
 		QFont font(MONOSPACE_FONT_FAMILY);
 		return font;
 	}
@@ -3583,14 +3616,14 @@ QModelIndex DumpModel::addressToIndex(uint64_t address)
 	int rows = 0;
 	while (i.hasNext()) {
 		i.next();
-		if(address >= i.key() && i.value() > (int)((address - i.key()) / 16))
+		if (address >= i.key() && i.value() > (int)((address - i.key()) / 16))
 			return createIndex(rows + (int)((address - i.key()) / 16), 0);
 		rows += i.value();
 	}
 	return QModelIndex();
 }
 
-uint64_t DumpModel::indexToAddress(const QModelIndex &index) const
+uint64_t DumpModel::indexToAddress(const QModelIndex& index) const
 {
 	QMapIterator<uint64_t, int> i(addrsToRows_);
 	int rows = 0;
@@ -3608,13 +3641,13 @@ uint64_t DumpModel::indexToAddress(const QModelIndex &index) const
  * DisasmModel
  */
 
-DisasmModel::DisasmModel(QObject *parent)
+DisasmModel::DisasmModel(QObject* parent)
 	: QAbstractItemModel(parent), file_(NULL), rowCountCache_(0), func_(NULL)
 {
 
 }
 
-QModelIndex DisasmModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DisasmModel::index(int row, int column, const QModelIndex& parent) const
 {
 	if (parent.isValid() && parent.column() != 0)
 		return QModelIndex();
@@ -3622,12 +3655,12 @@ QModelIndex DisasmModel::index(int row, int column, const QModelIndex &parent) c
 	return createIndex(row, column);
 }
 
-QModelIndex DisasmModel::parent(const QModelIndex & /*index*/) const
+QModelIndex DisasmModel::parent(const QModelIndex& /*index*/) const
 {
 	return QModelIndex();
 }
 
-int DisasmModel::rowCount(const QModelIndex &parent) const
+int DisasmModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
 		return 0;
@@ -3642,7 +3675,7 @@ int DisasmModel::rowCount(const QModelIndex &parent) const
 	return rowCountCache_;
 }
 
-int DisasmModel::columnCount(const QModelIndex & /*parent*/) const
+int DisasmModel::columnCount(const QModelIndex& /*parent*/) const
 {
 	return 3;
 }
@@ -3692,7 +3725,7 @@ uint64_t DisasmModel::offsetToAddress(int offset) const
 	return 0;
 }
 
-ICommand *DisasmModel::indexToCommand(const QModelIndex &index) const
+ICommand* DisasmModel::indexToCommand(const QModelIndex& index) const
 {
 	if (func_->count()) {
 		uint64_t address = func_->item(0)->address();
@@ -3706,7 +3739,7 @@ ICommand *DisasmModel::indexToCommand(const QModelIndex &index) const
 	return NULL;
 }
 
-void DisasmModel::setFile(IArchitecture *file) 
+void DisasmModel::setFile(IArchitecture* file)
 {
 	if (file_ == file)
 		return;
@@ -3720,8 +3753,8 @@ void DisasmModel::setFile(IArchitecture *file)
 
 	if (file_) {
 		size_t i;
-		ISection *segment;
-		std::vector<ISection *> segmentList;
+		ISection* segment;
+		std::vector<ISection*> segmentList;
 		std::string formatName = file->owner()->format_name();
 
 		if (formatName == "PE" && file->AddressSeek(file->image_base()))
@@ -3766,7 +3799,7 @@ void DisasmModel::setFile(IArchitecture *file)
 	endResetModel();
 }
 
-QVariant DisasmModel::data(const QModelIndex &index, int role) const
+QVariant DisasmModel::data(const QModelIndex& index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
@@ -3774,74 +3807,77 @@ QVariant DisasmModel::data(const QModelIndex &index, int role) const
 	switch (role) {
 	case Qt::DisplayRole:
 	case Qt::Vmp::StaticTextRole:
-	case Qt::Vmp::StaticColorRole: 
-		{
-			if (func_->count() > 100000)
-				func_->clear();
+	case Qt::Vmp::StaticColorRole:
+	{
+		if (func_->count() > 100000)
+			func_->clear();
 
-			uint64_t address = offsetToAddress(index.row());
-			ICommand *command = NULL;
-			if (func_->count()) {
-				int startIndex = addressOffset(func_->item(0)->address());
-				if (startIndex >= 0 && startIndex <= index.row()) {
-					size_t commandIndex = index.row() - startIndex;
-					if (commandIndex < func_->count())
-						command = func_->item(commandIndex);
-					else if (commandIndex == func_->count())
-						address = func_->item(func_->count() - 1)->next_address();
-					else
-						func_->clear();
-				} else {
+		uint64_t address = offsetToAddress(index.row());
+		ICommand* command = NULL;
+		if (func_->count()) {
+			int startIndex = addressOffset(func_->item(0)->address());
+			if (startIndex >= 0 && startIndex <= index.row()) {
+				size_t commandIndex = index.row() - startIndex;
+				if (commandIndex < func_->count())
+					command = func_->item(commandIndex);
+				else if (commandIndex == func_->count())
+					address = func_->item(func_->count() - 1)->next_address();
+				else
 					func_->clear();
-				}
 			}
+			else {
+				func_->clear();
+			}
+		}
 
-			if (!command)
-				command = func_->ParseCommand(*file_, address, true);
+		if (!command)
+			command = func_->ParseCommand(*file_, address, true);
 
-			if (role == Qt::DisplayRole) {
-				switch (index.column()) {
-				case 0: 
-					{
-						QString res;
-						ISection *segment = file_->segment_list()->GetSectionByAddress(address - address % file_->segment_alignment());
-						if (segment)
-							res = QString::fromLatin1(segment->name().c_str()).append(':');
-						return res.append(QString::fromLatin1(command->display_address().c_str()));
-					}
-				case 1:
-					return QString::fromLatin1(command->dump_str().c_str());
-				case 2:
-					return QString::fromUtf8(command->text().c_str());
-				}
-			} else if (role == Qt::Vmp::StaticTextRole) {
-				if (index.column() == 2 && !command->comment().value.empty())
-					return QString::fromUtf8(command->comment().display_value().c_str());
-			} else if (role == Qt::Vmp::StaticColorRole) {
-				if (index.column() == 2 && !command->comment().value.empty()) {
-					switch (command->comment().type) {
-					case ttFunction: case ttJmp:
-						return QColor(Qt::blue);
-					case ttImport:
-						return QColor(Qt::darkRed);
-					case ttExport:
-						return QColor(Qt::red);
-					case ttString:
-						return QColor(Qt::darkGreen);
-					case ttVariable:
-						return QColor(Qt::magenta);
-					case ttComment:
-						return QColor(Qt::gray);
-					default:
-						return QColor();
-					}
+		if (role == Qt::DisplayRole) {
+			switch (index.column()) {
+			case 0:
+			{
+				QString res;
+				ISection* segment = file_->segment_list()->GetSectionByAddress(address - address % file_->segment_alignment());
+				if (segment)
+					res = QString::fromLatin1(segment->name().c_str()).append(':');
+				return res.append(QString::fromLatin1(command->display_address().c_str()));
+			}
+			case 1:
+				return QString::fromLatin1(command->dump_str().c_str());
+			case 2:
+				return QString::fromUtf8(command->text().c_str());
+			}
+		}
+		else if (role == Qt::Vmp::StaticTextRole) {
+			if (index.column() == 2 && !command->comment().value.empty())
+				return QString::fromUtf8(command->comment().display_value().c_str());
+		}
+		else if (role == Qt::Vmp::StaticColorRole) {
+			if (index.column() == 2 && !command->comment().value.empty()) {
+				switch (command->comment().type) {
+				case ttFunction: case ttJmp:
+					return QColor(Qt::blue);
+				case ttImport:
+					return QColor(Qt::darkRed);
+				case ttExport:
+					return QColor(Qt::red);
+				case ttString:
+					return QColor(Qt::darkGreen);
+				case ttVariable:
+					return QColor(Qt::magenta);
+				case ttComment:
+					return QColor(Qt::gray);
+				default:
+					return QColor();
 				}
 			}
 		}
-		break;
+	}
+	break;
 	case Qt::FontRole: {
-			return QFont(MONOSPACE_FONT_FAMILY);
-		}
+		return QFont(MONOSPACE_FONT_FAMILY);
+	}
 	}
 
 	return QVariant();
@@ -3866,24 +3902,24 @@ QVariant DisasmModel::headerData(int section, Qt::Orientation /*orientation*/, i
  * ProjectNode
  */
 
-bool ItemModelSearcher::extractMatchingIndexes(const QModelIndex &parent)
+bool ItemModelSearcher::extractMatchingIndexes(const QModelIndex& parent)
 {
-	//TODO: âîçìîæíû äàëüíåéøèå îïòèìèçàöèè
+	//TODO: §Ó§à§Ù§Þ§à§Ø§ß§í §Õ§Ñ§Ý§î§ß§Ö§Û§ê§Ú§Ö §à§á§ä§Ú§Þ§Ú§Ù§Ñ§è§Ú§Ú
 	if (current_match_ == NULL)
 		current_match_ = &match_before_;
 
 	int rows = where_->rowCount(parent);
-	for(int i = 0; i < rows; ++i)
+	for (int i = 0; i < rows; ++i)
 	{
 		QModelIndex idx0;
-		for(int col = 0; col < where_->columnCount(parent); col++)
+		for (int col = 0; col < where_->columnCount(parent); col++)
 		{
 			QModelIndex idx = where_->index(i, col, parent);
-			if(idx.isValid())
+			if (idx.isValid())
 			{
-				if(col == 0)
+				if (col == 0)
 					idx0 = idx;
-				if(from_ == idx)
+				if (from_ == idx)
 				{
 					assert(current_match_ == &match_before_);
 					if (match_before_.isValid() && !forward_)
@@ -3891,7 +3927,8 @@ bool ItemModelSearcher::extractMatchingIndexes(const QModelIndex &parent)
 					if (!forward_ && !incremental_ && !match_before_.isValid())
 						return false;
 					current_match_ = &match_after_;
-				} else
+				}
+				else
 				{
 					bool matched = (idx.data(Qt::DisplayRole).toString() + idx.data(Qt::Vmp::StaticTextRole).toString()).contains(*term_);
 					if (matched)
@@ -3916,10 +3953,10 @@ bool ItemModelSearcher::extractMatchingIndexes(const QModelIndex &parent)
 QModelIndex ItemModelSearcher::find()
 {
 	assert(incremental_ == false || forward_ == true); //other modes unsupported
-	if(incremental_ == false || forward_ == true)
+	if (incremental_ == false || forward_ == true)
 	{
 		bool from_matched = from_.isValid() && (from_.data(Qt::DisplayRole).toString() + from_.data(Qt::Vmp::StaticTextRole).toString()).contains(*term_);
-		if(from_matched && incremental_)
+		if (from_matched && incremental_)
 			return from_;
 
 		if (extractMatchingIndexes(QModelIndex()))

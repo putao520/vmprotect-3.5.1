@@ -57,6 +57,7 @@
 #include <QtHelp/QHelpSearchEngine>
 #include <QtHelp/QHelpSearchResultWidget>
 
+
 #include "../third-party/scintilla/Platform.h"
 #include "../third-party/scintilla/Scintilla.h"
 #include "../third-party/scintilla/ScintillaEditBase.h"

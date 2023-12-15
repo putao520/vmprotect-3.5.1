@@ -1,6 +1,9 @@
 #ifndef TEMPLATE_SAVE_DIALOG_H
 #define TEMPLATE_SAVE_DIALOG_H
 
+#include "../core/core.h"
+#include "widgets.h"
+
 class TemplateSaveDialog : public QDialog
 {
     Q_OBJECT

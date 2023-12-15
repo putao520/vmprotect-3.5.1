@@ -2,6 +2,8 @@
 #define PROCESSORS_H
 
 #include "osutils.h"
+#include "objects.h"
+#include "files.h"
 
 class CommandLink;
 class Buffer;

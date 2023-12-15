@@ -1,6 +1,8 @@
 #ifndef SETTINGS_DIALOG_H
 #define SETTINGS_DIALOG_H
 
+#include "widgets.h"
+
 class SettingsDialog : public QDialog
 {
     Q_OBJECT

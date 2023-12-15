@@ -1,6 +1,10 @@
 #ifndef FUNCTION_DIALOG_H
 #define FUNCTION_DIALOG_H
 
+#include "widgets.h"
+#include "property_editor.h"
+#include "models.h"
+
 struct AddressInfo {
 	uint64_t address;
 	IArchitecture *arch;

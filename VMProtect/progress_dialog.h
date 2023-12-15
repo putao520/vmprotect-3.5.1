@@ -1,6 +1,9 @@
 #ifndef PROGRESS_DIALOG_H
 #define PROGRESS_DIALOG_H
 
+#include "../core/objects.h"
+#include "../core/files.h"
+
 class WaitCursor;
 
 class ProgressDialog : public QDialog

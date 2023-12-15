@@ -38,61 +38,61 @@ void XTrace(LPCTSTR lpszFormat, ...)
 
 NTSTATUS WINAPI HookedNtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtSetValueKey(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize);
 }
 
 NTSTATUS WINAPI HookedNtDeleteValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtDeleteValueKey(KeyHandle, ValueName);
 }
 
 NTSTATUS WINAPI HookedNtCreateKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG TitleIndex, PUNICODE_STRING Class, ULONG CreateOptions, PULONG Disposition)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtCreateKey(KeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition);
 }
 
 NTSTATUS WINAPI HookedNtQueryValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtQueryValueKey(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
 }
 
 NTSTATUS WINAPI HookedNtOpenKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtOpenKey(KeyHandle, DesiredAccess, ObjectAttributes);
 }
 
 NTSTATUS WINAPI HookedNtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG OpenOptions)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtOpenKeyEx(KeyHandle, DesiredAccess, ObjectAttributes, OpenOptions);
 }
 
 NTSTATUS WINAPI HookedNtDeleteKey(HANDLE KeyHandle)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtDeleteKey(KeyHandle);
 }
 
 NTSTATUS WINAPI HookedNtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtQueryKey(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLength);
 }
 
 NTSTATUS WINAPI HookedNtEnumerateValueKey(HANDLE KeyHandle, ULONG Index, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtEnumerateValueKey(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
 }
 
 NTSTATUS WINAPI HookedNtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
 {
-	RegistryManager *registry_manager = Core::Instance()->registry_manager();
+	RegistryManager* registry_manager = Core::Instance()->registry_manager();
 	return registry_manager->NtEnumerateKey(KeyHandle, Index, KeyInformationClass, KeyInformation, Length, ResultLength);
 }
 
@@ -100,7 +100,7 @@ NTSTATUS WINAPI HookedNtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFORMAT
  * RegistryValue
  */
 
-RegistryValue::RegistryValue(const wchar_t *name)
+RegistryValue::RegistryValue(const wchar_t* name)
 	: name_(NULL), type_(REG_NONE), data_(NULL), size_(0)
 {
 	size_t size = wcslen(name) + 1;
@@ -110,19 +110,20 @@ RegistryValue::RegistryValue(const wchar_t *name)
 
 RegistryValue::~RegistryValue()
 {
-	delete [] name_;
-	delete [] data_;
+	delete[] name_;
+	delete[] data_;
 }
 
-void RegistryValue::SetValue(uint32_t type, void *data, uint32_t size)
+void RegistryValue::SetValue(uint32_t type, void* data, uint32_t size)
 {
 	type_ = type;
 	size_ = size;
-	delete [] data_;
+	delete[] data_;
 	if (size) {
 		data_ = new uint8_t[size_];
 		memcpy(data_, data, size_);
-	} else {
+	}
+	else {
 		data_ = NULL;
 	}
 }
@@ -137,7 +138,7 @@ RegistryKey::RegistryKey()
 
 }
 
-RegistryKey::RegistryKey(RegistryKey *owner, const wchar_t *name, bool is_real)
+RegistryKey::RegistryKey(RegistryKey* owner, const wchar_t* name, bool is_real)
 	: name_(NULL), owner_(owner), is_real_(is_real), is_wow_(false), last_write_time_(0)
 {
 	size_t size = wcslen(name) + 1;
@@ -148,44 +149,44 @@ RegistryKey::RegistryKey(RegistryKey *owner, const wchar_t *name, bool is_real)
 RegistryKey::~RegistryKey()
 {
 	for (size_t i = 0; i < values_.size(); i++) {
-		RegistryValue *value = values_[i];
+		RegistryValue* value = values_[i];
 		delete value;
 	}
 	values_.clear();
 
 	for (size_t i = 0; i < keys_.size(); i++) {
-		RegistryKey *key = keys_[i];
+		RegistryKey* key = keys_[i];
 		delete key;
 	}
 	keys_.clear();
 
-	delete [] name_;
+	delete[] name_;
 }
 
-RegistryValue *RegistryKey::GetValue(const wchar_t *value_name) const
+RegistryValue* RegistryKey::GetValue(const wchar_t* value_name) const
 {
 	if (!value_name)
 		value_name = L"";
 	for (size_t i = 0; i < values_.size(); i++) {
-		RegistryValue *value = values_[i];
+		RegistryValue* value = values_[i];
 		if (_wcsicmp(value_name, value->name()) == 0)
 			return value;
 	}
 	return NULL;
 }
 
-RegistryValue *RegistryKey::AddValue(wchar_t *value_name)
+RegistryValue* RegistryKey::AddValue(wchar_t* value_name)
 {
 	if (!value_name)
 		value_name = L"";
-	RegistryValue *value = new RegistryValue(value_name);
+	RegistryValue* value = new RegistryValue(value_name);
 	values_.push_back(value);
 	return value;
 }
 
-void RegistryKey::SetValue(wchar_t *value_name, uint32_t type, void *data, uint32_t size)
+void RegistryKey::SetValue(wchar_t* value_name, uint32_t type, void* data, uint32_t size)
 {
-	RegistryValue *value = GetValue(value_name);
+	RegistryValue* value = GetValue(value_name);
 	if (!value)
 		value = AddValue(value_name);
 	value->SetValue(type, data, size);
@@ -195,12 +196,12 @@ void RegistryKey::SetValue(wchar_t *value_name, uint32_t type, void *data, uint3
 	last_write_time_ = static_cast<uint64_t>(system_time.dwHighDateTime) << 32 | static_cast<uint64_t>(system_time.dwLowDateTime);
 }
 
-bool RegistryKey::DeleteValue(wchar_t *value_name)
+bool RegistryKey::DeleteValue(wchar_t* value_name)
 {
 	if (!value_name)
 		value_name = L"";
 	for (size_t i = 0; i < values_.size(); i++) {
-		RegistryValue *value = values_[i];
+		RegistryValue* value = values_[i];
 		if (_wcsicmp(value_name, value->name()) == 0) {
 			delete value;
 			values_.erase(i);
@@ -210,7 +211,7 @@ bool RegistryKey::DeleteValue(wchar_t *value_name)
 	return false;
 }
 
-bool RegistryKey::is_wow_node(const wchar_t *name) const
+bool RegistryKey::is_wow_node(const wchar_t* name) const
 {
 	bool ret = (is_wow_ && _wcsicmp(L"Wow6432Node", name) == 0);
 #ifdef CHECKED
@@ -219,43 +220,43 @@ bool RegistryKey::is_wow_node(const wchar_t *name) const
 	return ret;
 }
 
-RegistryKey *RegistryKey::GetChild(const wchar_t *name) const
+RegistryKey* RegistryKey::GetChild(const wchar_t* name) const
 {
 	if (!name || *name == 0)
 		return NULL;
 
 	if (is_wow_node(name))
-		return const_cast<RegistryKey *>(this);
+		return const_cast<RegistryKey*>(this);
 
 	for (size_t i = 0; i < keys_.size(); i++) {
-		RegistryKey *key = keys_[i];
+		RegistryKey* key = keys_[i];
 		if (_wcsicmp(name, key->name()) == 0)
 			return key;
 	}
 	return NULL;
 }
 
-RegistryKey *RegistryKey::GetKey(const wchar_t *name) const
+RegistryKey* RegistryKey::GetKey(const wchar_t* name) const
 {
 	if (!name || *name == 0)
 		return NULL;
 
 	if (*name == L'\\')
 		name++;
-	const wchar_t *sub_name = wcschr(name, L'\\');
+	const wchar_t* sub_name = wcschr(name, L'\\');
 	if (!sub_name)
 		return GetChild(name);
 
-	RegistryKey *key = GetChild(UnicodeString(name, sub_name - name).c_str());
+	RegistryKey* key = GetChild(UnicodeString(name, sub_name - name).c_str());
 	return key ? key->GetKey(sub_name) : NULL;
 }
 
-RegistryKey *RegistryKey::AddChild(const wchar_t *name, bool is_real, bool *is_exists)
+RegistryKey* RegistryKey::AddChild(const wchar_t* name, bool is_real, bool* is_exists)
 {
 	if (!name || *name == 0)
 		return NULL;
 
-	RegistryKey *key = is_wow_node(name) ? this : GetChild(name);
+	RegistryKey* key = is_wow_node(name) ? this : GetChild(name);
 	if (is_exists)
 		*is_exists = (key != NULL);
 	if (!key) {
@@ -265,22 +266,22 @@ RegistryKey *RegistryKey::AddChild(const wchar_t *name, bool is_real, bool *is_e
 	return key;
 }
 
-RegistryKey *RegistryKey::AddKey(const wchar_t *name, bool is_real, bool *is_exists)
+RegistryKey* RegistryKey::AddKey(const wchar_t* name, bool is_real, bool* is_exists)
 {
 	if (!name || *name == 0)
 		return NULL;
 
 	if (*name == L'\\')
 		name++;
-	const wchar_t *sub_name = wcschr(name, L'\\');
+	const wchar_t* sub_name = wcschr(name, L'\\');
 	if (!sub_name)
 		return AddChild(name, is_real, is_exists);
 
-	RegistryKey *key = AddChild(UnicodeString(name, sub_name - name).c_str(), is_real, is_exists);
+	RegistryKey* key = AddChild(UnicodeString(name, sub_name - name).c_str(), is_real, is_exists);
 	return key ? key->AddKey(sub_name, is_real, is_exists) : NULL;
 }
 
-bool RegistryKey::DeleteKey(RegistryKey *key)
+bool RegistryKey::DeleteKey(RegistryKey* key)
 {
 	size_t index = keys_.find(key);
 	if (index != -1) {
@@ -302,7 +303,7 @@ UnicodeString RegistryKey::full_name() const
  * RegistryManager
  */
 
-RegistryManager::RegistryManager(const uint8_t *data, HMODULE instance, const uint8_t *key, VirtualObjectList *objects)
+RegistryManager::RegistryManager(const uint8_t* data, HMODULE instance, const uint8_t* key, VirtualObjectList* objects)
 	: instance_(instance)
 	, data_(data)
 	, objects_(objects)
@@ -318,22 +319,22 @@ RegistryManager::RegistryManager(const uint8_t *data, HMODULE instance, const ui
 	, nt_enumerate_key_(NULL)
 	, append_mode_(false)
 {
-	key_ = *(reinterpret_cast<const uint32_t *>(key));
+	key_ = *(reinterpret_cast<const uint32_t*>(key));
 
-//#ifndef _WIN64
-	static const wchar_t *wow_keys[] = {
+	//#ifndef _WIN64
+	static const wchar_t* wow_keys[] = {
 		L"\\REGISTRY\\MACHINE\\SOFTWARE\\Classes"
 	};
 
 	for (size_t i = 0; i < _countof(wow_keys); i++) {
-		RegistryKey *key = cache_.AddKey(wow_keys[i], true, NULL);
+		RegistryKey* key = cache_.AddKey(wow_keys[i], true, NULL);
 		if (key)
 			key->set_is_wow(true);
 	}
-//#endif
+	//#endif
 }
 
-void RegistryManager::HookAPIs(HookManager &hook_manager)
+void RegistryManager::HookAPIs(HookManager& hook_manager)
 {
 	hook_manager.Begin();
 	HMODULE dll = GetModuleHandleA(VMProtectDecryptStringA("ntdll.dll"));
@@ -350,7 +351,7 @@ void RegistryManager::HookAPIs(HookManager &hook_manager)
 	hook_manager.End();
 }
 
-void RegistryManager::UnhookAPIs(HookManager &hook_manager)
+void RegistryManager::UnhookAPIs(HookManager& hook_manager)
 {
 	hook_manager.Begin();
 	hook_manager.UnhookAPI(nt_set_value_key_);
@@ -366,7 +367,7 @@ void RegistryManager::UnhookAPIs(HookManager &hook_manager)
 	hook_manager.End();
 }
 
-REGISTRY_DIRECTORY RegistryManager::DecryptDirectory(const REGISTRY_DIRECTORY *directory_enc) const
+REGISTRY_DIRECTORY RegistryManager::DecryptDirectory(const REGISTRY_DIRECTORY* directory_enc) const
 {
 	REGISTRY_DIRECTORY res;
 	res.Reserved1 = directory_enc->Reserved1 ^ key_;
@@ -386,62 +387,62 @@ void RegistryManager::EndRegisterServer()
 
 NTSTATUS __forceinline RegistryManager::TrueNtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize)
 {
-	typedef NTSTATUS (WINAPI tNtSetValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize);
-	return reinterpret_cast<tNtSetValueKey *>(nt_set_value_key_)(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize);
+	typedef NTSTATUS(WINAPI tNtSetValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize);
+	return reinterpret_cast<tNtSetValueKey*>(nt_set_value_key_)(KeyHandle, ValueName, TitleIndex, Type, Data, DataSize);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtDeleteValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName)
 {
-	typedef NTSTATUS (WINAPI tNtDeleteValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName);
-	return reinterpret_cast<tNtDeleteValueKey *>(nt_delete_value_key_)(KeyHandle, ValueName);
+	typedef NTSTATUS(WINAPI tNtDeleteValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName);
+	return reinterpret_cast<tNtDeleteValueKey*>(nt_delete_value_key_)(KeyHandle, ValueName);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtCreateKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG TitleIndex, PUNICODE_STRING Class, ULONG CreateOptions, PULONG Disposition)
 {
-	typedef NTSTATUS (WINAPI tNtCreateKey)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG TitleIndex, PUNICODE_STRING Class, ULONG CreateOptions, PULONG Disposition);
-	return reinterpret_cast<tNtCreateKey *>(nt_create_key_)(KeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition);
+	typedef NTSTATUS(WINAPI tNtCreateKey)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG TitleIndex, PUNICODE_STRING Class, ULONG CreateOptions, PULONG Disposition);
+	return reinterpret_cast<tNtCreateKey*>(nt_create_key_)(KeyHandle, DesiredAccess, ObjectAttributes, TitleIndex, Class, CreateOptions, Disposition);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtQueryValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
 {
-	typedef NTSTATUS (WINAPI tNtQueryValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength);
-	return reinterpret_cast<tNtQueryValueKey *>(nt_query_value_key_)(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
+	typedef NTSTATUS(WINAPI tNtQueryValueKey)(HANDLE KeyHandle, PUNICODE_STRING ValueName, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength);
+	return reinterpret_cast<tNtQueryValueKey*>(nt_query_value_key_)(KeyHandle, ValueName, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtOpenKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes)
 {
-	typedef NTSTATUS (WINAPI tNtOpenKey)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes);
-	return reinterpret_cast<tNtOpenKey *>(nt_open_key_)(KeyHandle, DesiredAccess, ObjectAttributes);
+	typedef NTSTATUS(WINAPI tNtOpenKey)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes);
+	return reinterpret_cast<tNtOpenKey*>(nt_open_key_)(KeyHandle, DesiredAccess, ObjectAttributes);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG OpenOptions)
 {
-	typedef NTSTATUS (WINAPI tNtOpenKeyEx)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG OpenOptions);
-	return reinterpret_cast<tNtOpenKeyEx *>(nt_open_key_ex_)(KeyHandle, DesiredAccess, ObjectAttributes, OpenOptions);
+	typedef NTSTATUS(WINAPI tNtOpenKeyEx)(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ULONG OpenOptions);
+	return reinterpret_cast<tNtOpenKeyEx*>(nt_open_key_ex_)(KeyHandle, DesiredAccess, ObjectAttributes, OpenOptions);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtDeleteKey(HANDLE KeyHandle)
 {
-	typedef NTSTATUS (WINAPI tNtDeleteKey)(HANDLE KeyHandle);
-	return reinterpret_cast<tNtDeleteKey *>(nt_delete_key_)(KeyHandle);
+	typedef NTSTATUS(WINAPI tNtDeleteKey)(HANDLE KeyHandle);
+	return reinterpret_cast<tNtDeleteKey*>(nt_delete_key_)(KeyHandle);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
 {
-	typedef NTSTATUS (WINAPI tNtQueryKey)(HANDLE KeyHandle, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength);
-	return reinterpret_cast<tNtQueryKey *>(nt_query_key_)(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLength);
+	typedef NTSTATUS(WINAPI tNtQueryKey)(HANDLE KeyHandle, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength);
+	return reinterpret_cast<tNtQueryKey*>(nt_query_key_)(KeyHandle, KeyInformationClass, KeyInformation, Length, ResultLength);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtEnumerateValueKey(HANDLE KeyHandle, ULONG Index, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
 {
-	typedef NTSTATUS (WINAPI tNtEnumerateValueKey)(HANDLE KeyHandle, ULONG Index, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength);
-	return reinterpret_cast<tNtEnumerateValueKey *>(nt_enumerate_value_key_)(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
+	typedef NTSTATUS(WINAPI tNtEnumerateValueKey)(HANDLE KeyHandle, ULONG Index, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength);
+	return reinterpret_cast<tNtEnumerateValueKey*>(nt_enumerate_value_key_)(KeyHandle, Index, KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
 {
-	typedef NTSTATUS (WINAPI tNtEnumerateKey)(HANDLE KeyHandle, ULONG Index, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength);
-	return reinterpret_cast<tNtEnumerateKey *>(nt_enumerate_key_)(KeyHandle, Index, KeyInformationClass, KeyInformation, Length, ResultLength);
+	typedef NTSTATUS(WINAPI tNtEnumerateKey)(HANDLE KeyHandle, ULONG Index, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength);
+	return reinterpret_cast<tNtEnumerateKey*>(nt_enumerate_key_)(KeyHandle, Index, KeyInformationClass, KeyInformation, Length, ResultLength);
 }
 
 NTSTATUS __forceinline RegistryManager::TrueNtQueryObject(HANDLE Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, PVOID ObjectInformation, ULONG ObjectInformationLength, PULONG ReturnLength)
@@ -458,7 +459,7 @@ NTSTATUS RegistryManager::NtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueN
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			if ((object->access() & KEY_SET_VALUE) == 0)
 			{
@@ -468,14 +469,15 @@ NTSTATUS RegistryManager::NtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueN
 				return STATUS_ACCESS_DENIED;
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			try {
 				key->SetValue(ValueName->Buffer, Type, Data, DataSize);
 #ifdef CHECKED
 				XTrace(L"NtSetValueKey STATUS_SUCCESS\n");
 #endif
 				return STATUS_SUCCESS;
-			} catch(...) {
+			}
+			catch (...) {
 #ifdef CHECKED
 				XTrace(L"NtSetValueKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -500,7 +502,7 @@ NTSTATUS RegistryManager::NtDeleteValueKey(HANDLE KeyHandle, PUNICODE_STRING Val
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			if ((object->access() & KEY_SET_VALUE) == 0)
 			{
@@ -510,14 +512,15 @@ NTSTATUS RegistryManager::NtDeleteValueKey(HANDLE KeyHandle, PUNICODE_STRING Val
 				return STATUS_ACCESS_DENIED;
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			try {
-				NTSTATUS ret = key->DeleteValue(ValueName->Buffer) ? STATUS_SUCCESS : STATUS_OBJECT_NAME_NOT_FOUND; 
+				NTSTATUS ret = key->DeleteValue(ValueName->Buffer) ? STATUS_SUCCESS : STATUS_OBJECT_NAME_NOT_FOUND;
 #ifdef CHECKED
 				XTrace(L"NtDeleteValueKey STATUS_SUCCESS\n");
 #endif
 				return ret;
-			} catch(...) {
+			}
+			catch (...) {
 #ifdef CHECKED
 				XTrace(L"NtSetValueKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -533,22 +536,23 @@ NTSTATUS RegistryManager::NtDeleteValueKey(HANDLE KeyHandle, PUNICODE_STRING Val
 	return ret;
 }
 
-RegistryKey *RegistryManager::GetRootKey(HANDLE root, uint32_t *access, bool can_create)
+RegistryKey* RegistryManager::GetRootKey(HANDLE root, uint32_t* access, bool can_create)
 {
-	RegistryKey *res = NULL;
+	RegistryKey* res = NULL;
 	if (root) {
-		VirtualObject *object = objects_->GetKey(root);
+		VirtualObject* object = objects_->GetKey(root);
 		if (object && object->ref()) {
 			// root is a virtual key
-			res = static_cast<RegistryKey *>(object->ref());
+			res = static_cast<RegistryKey*>(object->ref());
 			if (access)
 				*access = object->access();
-		} else {
+		}
+		else {
 			// root is a real key
 			KEY_NAME_INFORMATION info;
 			DWORD size;
 			if (TrueNtQueryKey(root, KeyNameInformation, &info, sizeof(info), &size) == STATUS_BUFFER_OVERFLOW) {
-				KEY_NAME_INFORMATION *data = reinterpret_cast<KEY_NAME_INFORMATION *>(new uint8_t[size]);
+				KEY_NAME_INFORMATION* data = reinterpret_cast<KEY_NAME_INFORMATION*>(new uint8_t[size]);
 				if (NT_SUCCESS(TrueNtQueryKey(root, KeyNameInformation, data, size, &size))) {
 					UnicodeString str(data->Name, data->NameLength / sizeof(wchar_t));
 					res = can_create ? cache_.AddKey(str.c_str(), true, NULL) : cache_.GetKey(str.c_str());
@@ -561,10 +565,11 @@ RegistryKey *RegistryManager::GetRootKey(HANDLE root, uint32_t *access, bool can
 						}
 					}
 				}
-				delete [] data;
+				delete[] data;
 			}
 		}
-	} else {
+	}
+	else {
 		res = &cache_;
 		if (access)
 			*access = KEY_CREATE_SUB_KEY;
@@ -583,36 +588,38 @@ NTSTATUS RegistryManager::NtCreateKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 
 		try {
 			uint32_t root_access = 0;
-			RegistryKey *root_key = GetRootKey(ObjectAttributes->RootDirectory, &root_access, append_mode_);
+			RegistryKey* root_key = GetRootKey(ObjectAttributes->RootDirectory, &root_access, append_mode_);
 			if (root_key) {
 				bool is_exists = true;
-				RegistryKey *key;
+				RegistryKey* key;
 				if (ObjectAttributes->ObjectName->Buffer) {
 					UnicodeString str(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t));
 					key = ((root_access & KEY_CREATE_SUB_KEY) != 0 && (append_mode_ || !root_key->is_real())) ? root_key->AddKey(str.c_str(), false, &is_exists) : root_key->GetKey(str.c_str());
-				} else {
+				}
+				else {
 					key = root_key;
 				}
 				if (key) {
 					if (!key->is_real()) {
 						HANDLE newHandle = ::CreateEventA(NULL, false, false, NULL);
 #ifdef CHECKED
-						if(objects_->GetKey(newHandle))
+						if (objects_->GetKey(newHandle))
 						{
 							XTrace(L"NtCreateKey HANDLE REUSE DETECTED\n");
 						}
 #endif
-						VirtualObject *object = objects_->Add(OBJECT_KEY, key, newHandle, DesiredAccess);
+						VirtualObject* object = objects_->Add(OBJECT_KEY, key, newHandle, DesiredAccess);
 						*KeyHandle = object->handle();
 						if (Disposition)
 							*Disposition = is_exists ? REG_OPENED_EXISTING_KEY : REG_CREATED_NEW_KEY;
 #ifdef CHECKED
-						XTrace(L"NtCreateKey STATUS_SUCCESS, is_exists=%d, h=%p\n", is_exists?1:0, *KeyHandle);
+						XTrace(L"NtCreateKey STATUS_SUCCESS, is_exists=%d, h=%p\n", is_exists ? 1 : 0, *KeyHandle);
 #endif
 						return STATUS_SUCCESS;
 					}
-				} else if (ObjectAttributes->RootDirectory) {
-					VirtualObject *object = objects_->GetKey(ObjectAttributes->RootDirectory);
+				}
+				else if (ObjectAttributes->RootDirectory) {
+					VirtualObject* object = objects_->GetKey(ObjectAttributes->RootDirectory);
 					if (object && object->ref())
 					{
 						NTSTATUS ret = ((root_access & KEY_CREATE_SUB_KEY) == 0) ? STATUS_ACCESS_DENIED : STATUS_INVALID_PARAMETER;
@@ -623,7 +630,8 @@ NTSTATUS RegistryManager::NtCreateKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 					}
 				}
 			}
-		} catch(...) {
+		}
+		catch (...) {
 #ifdef CHECKED
 			XTrace(L"NtCreateKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -648,27 +656,28 @@ NTSTATUS RegistryManager::NtOpenKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess
 		CriticalSection	cs(objects_->critical_section());
 
 		try {
-			RegistryKey *root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, false);
+			RegistryKey* root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, false);
 			if (root_key) {
-				RegistryKey *key = ObjectAttributes->ObjectName->Buffer ? root_key->GetKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str()) : root_key;
+				RegistryKey* key = ObjectAttributes->ObjectName->Buffer ? root_key->GetKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str()) : root_key;
 				if (key) {
-					 if (!key->is_real()) {
-						 HANDLE newHandle = ::CreateEventA(NULL, false, false, NULL);
+					if (!key->is_real()) {
+						HANDLE newHandle = ::CreateEventA(NULL, false, false, NULL);
 #ifdef CHECKED
-						if(objects_->GetKey(newHandle))
+						if (objects_->GetKey(newHandle))
 						{
 							XTrace(L"NtOpenKey HANDLE REUSE DETECTED\n");
 						}
 #endif
-						VirtualObject *object = objects_->Add(OBJECT_KEY, key, newHandle, DesiredAccess);
+						VirtualObject* object = objects_->Add(OBJECT_KEY, key, newHandle, DesiredAccess);
 						*KeyHandle = object->handle();
 #ifdef CHECKED
 						XTrace(L"NtOpenKey STATUS_SUCCESS, h=%p\n", *KeyHandle);
 #endif
 						return STATUS_SUCCESS;
-					 }
-				} else if (ObjectAttributes->RootDirectory) {
-					VirtualObject *object = objects_->GetKey(ObjectAttributes->RootDirectory);
+					}
+				}
+				else if (ObjectAttributes->RootDirectory) {
+					VirtualObject* object = objects_->GetKey(ObjectAttributes->RootDirectory);
 					if (object && object->ref())
 					{
 #ifdef CHECKED
@@ -678,7 +687,8 @@ NTSTATUS RegistryManager::NtOpenKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess
 					}
 				}
 			}
-		} catch(...) {
+		}
+		catch (...) {
 #ifdef CHECKED
 			XTrace(L"NtOpenKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -691,10 +701,10 @@ NTSTATUS RegistryManager::NtOpenKey(PHANDLE KeyHandle, ACCESS_MASK DesiredAccess
 			XTrace(L"TrueNtOpenKey for MAXIMUM_ALLOWED %p h=%p\n", status, *KeyHandle);
 #endif
 			if (NT_SUCCESS(status)) {
-				RegistryKey *root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, true);
+				RegistryKey* root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, true);
 				if (root_key) {
 					bool is_exists = true;
-					RegistryKey *key = ObjectAttributes->ObjectName->Buffer ? root_key->AddKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str(), false, &is_exists) : root_key;
+					RegistryKey* key = ObjectAttributes->ObjectName->Buffer ? root_key->AddKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str(), false, &is_exists) : root_key;
 					if (key)
 						objects_->Add(OBJECT_KEY, key, *KeyHandle, DesiredAccess);
 				}
@@ -720,20 +730,21 @@ NTSTATUS RegistryManager::NtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 		CriticalSection	cs(objects_->critical_section());
 
 		try {
-			RegistryKey *root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, false);
+			RegistryKey* root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, false);
 			if (root_key) {
-				RegistryKey *key = ObjectAttributes->ObjectName->Buffer ? root_key->GetKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str()) : root_key;
+				RegistryKey* key = ObjectAttributes->ObjectName->Buffer ? root_key->GetKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str()) : root_key;
 				if (key) {
 					if (!key->is_real()) {
-						VirtualObject *object = objects_->Add(OBJECT_KEY, key, ::CreateEventA(NULL, false, false, NULL), DesiredAccess);
+						VirtualObject* object = objects_->Add(OBJECT_KEY, key, ::CreateEventA(NULL, false, false, NULL), DesiredAccess);
 						*KeyHandle = object->handle();
 #ifdef CHECKED
 						XTrace(L"NtOpenKeyEx STATUS_SUCCESS, h=%p\n", *KeyHandle);
 #endif
 						return STATUS_SUCCESS;
 					}
-				} else if (ObjectAttributes->RootDirectory) {
-					VirtualObject *object = objects_->GetKey(ObjectAttributes->RootDirectory);
+				}
+				else if (ObjectAttributes->RootDirectory) {
+					VirtualObject* object = objects_->GetKey(ObjectAttributes->RootDirectory);
 					if (object && object->ref())
 					{
 #ifdef CHECKED
@@ -743,7 +754,8 @@ NTSTATUS RegistryManager::NtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 					}
 				}
 			}
-		} catch(...) {
+		}
+		catch (...) {
 #ifdef CHECKED
 			XTrace(L"NtOpenKeyEx STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -756,10 +768,10 @@ NTSTATUS RegistryManager::NtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 			XTrace(L"TrueNtOpenKey for MAXIMUM_ALLOWED %p h=%p\n", status, *KeyHandle);
 #endif
 			if (NT_SUCCESS(status)) {
-				RegistryKey *root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, true);
+				RegistryKey* root_key = GetRootKey(ObjectAttributes->RootDirectory, NULL, true);
 				if (root_key) {
 					bool is_exists = true;
-					RegistryKey *key = ObjectAttributes->ObjectName->Buffer ? root_key->AddKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str(), false, &is_exists) : root_key;
+					RegistryKey* key = ObjectAttributes->ObjectName->Buffer ? root_key->AddKey(UnicodeString(ObjectAttributes->ObjectName->Buffer, ObjectAttributes->ObjectName->Length / sizeof(wchar_t)).c_str(), false, &is_exists) : root_key;
 					if (key)
 						objects_->Add(OBJECT_KEY, key, *KeyHandle, DesiredAccess);
 				}
@@ -775,7 +787,7 @@ NTSTATUS RegistryManager::NtOpenKeyEx(PHANDLE KeyHandle, ACCESS_MASK DesiredAcce
 	return ret;
 }
 
-NTSTATUS RegistryManager::QueryValueKey(RegistryValue *value, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
+NTSTATUS RegistryManager::QueryValueKey(RegistryValue* value, KEY_VALUE_INFORMATION_CLASS KeyValueInformationClass, PVOID KeyValueInformation, ULONG Length, PULONG ResultLength)
 {
 	if (!value)
 	{
@@ -787,99 +799,99 @@ NTSTATUS RegistryManager::QueryValueKey(RegistryValue *value, KEY_VALUE_INFORMAT
 
 	switch (KeyValueInformationClass) {
 	case KeyValueBasicInformation:
-		{
-			uint32_t name_size = static_cast<ULONG>(wcslen(value->name()) * sizeof(wchar_t));
-			uint32_t min_size = offsetof(KEY_VALUE_BASIC_INFORMATION, Name);
-			uint32_t result_size = min_size + name_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		uint32_t name_size = static_cast<ULONG>(wcslen(value->name()) * sizeof(wchar_t));
+		uint32_t min_size = offsetof(KEY_VALUE_BASIC_INFORMATION, Name);
+		uint32_t result_size = min_size + name_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_VALUE_BASIC_INFORMATION *info = static_cast<KEY_VALUE_BASIC_INFORMATION *>(KeyValueInformation);
-			info->TitleIndex = 0;
-			info->Type = value->type();
-			info->NameLength = name_size;
+		KEY_VALUE_BASIC_INFORMATION* info = static_cast<KEY_VALUE_BASIC_INFORMATION*>(KeyValueInformation);
+		info->TitleIndex = 0;
+		info->Type = value->type();
+		info->NameLength = name_size;
 
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
 
-			memcpy(info->Name, value->name(), name_size);
-		}
-		return STATUS_SUCCESS;
+		memcpy(info->Name, value->name(), name_size);
+	}
+	return STATUS_SUCCESS;
 
 	case KeyValueFullInformation:
 	case KeyValueFullInformationAlign64:
-		{
-			uint32_t align = 0;
-			if (KeyValueInformationClass == KeyValueFullInformationAlign64) {
-				align = 8 - ULONG(INT_PTR(KeyValueInformation)) % 8; //-V221
-				KeyValueInformation = static_cast<uint8_t *>(KeyValueInformation) + align;
-			}
-			uint32_t name_size = static_cast<ULONG>(wcslen(value->name()) * sizeof(wchar_t));
-			uint32_t data_size = value->size();
-			uint32_t min_size = offsetof(KEY_VALUE_FULL_INFORMATION, Name) + align;
-			uint32_t result_size = min_size + name_size + data_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
-
-			KEY_VALUE_FULL_INFORMATION *info = static_cast<KEY_VALUE_FULL_INFORMATION *>(KeyValueInformation);
-			info->TitleIndex = 0;
-			info->Type = value->type();
-			info->NameLength = name_size;
-			info->DataLength = data_size;
-			info->DataOffset = min_size + name_size;
-
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
-
-			memcpy(info->Name, value->name(), name_size);
-			memcpy(reinterpret_cast<uint8_t*>(info) + info->DataOffset, value->data(), data_size);
+	{
+		uint32_t align = 0;
+		if (KeyValueInformationClass == KeyValueFullInformationAlign64) {
+			align = 8 - ULONG(INT_PTR(KeyValueInformation)) % 8; //-V221
+			KeyValueInformation = static_cast<uint8_t*>(KeyValueInformation) + align;
 		}
-		return STATUS_SUCCESS;
+		uint32_t name_size = static_cast<ULONG>(wcslen(value->name()) * sizeof(wchar_t));
+		uint32_t data_size = value->size();
+		uint32_t min_size = offsetof(KEY_VALUE_FULL_INFORMATION, Name) + align;
+		uint32_t result_size = min_size + name_size + data_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
+
+		KEY_VALUE_FULL_INFORMATION* info = static_cast<KEY_VALUE_FULL_INFORMATION*>(KeyValueInformation);
+		info->TitleIndex = 0;
+		info->Type = value->type();
+		info->NameLength = name_size;
+		info->DataLength = data_size;
+		info->DataOffset = min_size + name_size;
+
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
+
+		memcpy(info->Name, value->name(), name_size);
+		memcpy(reinterpret_cast<uint8_t*>(info) + info->DataOffset, value->data(), data_size);
+	}
+	return STATUS_SUCCESS;
 
 	case KeyValuePartialInformation:
 	case KeyValuePartialInformationAlign64:
-		{
-			uint32_t align = 0;
-			if (KeyValueInformationClass == KeyValuePartialInformationAlign64) {
-				align = 8 - ULONG(INT_PTR(KeyValueInformation)) % 8; //-V221
-				KeyValueInformation = static_cast<uint8_t *>(KeyValueInformation) + align;
-			}
-			uint32_t data_size = value->size();
-			uint32_t min_size = offsetof(KEY_VALUE_PARTIAL_INFORMATION, Data) + align;
-			uint32_t result_size = min_size + data_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-			{
-#ifdef CHECKED
-				XTrace(L"QueryValueKey STATUS_BUFFER_TOO_SMALL\n");
-#endif
-				return STATUS_BUFFER_TOO_SMALL;
-			}
-
-			KEY_VALUE_PARTIAL_INFORMATION *info = static_cast<KEY_VALUE_PARTIAL_INFORMATION *>(KeyValueInformation);
-			info->TitleIndex = 0;
-			info->Type = value->type();
-			info->DataLength = data_size;
-
-			if (Length < result_size)
-			{
-#ifdef CHECKED
-				XTrace(L"QueryValueKey STATUS_BUFFER_OVERFLOW\n");
-#endif
-				return STATUS_BUFFER_OVERFLOW;
-			}
-
-#ifdef CHECKED
-			XTrace(L"QueryValueKey %s %d\n", value->data(), data_size);
-#endif
-			memcpy(info->Data, value->data(), data_size);
+	{
+		uint32_t align = 0;
+		if (KeyValueInformationClass == KeyValuePartialInformationAlign64) {
+			align = 8 - ULONG(INT_PTR(KeyValueInformation)) % 8; //-V221
+			KeyValueInformation = static_cast<uint8_t*>(KeyValueInformation) + align;
 		}
-		return STATUS_SUCCESS;
+		uint32_t data_size = value->size();
+		uint32_t min_size = offsetof(KEY_VALUE_PARTIAL_INFORMATION, Data) + align;
+		uint32_t result_size = min_size + data_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+		{
+#ifdef CHECKED
+			XTrace(L"QueryValueKey STATUS_BUFFER_TOO_SMALL\n");
+#endif
+			return STATUS_BUFFER_TOO_SMALL;
+		}
+
+		KEY_VALUE_PARTIAL_INFORMATION* info = static_cast<KEY_VALUE_PARTIAL_INFORMATION*>(KeyValueInformation);
+		info->TitleIndex = 0;
+		info->Type = value->type();
+		info->DataLength = data_size;
+
+		if (Length < result_size)
+		{
+#ifdef CHECKED
+			XTrace(L"QueryValueKey STATUS_BUFFER_OVERFLOW\n");
+#endif
+			return STATUS_BUFFER_OVERFLOW;
+		}
+
+#ifdef CHECKED
+		XTrace(L"QueryValueKey %s %d\n", value->data(), data_size);
+#endif
+		memcpy(info->Data, value->data(), data_size);
+	}
+	return STATUS_SUCCESS;
 
 	default:
 #ifdef CHECKED
@@ -898,7 +910,7 @@ NTSTATUS RegistryManager::NtQueryValueKey(HANDLE KeyHandle, PUNICODE_STRING Valu
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			if ((object->access() & KEY_QUERY_VALUE) == 0)
 			{
@@ -908,14 +920,14 @@ NTSTATUS RegistryManager::NtQueryValueKey(HANDLE KeyHandle, PUNICODE_STRING Valu
 				return STATUS_ACCESS_DENIED;
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
-			RegistryValue *value = key->GetValue(ValueName->Buffer);
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
+			RegistryValue* value = key->GetValue(ValueName->Buffer);
 			if (value == NULL && append_mode_ == false) {
 				// \Registry\Machine\Software\Classes\... to
 				UnicodeString hklm = key->full_name();
 				if (_wcsnicmp(hklm.c_str(), L"\\Registry\\Machine\\Software\\Classes\\", 35 /* SIZE */) == 0) {
 					// \REGISTRY\USER\<SID>_Classes\...
-					RegistryKey *ru = cache_.GetKey(L"\\REGISTRY\\USER");
+					RegistryKey* ru = cache_.GetKey(L"\\REGISTRY\\USER");
 					if (ru != NULL && ru->keys_size() == 1) {
 						ru = ru->key(0)->GetKey(hklm.c_str() + 35 /* SIZE */);
 					}
@@ -934,13 +946,15 @@ NTSTATUS RegistryManager::NtQueryValueKey(HANDLE KeyHandle, PUNICODE_STRING Valu
 					XTrace(L"NtQueryValueKey ret=%p\n", ret);
 #endif
 					return ret;
-				} catch(...) {
+				}
+				catch (...) {
 #ifdef CHECKED
 					XTrace(L"NtQueryValueKey STATUS_ACCESS_VIOLATION\n");
 #endif
 					return STATUS_ACCESS_VIOLATION;
 				}
-			} else if (!key->is_real()) {
+			}
+			else if (!key->is_real()) {
 #ifdef CHECKED
 				XTrace(L"NtQueryValueKey STATUS_OBJECT_NAME_NOT_FOUND\n");
 #endif
@@ -964,9 +978,9 @@ NTSTATUS RegistryManager::NtDeleteKey(HANDLE KeyHandle)
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			objects_->DeleteRef(key);
 			if (key->owner()->DeleteKey(key))
 				return STATUS_SUCCESS;
@@ -988,171 +1002,171 @@ NTSTATUS RegistryManager::NtDeleteKey(HANDLE KeyHandle)
 	return ret;
 }
 
-NTSTATUS RegistryManager::QueryKey(RegistryKey *key, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
+NTSTATUS RegistryManager::QueryKey(RegistryKey* key, KEY_INFORMATION_CLASS KeyInformationClass, PVOID KeyInformation, ULONG Length, PULONG ResultLength)
 {
 	if (!key)
 		return STATUS_INVALID_PARAMETER;
 
 	switch (KeyInformationClass) {
 	case KeyBasicInformation:
-		{
-			UnicodeString name = key->full_name();
-			uint32_t min_size = offsetof(KEY_BASIC_INFORMATION, Name);
-			uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
-			uint32_t result_size = min_size + name_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		UnicodeString name = key->full_name();
+		uint32_t min_size = offsetof(KEY_BASIC_INFORMATION, Name);
+		uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
+		uint32_t result_size = min_size + name_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_BASIC_INFORMATION *info = static_cast<KEY_BASIC_INFORMATION *>(KeyInformation);
-			info->LastWriteTime.QuadPart = key->last_write_time();
-			info->TitleIndex = 0;
-			info->NameLength = name_size;
+		KEY_BASIC_INFORMATION* info = static_cast<KEY_BASIC_INFORMATION*>(KeyInformation);
+		info->LastWriteTime.QuadPart = key->last_write_time();
+		info->TitleIndex = 0;
+		info->NameLength = name_size;
 
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
 
-			memcpy(info->Name, name.c_str(), name_size);
-		}
-		return STATUS_SUCCESS;
+		memcpy(info->Name, name.c_str(), name_size);
+	}
+	return STATUS_SUCCESS;
 
 	case KeyNodeInformation:
-		{
-			UnicodeString name = key->full_name();
-			uint32_t min_size = offsetof(KEY_NODE_INFORMATION, Name);
-			uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
-			uint32_t result_size = min_size + name_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		UnicodeString name = key->full_name();
+		uint32_t min_size = offsetof(KEY_NODE_INFORMATION, Name);
+		uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
+		uint32_t result_size = min_size + name_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_NODE_INFORMATION *info = static_cast<KEY_NODE_INFORMATION *>(KeyInformation);
-			info->LastWriteTime.QuadPart = key->last_write_time();
-			info->TitleIndex = 0;
-			info->ClassOffset = -1;
-			info->ClassLength = 0;
-			info->NameLength = name_size;
+		KEY_NODE_INFORMATION* info = static_cast<KEY_NODE_INFORMATION*>(KeyInformation);
+		info->LastWriteTime.QuadPart = key->last_write_time();
+		info->TitleIndex = 0;
+		info->ClassOffset = -1;
+		info->ClassLength = 0;
+		info->NameLength = name_size;
 
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
 
-			memcpy(info->Name, name.c_str(), name_size);
-		}
-		return STATUS_SUCCESS;
+		memcpy(info->Name, name.c_str(), name_size);
+	}
+	return STATUS_SUCCESS;
 
 	case KeyFullInformation:
-		{
-			uint32_t min_size = offsetof(KEY_FULL_INFORMATION, Class);
-			uint32_t result_size = min_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		uint32_t min_size = offsetof(KEY_FULL_INFORMATION, Class);
+		uint32_t result_size = min_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_FULL_INFORMATION *info = static_cast<KEY_FULL_INFORMATION *>(KeyInformation);
-			info->LastWriteTime.QuadPart = key->last_write_time();
-			info->TitleIndex = 0;
-			info->ClassOffset = -1;
-			info->ClassLength = 0;
-			info->SubKeys = static_cast<uint32_t>(key->keys_size());
-			info->MaxNameLen = 0;
-			for (size_t i = 0; i < key->keys_size(); i++) {
-				uint32_t name_size = static_cast<uint32_t>(wcslen(key->key(i)->name()) * sizeof(wchar_t));
-				if (info->MaxNameLen < name_size)
-					info->MaxNameLen = name_size;
-			}
-			info->MaxClassLen = 0;
-			info->Values = static_cast<uint32_t>(key->values_size());
-			info->MaxValueNameLen = 0;
-			info->MaxValueDataLen = 0;
-			for (size_t i = 0; i < key->values_size(); i++) {
-				uint32_t name_size = static_cast<uint32_t>(wcslen(key->value(i)->name()) * sizeof(wchar_t));
-				uint32_t data_size = key->value(i)->size();
-				if (info->MaxValueNameLen < name_size)
-					info->MaxValueNameLen = name_size;
-				if (info->MaxValueDataLen < data_size)
-					info->MaxValueDataLen = data_size;
-			}
-
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		KEY_FULL_INFORMATION* info = static_cast<KEY_FULL_INFORMATION*>(KeyInformation);
+		info->LastWriteTime.QuadPart = key->last_write_time();
+		info->TitleIndex = 0;
+		info->ClassOffset = -1;
+		info->ClassLength = 0;
+		info->SubKeys = static_cast<uint32_t>(key->keys_size());
+		info->MaxNameLen = 0;
+		for (size_t i = 0; i < key->keys_size(); i++) {
+			uint32_t name_size = static_cast<uint32_t>(wcslen(key->key(i)->name()) * sizeof(wchar_t));
+			if (info->MaxNameLen < name_size)
+				info->MaxNameLen = name_size;
 		}
-		return STATUS_SUCCESS;
+		info->MaxClassLen = 0;
+		info->Values = static_cast<uint32_t>(key->values_size());
+		info->MaxValueNameLen = 0;
+		info->MaxValueDataLen = 0;
+		for (size_t i = 0; i < key->values_size(); i++) {
+			uint32_t name_size = static_cast<uint32_t>(wcslen(key->value(i)->name()) * sizeof(wchar_t));
+			uint32_t data_size = key->value(i)->size();
+			if (info->MaxValueNameLen < name_size)
+				info->MaxValueNameLen = name_size;
+			if (info->MaxValueDataLen < data_size)
+				info->MaxValueDataLen = data_size;
+		}
+
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
+	}
+	return STATUS_SUCCESS;
 
 	case KeyNameInformation:
-		{
-			UnicodeString name = key->full_name();
-			uint32_t min_size = offsetof(KEY_NAME_INFORMATION, Name);
-			uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
-			uint32_t result_size = min_size + name_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		UnicodeString name = key->full_name();
+		uint32_t min_size = offsetof(KEY_NAME_INFORMATION, Name);
+		uint32_t name_size = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
+		uint32_t result_size = min_size + name_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_NAME_INFORMATION *info = static_cast<KEY_NAME_INFORMATION *>(KeyInformation);
-			info->NameLength = name_size;
+		KEY_NAME_INFORMATION* info = static_cast<KEY_NAME_INFORMATION*>(KeyInformation);
+		info->NameLength = name_size;
 
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
 
-			memcpy(info->Name, name.c_str(), name_size);
-		}
-		return STATUS_SUCCESS;
+		memcpy(info->Name, name.c_str(), name_size);
+	}
+	return STATUS_SUCCESS;
 
 	case KeyCachedInformation:
-		{
-			UnicodeString name = key->full_name();
-			uint32_t min_size = sizeof(KEY_CACHED_INFORMATION);
-			uint32_t result_size = min_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		UnicodeString name = key->full_name();
+		uint32_t min_size = sizeof(KEY_CACHED_INFORMATION);
+		uint32_t result_size = min_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_CACHED_INFORMATION *info = static_cast<KEY_CACHED_INFORMATION *>(KeyInformation);
-			info->LastWriteTime.QuadPart = key->last_write_time();
-			info->TitleIndex = 0;
-			info->SubKeys = static_cast<uint32_t>(key->keys_size());
-			info->MaxNameLen = 0;
-			for (size_t i = 0; i < key->keys_size(); i++) {
-				ULONG name_size = static_cast<ULONG>(wcslen(key->key(i)->name()) * sizeof(wchar_t));
-				if (info->MaxNameLen < name_size)
-					info->MaxNameLen = name_size;
-			}
-			info->Values = static_cast<ULONG>(key->values_size());
-			info->MaxValueNameLen = 0;
-			info->MaxValueDataLen = 0;
-			for (size_t i = 0; i < key->values_size(); i++) {
-				uint32_t name_size = static_cast<uint32_t>(wcslen(key->value(i)->name()) * sizeof(wchar_t));
-				uint32_t data_size = static_cast<uint32_t>(key->value(i)->size());
-				if (info->MaxValueNameLen < name_size)
-					info->MaxValueNameLen = name_size;
-				if (info->MaxValueDataLen < data_size)
-					info->MaxValueDataLen = data_size;
-			}
-			info->NameLength = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
-
-			if (Length < result_size)
-				return STATUS_BUFFER_OVERFLOW;
+		KEY_CACHED_INFORMATION* info = static_cast<KEY_CACHED_INFORMATION*>(KeyInformation);
+		info->LastWriteTime.QuadPart = key->last_write_time();
+		info->TitleIndex = 0;
+		info->SubKeys = static_cast<uint32_t>(key->keys_size());
+		info->MaxNameLen = 0;
+		for (size_t i = 0; i < key->keys_size(); i++) {
+			ULONG name_size = static_cast<ULONG>(wcslen(key->key(i)->name()) * sizeof(wchar_t));
+			if (info->MaxNameLen < name_size)
+				info->MaxNameLen = name_size;
 		}
-		return STATUS_SUCCESS;
+		info->Values = static_cast<ULONG>(key->values_size());
+		info->MaxValueNameLen = 0;
+		info->MaxValueDataLen = 0;
+		for (size_t i = 0; i < key->values_size(); i++) {
+			uint32_t name_size = static_cast<uint32_t>(wcslen(key->value(i)->name()) * sizeof(wchar_t));
+			uint32_t data_size = static_cast<uint32_t>(key->value(i)->size());
+			if (info->MaxValueNameLen < name_size)
+				info->MaxValueNameLen = name_size;
+			if (info->MaxValueDataLen < data_size)
+				info->MaxValueDataLen = data_size;
+		}
+		info->NameLength = static_cast<uint32_t>(name.size() * sizeof(wchar_t));
+
+		if (Length < result_size)
+			return STATUS_BUFFER_OVERFLOW;
+	}
+	return STATUS_SUCCESS;
 
 	case KeyHandleTagsInformation:
-		{
-			uint32_t min_size = sizeof(KEY_HANDLE_TAGS_INFORMATION);
-			uint32_t result_size = min_size;
-			if (ResultLength)
-				*ResultLength = result_size;
-			if (Length < min_size)
-				return STATUS_BUFFER_TOO_SMALL;
+	{
+		uint32_t min_size = sizeof(KEY_HANDLE_TAGS_INFORMATION);
+		uint32_t result_size = min_size;
+		if (ResultLength)
+			*ResultLength = result_size;
+		if (Length < min_size)
+			return STATUS_BUFFER_TOO_SMALL;
 
-			KEY_HANDLE_TAGS_INFORMATION *info = static_cast<KEY_HANDLE_TAGS_INFORMATION *>(KeyInformation);
-			info->HandleTags = 0;
-		}
-		return STATUS_SUCCESS;
+		KEY_HANDLE_TAGS_INFORMATION* info = static_cast<KEY_HANDLE_TAGS_INFORMATION*>(KeyInformation);
+		info->HandleTags = 0;
+	}
+	return STATUS_SUCCESS;
 
 	case KeyFlagsInformation:
 	case KeyVirtualizationInformation:
@@ -1165,7 +1179,7 @@ NTSTATUS RegistryManager::QueryKey(RegistryKey *key, KEY_INFORMATION_CLASS KeyIn
 
 static void ApplyDirtyHack(PVOID KeyInformation)
 {
-	KEY_HANDLE_TAGS_INFORMATION *info = static_cast<KEY_HANDLE_TAGS_INFORMATION *>(KeyInformation);
+	KEY_HANDLE_TAGS_INFORMATION* info = static_cast<KEY_HANDLE_TAGS_INFORMATION*>(KeyInformation);
 	info->HandleTags = 0x601;
 #ifdef CHECKED
 	XTrace(L"ApplyDirtyHack info->HandleTags=%d\n", info->HandleTags);
@@ -1180,12 +1194,12 @@ NTSTATUS RegistryManager::NtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS Key
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			if ((object->access() & KEY_QUERY_VALUE) == 0)
 			{
-				 // Special case (âçÿò èç win2k/private/ntos/config/ntapi.c:NtQueryKey)
-				if(KeyInformationClass != KeyNameInformation || object->access() == 0) {
+				// Special case (§Ó§Ù§ñ§ä §Ú§Ù win2k/private/ntos/config/ntapi.c:NtQueryKey)
+				if (KeyInformationClass != KeyNameInformation || object->access() == 0) {
 #ifdef CHECKED
 					XTrace(L"NtQueryKey STATUS_ACCESS_DENIED %p\n", object->access());
 #endif
@@ -1193,7 +1207,7 @@ NTSTATUS RegistryManager::NtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS Key
 				}
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			try {
 				NTSTATUS st = QueryKey(key, KeyInformationClass, KeyInformation, Length, ResultLength);
 #ifdef CHECKED
@@ -1202,7 +1216,8 @@ NTSTATUS RegistryManager::NtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS Key
 				if (KeyInformationClass == KeyHandleTagsInformation && st == S_OK && (object->access() & KEY_WOW64_32KEY) && append_mode_ && KeyInformation)
 					ApplyDirtyHack(KeyInformation);
 				return st;
-			} catch(...) {
+			}
+			catch (...) {
 #ifdef CHECKED
 				XTrace(L"NtQueryKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -1215,17 +1230,19 @@ NTSTATUS RegistryManager::NtQueryKey(HANDLE KeyHandle, KEY_INFORMATION_CLASS Key
 	if (KeyInformationClass == KeyHandleTagsInformation && ret == S_OK && append_mode_ && KeyInformation)
 		ApplyDirtyHack(KeyInformation);
 #ifdef CHECKED
-	if(KeyInformationClass == 7)
+	if (KeyInformationClass == 7)
 	{
-		KEY_HANDLE_TAGS_INFORMATION *info = static_cast<KEY_HANDLE_TAGS_INFORMATION *>(KeyInformation);
-		if (info) 
-		XTrace(L"TrueNtQueryKey %p HandleTags=%p\n", ret, info->HandleTags);
-	} else if(KeyInformationClass == 3)
+		KEY_HANDLE_TAGS_INFORMATION* info = static_cast<KEY_HANDLE_TAGS_INFORMATION*>(KeyInformation);
+		if (info)
+			XTrace(L"TrueNtQueryKey %p HandleTags=%p\n", ret, info->HandleTags);
+	}
+	else if (KeyInformationClass == 3)
 	{
-		KEY_NAME_INFORMATION *info = static_cast<KEY_NAME_INFORMATION *>(KeyInformation);
-		if (info) 
+		KEY_NAME_INFORMATION* info = static_cast<KEY_NAME_INFORMATION*>(KeyInformation);
+		if (info)
 			XTrace(L"TrueNtQueryKey %p info->Name=%s\n", ret, (UnicodeString(info->Name, info->NameLength)).c_str());
-	} else 
+	}
+	else
 		XTrace(L"TrueNtQueryKey %p\n", ret);
 #endif
 	return ret;
@@ -1239,7 +1256,7 @@ NTSTATUS RegistryManager::NtEnumerateValueKey(HANDLE KeyHandle, ULONG Index, KEY
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			if ((object->access() & KEY_QUERY_VALUE) == 0)
 			{
@@ -1249,19 +1266,20 @@ NTSTATUS RegistryManager::NtEnumerateValueKey(HANDLE KeyHandle, ULONG Index, KEY
 				return STATUS_ACCESS_DENIED;
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			if (Index >= key->values_size())
 #ifdef CHECKED
 				XTrace(L"NtEnumerateValueKey STATUS_NO_MORE_ENTRIES\n");
 #endif
-				return STATUS_NO_MORE_ENTRIES;
+			return STATUS_NO_MORE_ENTRIES;
 			try {
 				NTSTATUS vret = QueryValueKey(key->value(Index), KeyValueInformationClass, KeyValueInformation, Length, ResultLength);
 #ifdef CHECKED
 				XTrace(L"QueryValueKey %p\n", vret);
 #endif
 				return vret;
-			} catch(...) {
+			}
+			catch (...) {
 #ifdef CHECKED
 				XTrace(L"NtEnumerateValueKey STATUS_ACCESS_VIOLATION\n");
 #endif
@@ -1285,7 +1303,7 @@ NTSTATUS RegistryManager::NtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFO
 	{
 		CriticalSection	cs(objects_->critical_section());
 
-		VirtualObject *object = objects_->GetKey(KeyHandle);
+		VirtualObject* object = objects_->GetKey(KeyHandle);
 		if (object && object->ref()) {
 			// a virtual key
 			if ((object->access() & KEY_ENUMERATE_SUB_KEYS) == 0)
@@ -1296,25 +1314,27 @@ NTSTATUS RegistryManager::NtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFO
 				return STATUS_ACCESS_DENIED;
 			}
 
-			RegistryKey *key = static_cast<RegistryKey *>(object->ref());
+			RegistryKey* key = static_cast<RegistryKey*>(object->ref());
 			if (Index >= key->keys_size())
 #ifdef CHECKED
 				XTrace(L"NtEnumerateKey STATUS_NO_MORE_ENTRIES\n");
 #endif
-				return STATUS_NO_MORE_ENTRIES;
+			return STATUS_NO_MORE_ENTRIES;
 			try {
 				NTSTATUS vret = QueryKey(key->key(Index), KeyInformationClass, KeyInformation, Length, ResultLength);
 #ifdef CHECKED
 				XTrace(L"QueryKey %p\n", vret);
 #endif
 				return vret;
-			} catch(...) {
+			}
+			catch (...) {
 #ifdef CHECKED
 				XTrace(L"NtEnumerateKey STATUS_ACCESS_VIOLATION\n");
 #endif
 				return STATUS_ACCESS_VIOLATION;
 			}
-		} else {
+		}
+		else {
 			// a real key
 #ifdef CHECKED
 			XTrace(L"NtEnumerateKey real\n");
@@ -1330,12 +1350,12 @@ NTSTATUS RegistryManager::NtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFO
 #endif
 			}
 			if (access & KEY_ENUMERATE_SUB_KEYS) {
-				RegistryKey *key = NULL;
+				RegistryKey* key = NULL;
 				{
 					KEY_NAME_INFORMATION info;
 					DWORD size;
 					if (TrueNtQueryKey(KeyHandle, KeyNameInformation, &info, sizeof(info), &size) == STATUS_BUFFER_OVERFLOW) {
-						KEY_NAME_INFORMATION *data = reinterpret_cast<KEY_NAME_INFORMATION *>(new uint8_t[size]);
+						KEY_NAME_INFORMATION* data = reinterpret_cast<KEY_NAME_INFORMATION*>(new uint8_t[size]);
 						if (NT_SUCCESS(TrueNtQueryKey(KeyHandle, KeyNameInformation, data, size, &size)))
 						{
 							key = cache_.GetKey(UnicodeString(data->Name, data->NameLength / sizeof(wchar_t)).c_str());
@@ -1349,13 +1369,13 @@ NTSTATUS RegistryManager::NtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFO
 							XTrace(L"Cache NOT used\n");
 						}
 #endif
-						delete [] data;
+						delete[] data;
 					}
 				}
 				if (key) {
-					vector<RegistryKey *> children;
+					vector<RegistryKey*> children;
 					for (size_t i = 0; i < key->keys_size(); i++) {
-						RegistryKey *child = key->key(i);
+						RegistryKey* child = key->key(i);
 						if (!child->is_real())
 							children.push_back(child);
 					}
@@ -1366,13 +1386,15 @@ NTSTATUS RegistryManager::NtEnumerateKey(HANDLE KeyHandle, ULONG Index, KEY_INFO
 							XTrace(L"QueryKey %p\n", vret);
 #endif
 							return vret;
-						} catch(...) {
+						}
+						catch (...) {
 #ifdef CHECKED
 							XTrace(L"NtEnumerateKey STATUS_ACCESS_VIOLATION\n");
 #endif
 							return STATUS_ACCESS_VIOLATION;
 						}
-					} else {
+					}
+					else {
 						Index -= static_cast<uint32_t>(children.size());
 					}
 				}

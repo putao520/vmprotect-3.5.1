@@ -10,28 +10,28 @@ uint64_t rand64();
 
 inline uint8_t _rotl8(uint8_t value, int shift)
 {
-	__asm__ __volatile__ ("rolb %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("rolb %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
 inline uint16_t _rotl16(uint16_t value, int shift)
 {
-	__asm__ __volatile__ ("rolw %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("rolw %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
 inline uint32_t _rotl32(uint32_t value, int shift)
 {
-	__asm__ __volatile__ ("roll %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("roll %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
@@ -42,28 +42,28 @@ inline uint64_t _rotl64(uint64_t value, int shift)
 
 inline uint8_t _rotr8(uint8_t value, int shift)
 {
-	__asm__ __volatile__ ("rorb %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("rorb %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
 inline uint16_t _rotr16(uint16_t value, int shift)
 {
-	__asm__ __volatile__ ("rorw %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("rorw %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
 inline uint32_t _rotr32(uint32_t value, int shift)
 {
-	__asm__ __volatile__ ("rorl %%cl, %0"
-							: "=r"(value)
-							: "0"(value), "c"(shift)
-							);
+	__asm__ __volatile__("rorl %%cl, %0"
+		: "=r"(value)
+		: "0"(value), "c"(shift)
+	);
 	return value;
 }
 
@@ -75,22 +75,22 @@ inline uint64_t _rotr64(uint64_t value, int shift)
 inline uint64_t __rdtsc()
 {
 	uint32_t hi, lo;
-	__asm__ __volatile__ ("rdtsc" 
-							: "=a"(lo), "=d"(hi)
-							);
+	__asm__ __volatile__("rdtsc"
+		: "=a"(lo), "=d"(hi)
+	);
 	return static_cast<uint64_t>(lo) | static_cast<uint64_t>(hi) << 32;
 }
 
 
 inline void __cpuid(int regs[4], uint32_t value)
 {
-	__asm__ __volatile__ ("cpuid" 
-							: "=a"(regs[0]), "=b"(regs[1]), "=c"(regs[2]), "=d"(regs[3])
-							: "a"(value)
-							);
+	__asm__ __volatile__("cpuid"
+		: "=a"(regs[0]), "=b"(regs[1]), "=c"(regs[2]), "=d"(regs[3])
+		: "a"(value)
+	);
 }
 
-inline void __movsb(void *d, const void *s, size_t n) {
+inline void __movsb(void* d, const void* s, size_t n) {
 	asm volatile ("rep movsb"
 		: "=D" (d),
 		"=S" (s),
@@ -104,9 +104,9 @@ inline void __movsb(void *d, const void *s, size_t n) {
 #ifdef __APPLE__
 inline uint16_t __builtin_bswap16(uint16_t value)
 {
-	__asm__ __volatile__ ("rorw $8, %0"
-							: "+r"(value)
-							);
+	__asm__ __volatile__("rorw $8, %0"
+		: "+r"(value)
+	);
 	return value;
 }
 #endif
@@ -124,12 +124,12 @@ inline unsigned long __builtin_ctz(unsigned int x) { unsigned long r; _BitScanFo
 #ifdef __cplusplus
 extern "C" {
 #endif
-VOID
-__movsb(
-	__out_ecount_full(Count) PUCHAR Destination,
-	__in_ecount(Count) UCHAR const *Source,
-	__in SIZE_T Count
-);
+	VOID
+		__movsb(
+			__out_ecount_full(Count) PUCHAR Destination,
+			__in_ecount(Count) UCHAR const* Source,
+			__in SIZE_T Count
+		);
 #ifdef __cplusplus
 }
 #endif
@@ -159,9 +159,9 @@ struct RC5Key {
 	uint32_t P;
 	uint32_t Q;
 #endif
-	RC5Key() {} //-V730 ìóñîð òîæå ãîäèòñÿ
+	RC5Key() {} //-V730 §Þ§å§ã§à§â §ä§à§Ø§Ö §Ô§à§Õ§Ú§ä§ã§ñ
 #ifdef RUNTIME
-	RC5Key(const uint8_t *key)
+	RC5Key(const uint8_t* key)
 	{
 		memcpy(Value, key, sizeof(Value));
 	}
@@ -172,11 +172,11 @@ struct RC5Key {
 class CipherRC5
 {
 public:
-	CipherRC5(const RC5Key &key);
-	void Encrypt(uint8_t *buff, size_t count) const;
-	void Decrypt(const uint8_t *in, uint8_t *out, size_t count) const;
-	void Encrypt(const uint32_t *in, uint32_t *out) const;
-	void Decrypt(const uint32_t *in, uint32_t *out) const;
+	CipherRC5(const RC5Key& key);
+	void Encrypt(uint8_t* buff, size_t count) const;
+	void Decrypt(const uint8_t* in, uint8_t* out, size_t count) const;
+	void Encrypt(const uint32_t* in, uint32_t* out) const;
+	void Decrypt(const uint32_t* in, uint32_t* out) const;
 private:
 	enum {
 		w = 32, // u32 size in bits
@@ -188,7 +188,7 @@ private:
 	uint32_t S[t]; // expanded key table
 #ifdef RUNTIME
 	enum {
-		P = FACE_RC5_P, 
+		P = FACE_RC5_P,
 		Q = FACE_RC5_Q
 	};
 #else
@@ -201,35 +201,35 @@ class CryptoContainer;
 
 typedef unsigned short BignumInt;
 typedef unsigned long BignumDblInt;
-typedef BignumInt *Bignum;
+typedef BignumInt* Bignum;
 
 class BigNumber
 {
 public:
 	BigNumber();
-	BigNumber(const BigNumber &src);
-	BigNumber(const uint8_t *data, size_t size, bool inverse_order = false);
+	BigNumber(const BigNumber& src);
+	BigNumber(const uint8_t* data, size_t size, bool inverse_order = false);
 	~BigNumber();
-	BigNumber modpow(const BigNumber &exp, const BigNumber &mod) const;
-	CryptoContainer *modpow(const CryptoContainer &source, size_t exp_offset, size_t exp_size, size_t mod_offset, size_t mod_size) const;
+	BigNumber modpow(const BigNumber& exp, const BigNumber& mod) const;
+	CryptoContainer* modpow(const CryptoContainer& source, size_t exp_offset, size_t exp_size, size_t mod_offset, size_t mod_size) const;
 	size_t size() const;
-	bool operator < (const BigNumber &b) const;
+	bool operator < (const BigNumber& b) const;
 	uint8_t operator [] (size_t index) const;
 	BignumInt data(size_t index) const { return bignum_get_word(data_ + index); }
 private:
-	
-	// no assignment op
-	BigNumber &operator =(const BigNumber &);
 
-	BigNumber(Bignum data, const BignumInt *salt);
+	// no assignment op
+	BigNumber& operator =(const BigNumber&);
+
+	BigNumber(Bignum data, const BignumInt* salt);
 	BignumInt bignum_get_word(Bignum b) const;
 	void bignum_set_word(Bignum b, BignumInt value) const;
 	void init(size_t length);
-	void internal_mul(BignumInt *a, BignumInt *b, BignumInt *c, int len) const;
-	void internal_add_shifted(BignumInt *number, unsigned n, int shift) const;
-	void internal_mod(BignumInt *a, int alen, BignumInt *m, int mlen, BignumInt *quot, int qshift) const;
+	void internal_mul(BignumInt* a, BignumInt* b, BignumInt* c, int len) const;
+	void internal_add_shifted(BignumInt* number, unsigned n, int shift) const;
+	void internal_mod(BignumInt* a, int alen, BignumInt* m, int mlen, BignumInt* quot, int qshift) const;
 	uint8_t bignum_byte(Bignum bn, size_t i) const;
-	int bignum_cmp(const BigNumber &b) const;
+	int bignum_cmp(const BigNumber& b) const;
 	enum {
 		BIGNUM_INT_MASK = 0xFFFFU,
 		BIGNUM_TOP_BIT = 0x8000U,
@@ -245,21 +245,21 @@ private:
 
 enum {
 	ATL_BASE64_FLAG_NONE = 0,
-	ATL_BASE64_FLAG_NOPAD, 
+	ATL_BASE64_FLAG_NOPAD,
 	ATL_BASE64_FLAG_NOCRLF
 };
-bool Base64Encode(const uint8_t *src, size_t src_len, char *dst, size_t &dst_len);
-bool Base64Decode(const char *src, size_t src_len, uint8_t *dst, size_t &dst_len);
+bool Base64Encode(const uint8_t* src, size_t src_len, char* dst, size_t& dst_len);
+bool Base64Decode(const char* src, size_t src_len, uint8_t* dst, size_t& dst_len);
 size_t Base64EncodeGetRequiredLength(size_t src_len);
 
 class CryptoContainer
 {
 public:
-	CryptoContainer(uint8_t *data, size_t size, const RC5Key &key);
-	CryptoContainer(size_t size, const RC5Key &key);
-	CryptoContainer(const BigNumber &bn);
+	CryptoContainer(uint8_t* data, size_t size, const RC5Key& key);
+	CryptoContainer(size_t size, const RC5Key& key);
+	CryptoContainer(const BigNumber& bn);
 	~CryptoContainer();
-	const uint8_t *data() const { return reinterpret_cast<const uint8_t *>(data_); }
+	const uint8_t* data() const { return reinterpret_cast<const uint8_t*>(data_); }
 	size_t size() const { return size_; }
 	uint32_t GetDWord(size_t pos) const;
 	uint16_t GetWord(size_t pos) const;
@@ -268,19 +268,19 @@ public:
 	bool SetDWord(size_t pos, uint32_t value) const;
 	bool SetWord(size_t pos, uint16_t value) const;
 	bool SetByte(size_t pos, uint8_t value) const;
-	void UTF8ToUnicode(size_t offset, size_t len, VMP_WCHAR *dest, size_t dest_size) const;
+	void UTF8ToUnicode(size_t offset, size_t len, VMP_WCHAR* dest, size_t dest_size) const;
 private:
-	#define RC5_BLOCK_SIZE 8
-	bool EncryptValue(size_t pos, uint8_t *value, size_t value_size) const;
-	bool DecryptValue(size_t pos, uint8_t *value, size_t value_size) const;
+#define RC5_BLOCK_SIZE 8
+	bool EncryptValue(size_t pos, uint8_t* value, size_t value_size) const;
+	bool DecryptValue(size_t pos, uint8_t* value, size_t value_size) const;
 	bool is_own_data_;
-	uint32_t *data_;
+	uint32_t* data_;
 	size_t size_;
-	CipherRC5 *cipher_;
+	CipherRC5* cipher_;
 
 	// no copy ctr or assignment op
-	CryptoContainer(const CryptoContainer &);
-	CryptoContainer &operator =(const CryptoContainer &);
+	CryptoContainer(const CryptoContainer&);
+	CryptoContainer& operator =(const CryptoContainer&);
 };
 
 class SHA1
@@ -288,11 +288,11 @@ class SHA1
 public:
 	SHA1();
 	void Reset();
-	void Input(const uint8_t *data, size_t size);
-	void Input(const CryptoContainer &data, size_t offset, size_t size);
-	const uint8_t *Result();
+	void Input(const uint8_t* data, size_t size);
+	void Input(const CryptoContainer& data, size_t offset, size_t size);
+	const uint8_t* Result();
 	size_t ResultSize() const { return sizeof(digest_); }
-	bool operator ==(SHA1 &other) { return memcmp(Result(), other.Result(), ResultSize()) == 0; }
+	bool operator ==(SHA1& other) { return memcmp(Result(), other.Result(), ResultSize()) == 0; }
 private:
 	void ProcessMessageBlock();
 	void PadMessage();
@@ -353,12 +353,12 @@ static uint32_t crc32_table[] = {
 
 #ifdef RUNTIME
 #ifdef VMP_GNU
-EXPORT_API uint32_t WINAPI CalcCRC(const void * key, size_t len) __asm__ ("CalcCRC");
+EXPORT_API uint32_t WINAPI CalcCRC(const void* key, size_t len) __asm__("CalcCRC");
 #else
-EXPORT_API uint32_t WINAPI CalcCRC(const void * key, size_t len);
+EXPORT_API uint32_t WINAPI CalcCRC(const void* key, size_t len);
 #endif
 #else
-uint32_t CalcCRC(const void * key, size_t len);
+uint32_t CalcCRC(const void* key, size_t len);
 #endif
 
 class CRCValueCryptor
